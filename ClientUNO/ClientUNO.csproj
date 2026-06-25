@@ -1,0 +1,68 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Images\beige.jpg" />
+    <None Remove="Images\Coffeeeee.jpg" />
+    <None Remove="Images\cozy girl.jpg" />
+    <None Remove="Images\cute cat.jpg" />
+    <None Remove="Images\cute_cat_1.jpg" />
+    <None Remove="Images\cute_cat_2.jpg" />
+    <None Remove="Images\cute_cat_3.jpg" />
+    <None Remove="Images\cute_cat_4.jpg" />
+    <None Remove="Images\cute_cat_5.jpg" />
+    <None Remove="Images\cute_cat_6.jpg" />
+    <None Remove="Images\Cute_cat_7.jpg" />
+    <None Remove="Images\Cute_girl.jpg" />
+    <None Remove="Images\nails.jpg" />
+    <None Remove="Images\nails3.jpg" />
+    <None Remove="Images\Strawberry.jpg" />
+    <None Remove="Images\sunflowers.jpg" />
+    <None Remove="Images\Watermelon.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Shared_Library\Shared_Library.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\nails3.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\Cute_girl.jpg" />
+    <Resource Include="Images\sunflowers.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\cute_cat_4.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\cute_cat_3.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\beige.jpg" />
+    <Resource Include="Images\Coffeeeee.jpg" />
+    <Resource Include="Images\cozy girl.jpg" />
+    <Resource Include="Images\cute cat.jpg" />
+    <Resource Include="Images\cute_cat_1.jpg" />
+    <Resource Include="Images\cute_cat_2.jpg" />
+    <Resource Include="Images\cute_cat_5.jpg" />
+    <Resource Include="Images\cute_cat_6.jpg" />
+    <Resource Include="Images\Cute_cat_7.jpg" />
+    <Resource Include="Images\light_background.jpg" />
+    <Resource Include="Images\nails.jpg" />
+    <Resource Include="Images\Strawberry.jpg" />
+    <Resource Include="Images\Watermelon.jpg" />
+  </ItemGroup>
+
+</Project>

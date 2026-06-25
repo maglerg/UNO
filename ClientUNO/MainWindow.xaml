@@ -1,0 +1,96 @@
+﻿<Window x:Class="ClientUNO.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ClientUNO"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="700" Width="1100">
+
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="25"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Window.Background>
+        <ImageBrush ImageSource="Images/beige.jpg"/>
+    </Window.Background>
+
+    <Grid>
+        <TextBlock Text="Welcome to UNO"
+               FontSize="55"
+               FontFamily="Comic Sans MS"
+               FontWeight="Bold"
+               Foreground="White"
+               Margin="-2,15,0,0"
+               HorizontalAlignment="Center"/>
+
+        <TextBlock Text="Welcome to UNO"
+               FontSize="55"
+               FontFamily="Comic Sans MS"
+               FontWeight="Bold"
+               Foreground="White"
+               Margin="2,15,0,0"
+               HorizontalAlignment="Center"/>
+
+        <TextBlock Text="Welcome to UNO"
+               FontSize="55"
+               FontFamily="Comic Sans MS"
+               FontWeight="Bold"
+               Foreground="White"
+               Margin="0,13,0,0"
+               HorizontalAlignment="Center"/>
+
+        <TextBlock Text="Welcome to UNO"
+               FontSize="55"
+               FontFamily="Comic Sans MS"
+               FontWeight="Bold"
+               Foreground="White"
+               Margin="0,17,0,0"
+               HorizontalAlignment="Center"/>
+
+        <TextBlock Text="Welcome to UNO"
+               FontSize="55"
+               FontFamily="Comic Sans MS"
+               FontWeight="Bold"
+               Foreground="SaddleBrown"
+               Margin="0,15,0,0"
+               HorizontalAlignment="Center"/>
+
+        <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top"
+                    Margin="66,209,0,0" Height="394" Width="343">
+
+            <Button Content="Sign up" Width="297" Height="63" FontSize="25" Margin="20"
+                    FontFamily="Comic Sans MS"
+                    Foreground="#6F4E37" Background="White" Opacity="0.5" Click="SignUp_Click"/>
+
+            <Button Content="Login" Width="297" Height="63" FontSize="25" Margin="20"
+                    FontFamily="Comic Sans MS"
+                    Foreground="#6F4E37" Background="White" Opacity="0.5" Click="Login_Click"/>
+
+            <Button Content="Leave the game" Width="267" Height="48" FontSize="22"
+                    Margin="20,50,20,20"
+                    FontFamily="Comic Sans MS"
+                    Foreground="#6F4E37" Background="White" Opacity="0.5" Click="Exit_Click"/>
+        </StackPanel>
+
+        <Image Source="Images/cozy girl.jpg" Margin="592,255,-116,32" />
+        <Image Source="Images/Coffeeeee.jpg" Margin="428,143,269,66"/>
+        <Image Source="Images/nails.jpg" Margin="877,61,33,328"/>
+        <Image Source="Images/cute_cat_3.jpg" Margin="50,-55,914,479" RenderTransformOrigin="0.659,0.636"/>
+        <Image Source="Images/cute_cat_6.jpg" Margin="714,61,243,275" RenderTransformOrigin="2.885,0.804"/>
+    </Grid>
+</Window>
