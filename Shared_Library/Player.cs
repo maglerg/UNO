@@ -16,6 +16,7 @@ namespace Shared_Library
         public List<Card> PlayerCards { get; set; }
         public PlayerAction Action { get; set; }
 
+
         public Player(string name)
         {
             this.Name = name;

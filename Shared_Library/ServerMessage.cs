@@ -6,6 +6,18 @@ using System.Threading.Tasks;
 
 namespace Shared_Library
 {
+    public enum RequestType
+    {
+        Login,
+        SignUp,
+        CreateRoom,
+        ConnectRoom,
+        SomeoneJoin,
+        SomeoneLeft,
+        StartGame,
+        LeaveGame,
+        GameState
+    }
     public abstract class ServerMessage
     {
         public string Type { get; set; }
@@ -14,8 +26,31 @@ namespace Shared_Library
     public class ConnectMessage : ServerMessage
     {
         public string CodeRoom { get; set; }
+        public ConnectMessage(string codeRoom)
+        {
+            this.CodeRoom = codeRoom;
+        }
     }
+    public class LeaveGameMessage : ServerMessage
+    {
 
+    }
+    public class SomeoneJoin : ServerMessage
+    {
+        public PlayerInfo Player { get; set; }
+        public SomeoneJoin(PlayerInfo player)
+        {
+            this.Player = player;
+        }
+    }
+    public class SomeoneLeft : ServerMessage
+    {
+        public PlayerInfo Player { get; set; }
+        public SomeoneLeft(PlayerInfo player)
+        {
+            Player = player;
+        }
+    }
     public class CreateRoomMessage : ServerMessage
     {
 
@@ -39,7 +74,18 @@ namespace Shared_Library
 
     public class ErrorMessage : ServerMessage
     {
+        public RequestType RequestType { get; set; }
         public string TextError { get; set; }
+    }
+    public class ConfirmMessage : ServerMessage
+    {
+        public RequestType RequestType { get; set; }
+        public string roomCode { get; set; }
+        public ConfirmMessage(RequestType RequestType,string roomCode)
+        {
+            this.RequestType = RequestType;
+            this.roomCode = roomCode;
+        }
     }
 
     public class PushUNOMessage : ServerMessage
@@ -50,11 +96,21 @@ namespace Shared_Library
     {
         public string name {  get; set; }
         public string password { get; set; }
+        public SignUpMessage(string name, string password)
+        {
+            this.name = name;
+            this.password = password;
+        }
     }
     public class LoginMessage : ServerMessage
     {
         public string name { get; set; }
         public string password { get; set; }
+        public LoginMessage(string name, string password)
+        {
+            this.name = name;
+            this.password = password;
+        }
     }
     public class GameStateMessage : ServerMessage
     {
