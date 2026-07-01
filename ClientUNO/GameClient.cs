@@ -7,11 +7,11 @@ using Shared_Library;
 
 namespace ClientUNO
 {
-    class GameClient
+    public class GameClient
     {
         public WebSocket Socket { get; set; }
         public Player player { get; set; }
-
+        public event Action<ServerMessage>? MessageReceived;
         public GameClient(WebSocket socket)
         {
             Socket = socket;
@@ -20,9 +20,11 @@ namespace ClientUNO
         {
             while (Socket.State == WebSocketState.Open)
             {
-                ServerMessage msg = await ReceiveAsync();
-
-                await GameViewModel.ProcessMessage(msg);
+                while (Socket.State == WebSocketState.Open)
+                {
+                    ServerMessage msg = await ReceiveAsync();
+                    MessageReceived?.Invoke(msg);
+                }
             }
         }
         public async Task<ServerMessage> ReceiveAsync()
@@ -40,6 +42,9 @@ namespace ClientUNO
 
             switch (type)
             {
+                case "Confirm":
+                    msg = JsonSerializer.Deserialize<ConfirmMessage>(json);
+                    break;
                 case "Error":
                     msg = JsonSerializer.Deserialize<ErrorMessage>(json);
                     break;

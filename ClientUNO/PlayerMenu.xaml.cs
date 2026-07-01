@@ -13,32 +13,54 @@ using Shared_Library;
 
 namespace ClientUNO
 {
-    
     public partial class PlayerMenu : Window
     {
-        GameClient Client {  get; set; }
+        public GameViewModel Model { get; }
+        public GameClient Client { get; }
         public PlayerMenu()
         {
             InitializeComponent();
-            Client.player = new Player("Sigma_Woman");
-            username.Text = Client.player.Name;
+            Client = App.Session.Client;
+            Model = App.Session.Model;
         }
-
         public async Task CreateRoom_Click(object sender, RoutedEventArgs e)
         {
-            CreateRoomMessage msg= new CreateRoomMessage();
-            await SendAsync(msg);
+            try
+            {
+                var confirm = await App.Session.Model.CreateRoomAsync();
 
-            // схвать ответ с кодом комнаты и создать окно комнаты с переданным кодом
+                Lobby window = new Lobby(confirm.roomCode);
+                window.Show();
+                Close();
+            }
+            catch (Exception ex)
+            {
+                CreateRoomError.Text = ex.Message;
+            }
         }
+        
 
         public async Task ConnectRoom_Click(object sender, RoutedEventArgs e)
         {
-            // открыть окошко для вписывания кода ( или сделать его здесь же )
-            // получить код комнаты
-            // получить подтверждение что комната найдена
-           
-            //  создать окно комнаты с переданным кодом
+            string code = RoomCode.Text;
+            try
+            {
+                var confirm = await App.Session.Model.ConnectRoomAsync(code);
+
+                Lobby window = new Lobby(confirm.roomCode);
+                window.Show();
+                Close();
+            }
+            catch (Exception ex)
+            {
+                ConnectRoomError.Text = ex.Message;
+            }
+        }
+        public async Task LogOut_Click(object sender, RoutedEventArgs e)
+        {
+            MainWindow window = new MainWindow();
+            window.Show();
+            this.Close();
         }
     }
 }

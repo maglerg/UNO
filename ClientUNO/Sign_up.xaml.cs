@@ -12,20 +12,20 @@ using System.Windows.Shapes;
 
 namespace ClientUNO
 {
-    /// <summary>
-    /// Логика взаимодействия для Sign_up.xaml
-    /// </summary>
     public partial class Sign_up : Window
     {
+        public GameViewModel Model { get; }
+        public GameClient Client { get; }
         public Sign_up()
         {
             InitializeComponent();
+            Client = App.Session.Client;
+            Model = App.Session.Model;
         }
-        public void SignUp_Click (object sender, RoutedEventArgs e)
+        public async Task SignUp_Click (object sender, RoutedEventArgs e)
         {
             string username = UsernameBox.Text;
             string password1 = Password1.Password;
-            string password2 = Password2.Password;
 
             bool hasError = false;
 
@@ -51,20 +51,10 @@ namespace ClientUNO
                 PasswordError1.Visibility = Visibility.Collapsed;
             }
 
-            if (password1 != password2)
-            {
-                PasswordError.Text = "Passwords do not match";
-                PasswordError.Visibility = Visibility.Visible;
-                hasError = true;
-            }
-            else
-            {
-                PasswordError.Visibility = Visibility.Collapsed;
-            }
-
             if (!hasError)
             {
-                Lobby lobby = new Lobby();
+                var confirm = await App.Session.Model.SignUpAsync(username, password1);
+                PlayerMenu lobby = new PlayerMenu();
                 lobby.Show();
 
                 this.Owner.Close();

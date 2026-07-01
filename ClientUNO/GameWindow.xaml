@@ -65,26 +65,56 @@
         </StackPanel>
 
         <!-- ================= CENTER GAME AREA ================= -->
-        <Grid HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,212,0,0">
+        <Grid HorizontalAlignment="Center"
+      VerticalAlignment="Top"
+      Margin="0,212,0,0">
 
             <!-- Deck -->
-            <Border Width="120" Height="160"
-                    Background="Transparent"
-                    BorderThickness="3"
-                    BorderBrush="Black"
-                    HorizontalAlignment="Left"
-                    Margin="-160,0,0,0"/>
+            <Button Width="120"
+            Height="160"
+            Command="{Binding DrawCardCommand}"
+            HorizontalAlignment="Left"
+            Margin="-160,0,0,0">
+
+                <Image Source="Images/Cards/back.png"/>
+            </Button>
 
             <!-- Last card -->
-            <Border Width="120" Height="160"
-                    Background="Transparent"
-                    BorderThickness="3"
-                    BorderBrush="DarkRed"
-                    HorizontalAlignment="Right"
-                    Margin="0,0,-160,0"/>
+            <Border Width="120"
+            Height="160"
+            HorizontalAlignment="Right"
+            Margin="0,0,-160,0">
+
+                <Image Source="{Binding TopCard.ImagePath}"/>
+            </Border>
+            <StackPanel HorizontalAlignment="Right"
+            VerticalAlignment="Top"
+            Margin="0,200,-160,0"
+            Width="160">
+
+                <Border Background="#AAFF4444"
+            CornerRadius="10"
+            Padding="8"
+            Visibility="{Binding ErrorVisibility}">
+
+                    <TextBlock Text="{Binding ErrorMessage}"
+                   Foreground="White"
+                   TextWrapping="Wrap"
+                   HorizontalAlignment="Center"/>
+                </Border>
+
+            </StackPanel>
+            <!-- Draw button -->
+            <Button Content="Взять карту"
+            Width="120"
+            Height="35"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Bottom"
+            Margin="-160,175,0,0"
+            Command="{Binding DrawCardCommand}"/>
 
         </Grid>
-
+        
         <!-- ================= BOTTOM (MAIN PLAYER) ================= -->
         <StackPanel HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0,0,0,20">
 
@@ -114,13 +144,15 @@
 
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Border Width="90"
-                    Height="130"
-                    BorderThickness="2"
-                    BorderBrush="Black"
-                    Margin="5">
-                                <Image Source="{Binding ImagePath}"/>
-                            </Border>
+                            <Button Command="{Binding DataContext.PlayCardCommand,
+                                                      RelativeSource={RelativeSource AncestorType=Window}}"
+                                    CommandParameter="{Binding}"
+                                    Margin="5">
+
+                                <Image Source="{Binding ImagePath}"
+                                       Width="90"
+                                       Height="130"/>
+                            </Button>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
@@ -128,6 +160,22 @@
             </StackPanel>
 
         </StackPanel>
+        <Grid x:Name="ColorOverlay"
+          Background="#80000000"
+          Visibility="Collapsed">
 
+            <StackPanel
+            Orientation="Horizontal"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center">
+
+                <Button Background="Red" Width="50" Height="50" Click="ChooseRed"/>
+                <Button Background="Blue" Width="50" Height="50" Click="ChooseBlue"/>
+                <Button Background="Green" Width="50" Height="50" Click="ChooseGreen"/>
+                <Button Background="Yellow" Width="50" Height="50" Click="ChooseYellow"/>
+
+            </StackPanel>
+        </Grid>
     </Grid>
 </Window>
+

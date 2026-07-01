@@ -11,14 +11,17 @@ using System.Windows.Shapes;
 
 namespace ClientUNO
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
+    // сделать класс для хранения списка игроков и загрузки его на сервере
+    // сообщение для создания и поиска учетной записи и их обработка
     public partial class MainWindow : Window
     {
+        public GameViewModel Model { get;}
+        public GameClient Client { get; }
         public MainWindow()
         {
             InitializeComponent();
+            Client = App.Session.Client;
+            Model = App.Session.Model;
         }
         private void SignUp_Click(object sender, RoutedEventArgs e)
         {

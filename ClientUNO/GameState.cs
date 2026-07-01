@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ClientUNO
 {
-    class GameState
+    public class GameState
     {
         public List<PlayerInfo> Players { get; set; }
         public string password { get; set; }

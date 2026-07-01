@@ -12,23 +12,87 @@ namespace ServerUNO
     {
         Dictionary<string, GameRoom> Rooms = new();
         const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        AccountManager accountManager { get; set; }
 
         public async Task ProcessMessage(ClientConnection client, ServerMessage msg)
         {
             switch (msg)
             {
+                case SignUpMessage sMsg:
+                    if (accountManager.Find(sMsg.name, sMsg.password) != null)
+                    {
+                        var okMsg1 = new ConfirmMessage(RequestType.ConnectRoom, "ok");
+                        await client.SendAsync(okMsg1);
+                    }
+                    else
+                    {
+                        await client.SendAsync(new ErrorMessage
+                        {
+                            RequestType = RequestType.StartGame,
+                            TextError = "Пользователь не найден."
+                        });
+                    }
+
+                    break;
+                case LoginMessage lMsg:
+                    if (accountManager.Find(lMsg.name, lMsg.password) != null)
+                    {
+                        await client.SendAsync(new ErrorMessage
+                        {
+                            RequestType = RequestType.StartGame,
+                            TextError = "Данный пользователь уже существует."
+                        });
+                    }
+                    else
+                    {
+                        var okMsg1 = new ConfirmMessage(RequestType.ConnectRoom, "ok");
+                        await client.SendAsync(okMsg1);
+                    }
+                    break;
                 case ConnectMessage:
                     try
                     {
-                        JoinRoom(msg, client);
+                        var room = JoinRoom(msg, client);
+                        
+                        var okMsg1 = new ConfirmMessage(RequestType.ConnectRoom, "ok");
+                        await client.SendAsync(okMsg1);
+                        for (int i = 0; i < room.Clients.Count; i++)
+                        {
+                            if (room.Clients[i] != client)
+                            {
+                                var player = new PlayerInfo(room.Clients[i].Player.Name, -1);
+                                await client.SendAsync(new SomeoneJoin(player));
+                            }
+                        }
+                     
                     }
                     catch(Exception ex)
                     {
                         Console.WriteLine(ex.Message);
+                        await client.SendAsync(new ErrorMessage
+                        {
+                            RequestType = RequestType.ConnectRoom,
+                            TextError = "Сouldn't join the room"
+                        });
                     }
                     break;
                 case CreateRoomMessage:
-                    CreateRoom();
+                    try
+                    {
+                        string code = CreateRoom();
+                        var okMsg = new ConfirmMessage(RequestType.CreateRoom, code);
+                        await client.SendAsync(okMsg);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                        await client.SendAsync(new ErrorMessage
+                        {
+                            RequestType = RequestType.CreateRoom,
+                            TextError = "Сouldn't create a room"
+                        });
+                    }
+
                     break;
                 default:
                     client.Room.ProcessMessage(client.Player, msg);
@@ -43,7 +107,7 @@ namespace ServerUNO
                     .Select(_ => chars[Random.Shared.Next(chars.Length)])
                     .ToArray());
         }
-        public void CreateRoom()
+        public string CreateRoom()
         {
             GameRoom newRoom = new GameRoom();
 
@@ -55,18 +119,19 @@ namespace ServerUNO
             while (Rooms.ContainsKey(code));
 
             Rooms.Add(code, newRoom);
+            return code;
         }
         public GameRoom GetRoom(string code)
         {
             Rooms.TryGetValue(code, out GameRoom room);
             return room;
         }
-        public void JoinRoom(ServerMessage message, ClientConnection client)
+        public GameRoom JoinRoom(ServerMessage message, ClientConnection client)
         {
             var connectMsg = message as ConnectMessage;
 
             if (connectMsg == null)
-                return;
+                throw new Exception("Connect is close");
 
             string code = connectMsg.CodeRoom;
 
@@ -75,8 +140,10 @@ namespace ServerUNO
             if (room.CanJoinPlayer(client.Player))
             {
                 room.Clients.Add(client);
+                return room;
             }
+            throw new Exception("Сouldn't find the room");
         }
-        // удалить комнату
+        
     }
 }

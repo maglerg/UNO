@@ -13,10 +13,6 @@ namespace Server
         public List<ClientConnection> Clients = new List<ClientConnection>();
         public GameEngine Engine;
 
-        /*class GameRoom
-        {
-            public List<Player> Clients.Player;
-        }*/
         public async Task SendGameStage()
         {
 
@@ -67,23 +63,57 @@ namespace Server
                         {
                             await client.SendAsync(new ErrorMessage
                             {
+                                RequestType = RequestType.StartGame,
                                 TextError = "Нельзя начать игру"
                             });
                         }
                     }   
                     break;
+                case LeaveGameMessage:
+                    try {
+                        Clients.Remove(Clients[indexPlayer]);
 
+                        var okMsg4 = new ConfirmMessage(RequestType.LeaveGame, "ok");
+                        await Clients[indexPlayer].SendAsync(okMsg4);
+                        for (int i = 1; i < Clients.Count; i++)
+                        {
+                            if (Clients[i] != Clients[indexPlayer])
+                            {
+                                var person = new PlayerInfo(Clients[i].Player.Name, -1);
+                                var msgl = new SomeoneLeft(person);
+                                await Clients[i].SendAsync(msgl);
+                            }
+                        }
+                    }
+                    catch(Exception ex)
+                    {
+                        foreach (var client in Clients)
+                        {
+                            await client.SendAsync(new ErrorMessage
+                            {
+                                RequestType = RequestType.LeaveGame,
+                                TextError = $"Couldn't leave game. {ex.Message}"
+                            });
+                        }
+                    }
+                    break;
                 case TakeCardMessage:
                     Engine.TakeCard(indexPlayer);
+                    var okMsg1 = new ConfirmMessage(RequestType.TakeCard, "ok");
+                    await Clients[indexPlayer].SendAsync(okMsg1);
                     await SendGameStage();
                     break;
 
                 case PlayCardMessage playMsg:
                     Engine.PlayCard(indexPlayer, playMsg.card, playMsg.chosenColor);
+                    var okMsg2 = new ConfirmMessage(RequestType.PlayCard, "ok");
+                    await Clients[indexPlayer].SendAsync(okMsg2);
                     await SendGameStage();
                     break;
                 case PushUNOMessage pushunoMsg:
                     Engine.PushUno(pushunoMsg.indexPush);
+                    var okMsg3 = new ConfirmMessage(RequestType.PlayUno, "ok");
+                    await Clients[indexPlayer].SendAsync(okMsg3);
                     await SendGameStage();
                     break;
                 default:
@@ -91,6 +121,7 @@ namespace Server
                     {
                         await client.SendAsync(new ErrorMessage
                         {
+                            RequestType = RequestType.GameState,
                             TextError = "Несуществующее действие"
                         });
                     }

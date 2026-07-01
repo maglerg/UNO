@@ -16,7 +16,11 @@ namespace Shared_Library
         SomeoneLeft,
         StartGame,
         LeaveGame,
-        GameState
+        GameState,
+        
+        TakeCard,
+        PlayCard,
+        PlayUno
     }
     public abstract class ServerMessage
     {
@@ -64,7 +68,12 @@ namespace Shared_Library
     public class PlayCardMessage : ServerMessage
     {
         public Card card { get; set; }
-        public ColorCard chosenColor { get; set; }
+        public ColorCard? chosenColor { get; set; }
+        public PlayCardMessage(Card card, ColorCard? chosenColor = null)
+        {
+            this.card = card;
+            this.chosenColor = chosenColor;
+        }
     }
 
     public class StartGameMessage : ServerMessage
@@ -91,6 +100,10 @@ namespace Shared_Library
     public class PushUNOMessage : ServerMessage
     {
         public int indexPush {  get; set; } // кому нажали
+        public PushUNOMessage(int indexPush)
+        {
+            this.indexPush = indexPush;
+        }
     }
     public class SignUpMessage : ServerMessage
     {

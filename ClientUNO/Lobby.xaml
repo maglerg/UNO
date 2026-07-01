@@ -91,8 +91,25 @@ FontFamily="Comic Sans MS" Foreground="#6F4E37" Background="White" Opacity="0.7"
         </StackPanel>
 
         <StackPanel Margin="514,104,53,41">
-            <TextBlock Text="Players" FontSize="15"
+            <TextBlock Text="Players" FontSize="20"
 FontFamily="Comic Sans MS" Foreground="SaddleBrown"/>
+            <ListBox ItemsSource="{Binding Players}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Border Background="White"
+                    CornerRadius="10"
+                    Padding="10"
+                    Margin="5"
+                    Opacity="0.8">
+
+                            <TextBlock Text="{Binding Name}"
+                           FontSize="18"
+                           FontFamily="Comic Sans MS"
+                           Foreground="Black"/>
+                        </Border>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
         </StackPanel>
         <Button Content="Start game"
         Width="267"
@@ -105,5 +122,29 @@ FontFamily="Comic Sans MS" Foreground="SaddleBrown"/>
         HorizontalAlignment="Left"
         VerticalAlignment="Top"
         Margin="72,230,0,0"/>
+
+        <TextBlock x:Name="StartGameError"
+               Foreground="Red"
+               FontSize="12"
+               Visibility="Collapsed"
+               Margin="168,2,0,0"/>
+        <Button Content="Leave game |->"
+Width="267"
+Height="42"
+FontSize="20"
+FontFamily="Comic Sans MS"
+Foreground="#6F4E37"
+Background="White"
+Opacity="0.7"
+HorizontalAlignment="Left"
+VerticalAlignment="Top"
+Margin="72,341,0,0"/>
+
+        <TextBlock x:Name="LeaveGameError"
+       Foreground="Red"
+       FontSize="12"
+       Visibility="Collapsed"
+       Margin="168,2,0,0"/>
+
     </Grid>
 </Window>
