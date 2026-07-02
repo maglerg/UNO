@@ -23,6 +23,7 @@ namespace ServerUNO
                     {
                         var okMsg1 = new ConfirmMessage(RequestType.ConnectRoom, "ok");
                         await client.SendAsync(okMsg1);
+                        Console.WriteLine($"Успешный вход пользователя {sMsg.name}");
                     }
                     else
                     {
@@ -47,6 +48,7 @@ namespace ServerUNO
                     {
                         var okMsg1 = new ConfirmMessage(RequestType.ConnectRoom, "ok");
                         await client.SendAsync(okMsg1);
+                        Console.WriteLine($"Успешная регистрация пользователя {lMsg.name}");
                     }
                     break;
                 case ConnectMessage:

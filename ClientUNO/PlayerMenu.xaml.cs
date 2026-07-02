@@ -23,7 +23,7 @@ namespace ClientUNO
             Client = App.Session.Client;
             Model = App.Session.Model;
         }
-        public async Task CreateRoom_Click(object sender, RoutedEventArgs e)
+        private async void CreateRoom_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -38,11 +38,11 @@ namespace ClientUNO
                 CreateRoomError.Text = ex.Message;
             }
         }
-        
 
-        public async Task ConnectRoom_Click(object sender, RoutedEventArgs e)
+        private async void ConnectRoom_Click(object sender, RoutedEventArgs e)
         {
             string code = RoomCode.Text;
+
             try
             {
                 var confirm = await App.Session.Model.ConnectRoomAsync(code);
@@ -56,7 +56,8 @@ namespace ClientUNO
                 ConnectRoomError.Text = ex.Message;
             }
         }
-        public async Task LogOut_Click(object sender, RoutedEventArgs e)
+
+        private async void LogOut_Click(object sender, RoutedEventArgs e)
         {
             MainWindow window = new MainWindow();
             window.Show();

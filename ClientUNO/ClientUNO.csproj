@@ -40,11 +40,6 @@
 
   <ItemGroup>
     <Resource Include="Images\Cute_girl.jpg" />
-    <Resource Include="Images\sunflowers.jpg" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="Images\cute_cat_4.jpg" />
   </ItemGroup>
 
   <ItemGroup>
@@ -55,16 +50,10 @@
     <Resource Include="Images\beige.jpg" />
     <Resource Include="Images\Coffeeeee.jpg" />
     <Resource Include="Images\cozy girl.jpg" />
-    <Resource Include="Images\cute cat.jpg" />
-    <Resource Include="Images\cute_cat_1.jpg" />
     <Resource Include="Images\cute_cat_2.jpg" />
-    <Resource Include="Images\cute_cat_5.jpg" />
     <Resource Include="Images\cute_cat_6.jpg" />
     <Resource Include="Images\Cute_cat_7.jpg" />
-    <Resource Include="Images\light_background.jpg" />
     <Resource Include="Images\nails.jpg" />
-    <Resource Include="Images\Strawberry.jpg" />
-    <Resource Include="Images\Watermelon.jpg" />
   </ItemGroup>
 
 </Project>

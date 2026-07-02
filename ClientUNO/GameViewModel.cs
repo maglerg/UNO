@@ -1,14 +1,12 @@
-﻿using Microsoft.Win32;
+﻿
 using Shared_Library;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Documents;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.ComponentModel;
+using System.Windows;
+using System.Windows.Input;
 
 namespace ClientUNO
 {
-    public class GameViewModel
+    public class GameViewModel : INotifyPropertyChanged
     {
         public GameState state { get; set; }
 
@@ -16,7 +14,6 @@ namespace ClientUNO
         public event Action<ErrorMessage> StartGameError;
         public event Action<SomeoneJoin> SomeoneJoin;
         public event Action<SomeoneLeft> SomeoneLeft;
-        public event Action? GameStateChanged;
 
         private TaskCompletionSource<ConfirmMessage>? _createRoomTcs;
         private TaskCompletionSource<ConfirmMessage>? _connectRoomTcs;
@@ -27,9 +24,69 @@ namespace ClientUNO
         private TaskCompletionSource<ConfirmMessage>? _playCardTcs;
         private TaskCompletionSource<ConfirmMessage>? _playUnoTcs;
 
+        public ICommand DrawCardCommand { get; }
+        public ICommand PlayCardCommand { get; }
+        public ICommand UnoCommand { get; }
+
+        public List<Card> Cards => state.MyCards;
+        public Card TopCard => state.lastCard;
+        public int MyCardsCount => state.MyCards.Count;
+        public bool CanSayUno => state.MyCards.Count == 1;
+
+        public string ErrorMessage { get; set; }
+        public Visibility ErrorVisibility { get; set; } = Visibility.Collapsed;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string name)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+
+        private Card? _selectedCard;
+
+        private bool _isColorSelectionVisible;
+
+        public bool IsColorSelectionVisible
+        {
+            get => _isColorSelectionVisible;
+            set
+            {
+                _isColorSelectionVisible = value;
+                OnPropertyChanged(nameof(IsColorSelectionVisible));
+                OnPropertyChanged(nameof(ColorSelectionVisibility));
+            }
+        }
+
+        public Visibility ColorSelectionVisibility =>
+            IsColorSelectionVisible ? Visibility.Visible : Visibility.Collapsed;
+
+        public ICommand ChooseColorCommand { get; }
+
+        public PlayerInfo TopPlayer => state.Players[0];
+        public PlayerInfo LeftPlayer => state.Players[1];
+        public PlayerInfo RightPlayer => state.Players[2];
+        public PlayerInfo Me => state.Players[3];
+
+        public Visibility TopPlayerUnoVisibility =>
+    TopPlayer.CardCount == 1 ? Visibility.Visible : Visibility.Collapsed;
+
+        public Visibility LeftPlayerUnoVisibility =>
+            LeftPlayer.CardCount == 1 ? Visibility.Visible : Visibility.Collapsed;
+
+        public Visibility RightPlayerUnoVisibility =>
+            RightPlayer.CardCount == 1 ? Visibility.Visible : Visibility.Collapsed;
+
+        public Visibility MyUnoVisibility =>
+            Me.CardCount == 1 ? Visibility.Visible : Visibility.Collapsed;
+
+
         public GameViewModel()
         {
             state = new GameState();
+
+            DrawCardCommand = new RelayCommand(() => _ =  TakeCardAsync());
+            PlayCardCommand = new RelayCommand<Card>(card => _ = PlayCardCommandExecute(card));
+            UnoCommand = new RelayCommand<int>(index => _ = PlayUnoAsync(index));
         }
         public void ProcessMessage(ServerMessage msg)
         {
@@ -50,7 +107,20 @@ namespace ClientUNO
                     break;
                 case GameStateMessage game:
                     state.Update(game);
-                    GameStateChanged?.Invoke();
+                    OnPropertyChanged(nameof(Cards));
+                    OnPropertyChanged(nameof(TopCard));
+                    OnPropertyChanged(nameof(MyCardsCount));
+                    OnPropertyChanged(nameof(CanSayUno));
+
+                    OnPropertyChanged(nameof(TopPlayer));
+                    OnPropertyChanged(nameof(LeftPlayer));
+                    OnPropertyChanged(nameof(RightPlayer));
+                    OnPropertyChanged(nameof(Me));
+
+                    OnPropertyChanged(nameof(TopPlayerUnoVisibility));
+                    OnPropertyChanged(nameof(LeftPlayerUnoVisibility));
+                    OnPropertyChanged(nameof(RightPlayerUnoVisibility));
+                    OnPropertyChanged(nameof(MyUnoVisibility));
                     break;
 
                 default:
@@ -186,7 +256,7 @@ namespace ClientUNO
         {
             _loginTcs = new TaskCompletionSource<ConfirmMessage>();
 
-            await App.Session.Client.SendAsync(new SignUpMessage(name, password));
+            await App.Session.Client.SendAsync(new LoginMessage(name, password));
 
             return await _loginTcs.Task;
         }
@@ -197,6 +267,17 @@ namespace ClientUNO
             await App.Session.Client.SendAsync(new TakeCardMessage());
 
             return await _takeCardTcs.Task;
+        }
+        private async Task PlayCardCommandExecute(Card card)
+        {
+            if (card.Color == ColorCard.Black)
+            {
+                _selectedCard = card;
+                IsColorSelectionVisible = true;
+                return;
+            }
+
+            await PlayCardAsync(card, null);
         }
         public async Task<ConfirmMessage> PlayCardAsync(Card card, ColorCard? chosenColor)
         {
@@ -213,6 +294,19 @@ namespace ClientUNO
             await App.Session.Client.SendAsync(new PushUNOMessage(indexPush));
 
             return await _playUnoTcs.Task;
+        }
+        public void ShowError(string message)
+        {
+            ErrorMessage = message;
+            ErrorVisibility = Visibility.Visible;
+            OnPropertyChanged(nameof(ErrorMessage));
+            OnPropertyChanged(nameof(ErrorVisibility));
+
+            Task.Delay(2000).ContinueWith(_ =>
+            {
+                ErrorVisibility = Visibility.Collapsed;
+                OnPropertyChanged(nameof(ErrorVisibility));
+            });
         }
     }
 }

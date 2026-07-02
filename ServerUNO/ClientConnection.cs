@@ -38,52 +38,36 @@ namespace Shared_Library
         public async Task<ServerMessage> ReceiveAsync()
         {
             byte[] buffer = new byte[4096];
+
             WebSocketReceiveResult result =
                 await Socket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
 
             string json = Encoding.UTF8.GetString(buffer, 0, result.Count);
 
-            JsonDocument doc = JsonDocument.Parse(json);
-            string type = doc.RootElement.GetProperty("Type").GetString();
+            var baseMsg = JsonSerializer.Deserialize<JsonElement>(json);
+            var type = baseMsg.GetProperty("Type").GetString();
 
-            ServerMessage msg;
+            if (type == null)
+                throw new Exception("Message Type is null");
 
-            switch (type)
+            return type switch
             {
-                case "Connect":
-                    msg = JsonSerializer.Deserialize<ConnectMessage>(json);
-                    break;
-                case "CreateRoom":
-                    msg = JsonSerializer.Deserialize<CreateRoomMessage>(json);
-                    break;
-                case "TakeCard":
-                    msg = JsonSerializer.Deserialize<TakeCardMessage>(json);
-                    break;
-                case "PlayCard":
-                    msg = JsonSerializer.Deserialize<PlayCardMessage>(json);
-                    break;
-                case "StartGame":
-                    msg = JsonSerializer.Deserialize<StartGameMessage>(json);
-                    break;
-                case "Error":
-                    msg = JsonSerializer.Deserialize<ErrorMessage>(json);
-                    break;
-                case "PlayUNO":
-                    msg = JsonSerializer.Deserialize<PushUNOMessage>(json);
-                    break;
-                case "GameState":
-                    msg = JsonSerializer.Deserialize<GameStateMessage>(json);
-                    break;
-                case "SignUp":
-                    msg = JsonSerializer.Deserialize<SignUpMessage>(json);
-                    break;
-                case "Login":
-                    msg = JsonSerializer.Deserialize<LoginMessage>(json);
-                    break;
-                default:
-                    throw new Exception("Unknown message type");
-            }
-            return msg;
+                nameof(ConnectMessage) => JsonSerializer.Deserialize<ConnectMessage>(json),
+                nameof(CreateRoomMessage) => JsonSerializer.Deserialize<CreateRoomMessage>(json),
+                nameof(TakeCardMessage) => JsonSerializer.Deserialize<TakeCardMessage>(json),
+                nameof(PlayCardMessage) => JsonSerializer.Deserialize<PlayCardMessage>(json),
+                nameof(StartGameMessage) => JsonSerializer.Deserialize<StartGameMessage>(json),
+                nameof(ErrorMessage) => JsonSerializer.Deserialize<ErrorMessage>(json),
+                nameof(PushUNOMessage) => JsonSerializer.Deserialize<PushUNOMessage>(json),
+                nameof(GameStateMessage) => JsonSerializer.Deserialize<GameStateMessage>(json),
+                nameof(SignUpMessage) => JsonSerializer.Deserialize<SignUpMessage>(json),
+                nameof(LoginMessage) => JsonSerializer.Deserialize<LoginMessage>(json),
+                nameof(SomeoneJoin) => JsonSerializer.Deserialize<SomeoneJoin>(json),
+                nameof(SomeoneLeft) => JsonSerializer.Deserialize<SomeoneLeft>(json),
+                nameof(LeaveGameMessage) => JsonSerializer.Deserialize<LeaveGameMessage>(json),
+
+                _ => throw new Exception($"Unknown message type: {type}")
+            };
         }
 
         public async Task SendAsync(object message)

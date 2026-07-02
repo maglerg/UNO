@@ -1,6 +1,7 @@
 ﻿<Window x:Class="ClientUNO.GameWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:Shared_Library;assembly=Shared_Library"
         Title="UNO Game" Height="700" Width="1100">
 
     <Window.Resources>
@@ -33,13 +34,17 @@
 
             <StackPanel HorizontalAlignment="Center" Orientation="Vertical">
                 <Border Width="106" Height="104" CornerRadius="6" BorderThickness="5" BorderBrush="Gray"/>
-                <TextBlock Text="Player 2" HorizontalAlignment="Center"/>
-                <TextBlock Text="Cards: 5" HorizontalAlignment="Center"/>
+                <TextBlock Text="{Binding TopPlayer.Name}"
+           HorizontalAlignment="Center"/>
+
+                <TextBlock Text="{Binding TopPlayer.CardCount,
+                          StringFormat=Cards: {0}}"
+           HorizontalAlignment="Center"/>
 
                 <Button Content="UNO"
-                        Width="60"
-                        Height="25"
-                        Visibility="Hidden"/>
+        Command="{Binding UnoCommand}"
+        CommandParameter="{Binding TopPlayer.Index}"
+        Visibility="{Binding TopPlayerUnoVisibility}"/>
             </StackPanel>
 
         </Grid>
@@ -48,8 +53,15 @@
         <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20">
 
             <Border Width="106" Height="104" CornerRadius="6" BorderThickness="5" BorderBrush="Gray"/>
-            <TextBlock Text="Player 3"/>
-            <TextBlock Text="Cards: 8"/>
+            <TextBlock Text="{Binding LeftPlayer.Name}"/>
+
+            <TextBlock Text="{Binding LeftPlayer.CardCount,
+                          StringFormat=Cards: {0}}"/>
+
+            <Button Content="UNO"
+        Command="{Binding UnoCommand}"
+        CommandParameter="{Binding LeftPlayer.Index}"
+        Visibility="{Binding LeftPlayerUnoVisibility}"/>
 
             <Border Width="120" Height="160" BorderThickness="2" BorderBrush="Transparent"/>
         </StackPanel>
@@ -58,8 +70,15 @@
         <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center" Margin="20">
 
             <Border Width="106" Height="104" CornerRadius="6" BorderThickness="5" BorderBrush="Gray"/>
-            <TextBlock Text="Player 4"/>
-            <TextBlock Text="Cards: 3"/>
+            <TextBlock Text="{Binding RightPlayer.Name}"/>
+
+            <TextBlock Text="{Binding RightPlayer.CardCount,
+                          StringFormat=Cards: {0}}"/>
+
+            <Button Content="UNO"
+        Command="{Binding UnoCommand}"
+        CommandParameter="{Binding RightPlayer.Index}"
+        Visibility="{Binding RightPlayerUnoVisibility}"/>
 
             <Border Width="120" Height="160" BorderThickness="2" BorderBrush="Transparent"/>
         </StackPanel>
@@ -76,7 +95,7 @@
             HorizontalAlignment="Left"
             Margin="-160,0,0,0">
 
-                <Image Source="Images/Cards/back.png"/>
+                <Image Source="Images/back.png"/>
             </Button>
 
             <!-- Last card -->
@@ -122,15 +141,16 @@
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <Border Width="139" Height="139" CornerRadius="6" BorderThickness="5" BorderBrush="Gray"/>
                 <StackPanel Margin="10,0,0,0">
-                    <TextBlock Text="You"/>
-                    <TextBlock Text="Cards: 6"/>
+                    <TextBlock Text="{Binding Me.Name}"/>
+
+                    <TextBlock Text="{Binding Me.CardCount,
+                          StringFormat=Cards: {0}}"/>
                 </StackPanel>
 
                 <Button Content="UNO"
-                        Width="70"
-                        Height="30"
-                        Margin="20,0,0,0"
-                        Visibility="Hidden"/>
+        Command="{Binding UnoCommand}"
+        CommandParameter="{Binding Me.Index}"
+        Visibility="{Binding MyUnoVisibility}"/>
             </StackPanel>
 
             <!-- cards hand -->
@@ -162,17 +182,18 @@
         </StackPanel>
         <Grid x:Name="ColorOverlay"
           Background="#80000000"
-          Visibility="Collapsed">
+          Visibility="{Binding ColorSelectionVisibility}">
 
-            <StackPanel
-            Orientation="Horizontal"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
 
-                <Button Background="Red" Width="50" Height="50" Click="ChooseRed"/>
-                <Button Background="Blue" Width="50" Height="50" Click="ChooseBlue"/>
-                <Button Background="Green" Width="50" Height="50" Click="ChooseGreen"/>
-                <Button Background="Yellow" Width="50" Height="50" Click="ChooseYellow"/>
+                <Button Background="Red" Width="50" Height="50" Command="{Binding ChooseColorCommand}"
+        CommandParameter="{x:Static local:ColorCard.Red}"/>
+                <Button Background="Blue" Width="50" Height="50" Command="{Binding ChooseColorCommand}"
+        CommandParameter="{x:Static local:ColorCard.Blue}"/>
+                <Button Background="Green" Width="50" Height="50" Command="{Binding ChooseColorCommand}"
+        CommandParameter="{x:Static local:ColorCard.Green}"/>
+                <Button Background="Yellow" Width="50" Height="50" Command="{Binding ChooseColorCommand}"
+        CommandParameter="{x:Static local:ColorCard.Yellow}"/>
 
             </StackPanel>
         </Grid>

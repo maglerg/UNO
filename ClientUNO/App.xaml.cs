@@ -5,7 +5,6 @@ using System.Windows;
 
 namespace ClientUNO
 {
-    // сделать наконец игровое поле
     // подключить бд
     // добавить музыку
     // убрать мусор/ оптимизировать код/ добавить вывод в консоль на сервере при любых действиях
@@ -27,8 +26,6 @@ namespace ClientUNO
             Session = new AppSession(client, model);
 
             Task.Run(() => client.ReceiveLoop());
-
-            new MainWindow().Show();
         }
         public static ClientWebSocket ConnectToServer()
         {

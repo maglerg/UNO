@@ -11,6 +11,7 @@ namespace Shared_Library
         public string Name { get; set; }
 
         public int CardCount { get; set; }
+
         public PlayerInfo(string name, int cardCount)
         {
             Name = name;

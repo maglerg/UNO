@@ -25,7 +25,7 @@ namespace ClientUNO
             Client = App.Session.Client;
             Model = App.Session.Model;
         }
-        public async Task Login_Click(object sender, RoutedEventArgs e)
+        private async void Login_Click(object sender, RoutedEventArgs e)
         {
             string username = UsernameBox.Text;
             string password1 = Password1.Password;
@@ -33,7 +33,7 @@ namespace ClientUNO
 
             bool hasError = false;
 
-            if (username.Length < 3)
+            /*if (username.Length < 3)
             {
                 UsernameError.Text = "Username must be at least 3 characters";
                 UsernameError.Visibility = Visibility.Visible;
@@ -64,15 +64,16 @@ namespace ClientUNO
             else
             {
                 PasswordError.Visibility = Visibility.Collapsed;
-            }
+            }*/
 
             if (!hasError)
             {
                 var confirm = await App.Session.Model.LoginAsync(username, password1);
+
                 PlayerMenu lobby = new PlayerMenu();
                 lobby.Show();
 
-                this.Owner.Close();
+                this.Owner?.Close();
                 this.Close();
             }
         }

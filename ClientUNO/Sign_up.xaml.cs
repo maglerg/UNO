@@ -22,7 +22,7 @@ namespace ClientUNO
             Client = App.Session.Client;
             Model = App.Session.Model;
         }
-        public async Task SignUp_Click (object sender, RoutedEventArgs e)
+        private async void SignUp_Click(object sender, RoutedEventArgs e)
         {
             string username = UsernameBox.Text;
             string password1 = Password1.Password;
@@ -54,10 +54,11 @@ namespace ClientUNO
             if (!hasError)
             {
                 var confirm = await App.Session.Model.SignUpAsync(username, password1);
+
                 PlayerMenu lobby = new PlayerMenu();
                 lobby.Show();
 
-                this.Owner.Close();
+                this.Owner?.Close();
                 this.Close();
             }
         }

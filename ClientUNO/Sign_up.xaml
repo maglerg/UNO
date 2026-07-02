@@ -116,7 +116,7 @@
         Foreground="#6F4E37" Background="White" Opacity="0.7" Click="SignUp_Click"/>
                 <Button Content="Undo" Width="150" Height="40" FontSize="15" Margin="10"
 FontFamily="Comic Sans MS"
-Foreground="#6F4E37" Background="White" Opacity="0.7"/>
+Foreground="#6F4E37" Background="White" Opacity="0.7" Click="Undo_Click"/>
             </StackPanel>
         </StackPanel>
 

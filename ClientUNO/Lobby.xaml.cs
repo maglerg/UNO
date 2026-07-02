@@ -46,7 +46,7 @@ namespace ClientUNO
         }
         private void OnStartGame(ConfirmMessage confirm)
         {
-            GameWindow window = new GameWindow(Client);
+            GameWindow window = new GameWindow();
             window.Show();
             Close();
         }

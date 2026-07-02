@@ -132,7 +132,7 @@
             <StackPanel Orientation="Horizontal" Margin="10">
                 <Button Content="Sign up" Width="150" Height="40" FontSize="15" Margin="30,10,50,10"
         FontFamily="Comic Sans MS"
-        Foreground="#6F4E37" Background="White" Opacity="0.7" Click="SignUp_Click"/>
+        Foreground="#6F4E37" Background="White" Opacity="0.7" Click="Login_Click"/>
                 <Button Content="Undo" Width="150" Height="40" FontSize="15" Margin="10"
 FontFamily="Comic Sans MS"
 Foreground="#6F4E37" Background="White" Opacity="0.7"/>
