@@ -27,7 +27,7 @@ namespace Server
                 bool isMyTurn = false;
                 if (i == Engine.currentPlayer)
                     isMyTurn = true;
-                    var msgdto = new GameStateMessage(infos, Engine.currentPlayer,
+                    var msgdto = new GameStateMessage(infos, Clients[i].Player.PlayerCards, Engine.currentPlayer,
                     Engine.direction, Engine.lastCard, Engine.currentColor, isMyTurn);
                 await Clients[i].SendAsync(msgdto);
             }
@@ -46,7 +46,7 @@ namespace Server
                 }
             }
             if (indexPlayer == -1)
-                throw new ArgumentException("Игрок не найден");
+                throw new ArgumentException("Player was not found");
 
             switch (msg)
             {
@@ -54,7 +54,7 @@ namespace Server
                     if (CheckStartGame())
                     {
                         Engine.StartGame();
-
+                        // отправиль подтверждение игры
                         await SendGameStage();
                     }
                     else
@@ -64,7 +64,7 @@ namespace Server
                             await client.SendAsync(new ErrorMessage
                             {
                                 RequestType = RequestType.StartGame,
-                                TextError = "Нельзя начать игру"
+                                TextError = "Can't start the game"
                             });
                         }
                     }   
@@ -80,7 +80,7 @@ namespace Server
                             if (Clients[i] != Clients[indexPlayer])
                             {
                                 var person = new PlayerInfo(Clients[i].Player.Name, -1);
-                                var msgl = new SomeoneLeft(person);
+                                var msgl = new SomeoneLeftMessage(person);
                                 await Clients[i].SendAsync(msgl);
                             }
                         }
@@ -122,7 +122,7 @@ namespace Server
                         await client.SendAsync(new ErrorMessage
                         {
                             RequestType = RequestType.GameState,
-                            TextError = "Несуществующее действие"
+                            TextError = "Non-existent action"
                         });
                     }
                     break;

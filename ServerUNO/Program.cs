@@ -11,10 +11,16 @@ namespace ServerUNO
     {
         static async Task Main(string[] args)
         {
-            RoomManager roomManager = new RoomManager();
+            AccountManager accountManager = new AccountManager();
+            RoomManager roomManager = new RoomManager(accountManager);
 
             ServerManager server = new ServerManager(roomManager);
+            Console.CancelKeyPress += (sender, e) =>
+            {
+                Console.WriteLine("Server is shutting down");
 
+                accountManager.Save();
+            };
             await server.Start();
         }
     }

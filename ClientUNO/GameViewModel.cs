@@ -12,8 +12,8 @@ namespace ClientUNO
 
         public event Action<ConfirmMessage> StartGame;
         public event Action<ErrorMessage> StartGameError;
-        public event Action<SomeoneJoin> SomeoneJoin;
-        public event Action<SomeoneLeft> SomeoneLeft;
+        public event Action<SomeoneJoinMessage> SomeoneJoin;
+        public event Action<SomeoneLeftMessage> SomeoneLeft;
 
         private TaskCompletionSource<ConfirmMessage>? _createRoomTcs;
         private TaskCompletionSource<ConfirmMessage>? _connectRoomTcs;
@@ -99,10 +99,10 @@ namespace ClientUNO
                 case ErrorMessage error:
                     ProcessError(error);
                     break;
-                case SomeoneJoin someoneJ:
+                case SomeoneJoinMessage someoneJ:
                     SomeoneJoin?.Invoke(someoneJ);
                     break;
-                case SomeoneLeft someoneL:
+                case SomeoneLeftMessage someoneL:
                     SomeoneLeft?.Invoke(someoneL);
                     break;
                 case GameStateMessage game:

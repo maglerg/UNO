@@ -24,6 +24,8 @@ namespace Shared_Library
         {
             Socket = socket;
             this.roomManager = roomManager;
+            Player = new Player();
+            Room = new GameRoom();
         }
         public async Task ReceiveLoop()
         {
@@ -62,8 +64,8 @@ namespace Shared_Library
                 nameof(GameStateMessage) => JsonSerializer.Deserialize<GameStateMessage>(json),
                 nameof(SignUpMessage) => JsonSerializer.Deserialize<SignUpMessage>(json),
                 nameof(LoginMessage) => JsonSerializer.Deserialize<LoginMessage>(json),
-                nameof(SomeoneJoin) => JsonSerializer.Deserialize<SomeoneJoin>(json),
-                nameof(SomeoneLeft) => JsonSerializer.Deserialize<SomeoneLeft>(json),
+                nameof(SomeoneJoinMessage) => JsonSerializer.Deserialize<SomeoneJoinMessage>(json),
+                nameof(SomeoneLeftMessage) => JsonSerializer.Deserialize<SomeoneLeftMessage>(json),
                 nameof(LeaveGameMessage) => JsonSerializer.Deserialize<LeaveGameMessage>(json),
 
                 _ => throw new Exception($"Unknown message type: {type}")
@@ -75,7 +77,7 @@ namespace Shared_Library
             string json = JsonSerializer.Serialize(message);
 
             byte[] data = Encoding.UTF8.GetBytes(json);
-
+            Console.WriteLine("OUT → " + json);
             await Socket.SendAsync(
                 new ArraySegment<byte>(data),
                 WebSocketMessageType.Text,

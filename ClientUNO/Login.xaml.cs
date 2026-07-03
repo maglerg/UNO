@@ -12,9 +12,6 @@ using System.Windows.Shapes;
 
 namespace ClientUNO
 {
-    /// <summary>
-    /// Логика взаимодействия для Login.xaml
-    /// </summary>
     public partial class Login : Window
     {
         public GameViewModel Model { get; }
@@ -29,7 +26,6 @@ namespace ClientUNO
         {
             string username = UsernameBox.Text;
             string password1 = Password1.Password;
-            string password2 = Password2.Password;
 
             bool hasError = false;
 
@@ -53,28 +49,22 @@ namespace ClientUNO
             else
             {
                 PasswordError1.Visibility = Visibility.Collapsed;
-            }
-
-            if (password1 != password2)
-            {
-                PasswordError.Text = "Passwords do not match";
-                PasswordError.Visibility = Visibility.Visible;
-                hasError = true;
-            }
-            else
-            {
-                PasswordError.Visibility = Visibility.Collapsed;
             }*/
 
-            if (!hasError)
+            try
             {
                 var confirm = await App.Session.Model.LoginAsync(username, password1);
-
+                Client.player.Name = username;
                 PlayerMenu lobby = new PlayerMenu();
                 lobby.Show();
 
                 this.Owner?.Close();
                 this.Close();
+            }
+            catch (Exception ex)
+            {
+                PasswordError1.Text = ex.Message;
+                PasswordError1.Visibility = Visibility.Visible;
             }
         }
         public void Undo_Click(object sender, RoutedEventArgs e)

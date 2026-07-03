@@ -83,9 +83,9 @@
                     </StackPanel.RenderTransform>
                     <TextBlock Text="Room code" FontSize="15"
 FontFamily="Comic Sans MS" Foreground="SaddleBrown" Margin="10" TextAlignment="Center"/>
-                    <TextBlock Width="120" Height="20" Margin="10,0,0,0"/>
+                    <TextBlock Width="120" Height="20" Margin="10,0,0,0" x:Name="roomcode"/>
                     <Button Content="Copy" Width="69" Height="31" FontSize="15"
-FontFamily="Comic Sans MS" Foreground="#6F4E37" Background="White" Opacity="0.7"/>
+FontFamily="Comic Sans MS" Foreground="#6F4E37" Background="White" Opacity="0.7" Click="CopyRoomCode_Click"/>
                 </StackPanel>
             </StackPanel>
         </StackPanel>
@@ -129,6 +129,7 @@ FontFamily="Comic Sans MS" Foreground="SaddleBrown"/>
                Visibility="Collapsed"
                Margin="168,2,0,0"/>
         <Button Content="Leave game |->"
+                Click="LeaveGame_Click"
 Width="267"
 Height="42"
 FontSize="20"

@@ -30,6 +30,7 @@ namespace ClientUNO
             Players = new ObservableCollection<PlayerInfo>();
             var player = new PlayerInfo(Client.player.Name, -1);
             Players.Add(player);
+            roomcode.Text = roomCode;
             DataContext = this;
 
             App.Session.Model.StartGame += OnStartGame;
@@ -46,6 +47,7 @@ namespace ClientUNO
         }
         private void OnStartGame(ConfirmMessage confirm)
         {
+            Logger.Log("Game start");
             GameWindow window = new GameWindow();
             window.Show();
             Close();
@@ -53,14 +55,17 @@ namespace ClientUNO
         private void OnStartGameError(ErrorMessage error)
         {
             StartGameError.Text = error.TextError;
+            Logger.Log("Cant start game");
         }
-        private void OnSomeoneJoinGame(SomeoneJoin msg)
+        private void OnSomeoneJoinGame(SomeoneJoinMessage msg)
         {
             Players.Add(msg.Player);
+            Logger.Log($"{msg.Player} join game");
         }
-        private void OnSomeoneLeftGame(SomeoneLeft msg)
+        private void OnSomeoneLeftGame(SomeoneLeftMessage msg)
         {
             Players.Remove(msg.Player);
+            Logger.Log($"{msg.Player} left game");
         }
         protected override void OnClosed(EventArgs e)
         {
@@ -72,7 +77,7 @@ namespace ClientUNO
             base.OnClosed(e);
         }
 
-        public async Task LogOut_Click(object sender, RoutedEventArgs e)
+        public async void LeaveGame_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -87,6 +92,10 @@ namespace ClientUNO
                 LeaveGameError.Text = ex.Message;
             }
         }
-        
+        private void CopyRoomCode_Click(object sender, RoutedEventArgs e)
+        {
+            Clipboard.SetText(roomcode.Text);
+        }
+
     }
 }

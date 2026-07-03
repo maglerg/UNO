@@ -108,34 +108,15 @@
                FontSize="12"
                Visibility="Collapsed"
                Margin="168,2,0,0"/>
-            </StackPanel>
-            <StackPanel Margin="10">
 
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Repeat the password"
-                   FontFamily="Comic Sans MS"
-                   Foreground="SaddleBrown"
-                   Width="168"
-                   FontSize="15"/>
-
-                    <PasswordBox Width="259" x:Name="Password2"
-                     Height="28"
-                     VerticalContentAlignment="Center"/>
-                </StackPanel>
-
-                <TextBlock x:Name="PasswordError"
-               Foreground="Red"
-               FontSize="12"
-               Visibility="Collapsed"
-               Margin="168,2,0,0"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="10">
-                <Button Content="Sign up" Width="150" Height="40" FontSize="15" Margin="30,10,50,10"
+                <Button Content="Login" Width="150" Height="40" FontSize="15" Margin="30,10,50,10"
         FontFamily="Comic Sans MS"
         Foreground="#6F4E37" Background="White" Opacity="0.7" Click="Login_Click"/>
                 <Button Content="Undo" Width="150" Height="40" FontSize="15" Margin="10"
 FontFamily="Comic Sans MS"
-Foreground="#6F4E37" Background="White" Opacity="0.7"/>
+Foreground="#6F4E37" Background="White" Opacity="0.7" Click="Undo_Click"/>
             </StackPanel>
         </StackPanel>
 

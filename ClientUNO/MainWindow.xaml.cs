@@ -11,8 +11,6 @@ using System.Windows.Shapes;
 
 namespace ClientUNO
 {
-    // сделать класс для хранения списка игроков и загрузки его на сервере
-    // сообщение для создания и поиска учетной записи и их обработка
     public partial class MainWindow : Window
     {
         public GameViewModel Model { get;}
@@ -25,13 +23,14 @@ namespace ClientUNO
         }
         private void SignUp_Click(object sender, RoutedEventArgs e)
         {
-            Sign_up window = new Sign_up();
+            SignUp window = new SignUp();
             window.Owner = this;
             window.Show();
         }
         private void Login_Click(object sender, RoutedEventArgs e)
         {
             Login window = new Login();
+            window.Owner = this;
             window.Show();
         }
         private void Exit_Click(object sender, RoutedEventArgs e)

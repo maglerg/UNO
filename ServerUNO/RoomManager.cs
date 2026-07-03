@@ -2,6 +2,7 @@
 using Shared_Library;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,45 +11,60 @@ namespace ServerUNO
 {
     public class RoomManager
     {
-        Dictionary<string, GameRoom> Rooms = new();
+        private readonly Dictionary<string, GameRoom> Rooms = new();
         const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        AccountManager accountManager { get; set; }
+        private readonly AccountManager accountManager;
+        public RoomManager(AccountManager accountManager)
+        {
+            this.accountManager = accountManager?? throw new ArgumentNullException(nameof(accountManager));
+        }
 
         public async Task ProcessMessage(ClientConnection client, ServerMessage msg)
         {
             switch (msg)
             {
                 case SignUpMessage sMsg:
-                    if (accountManager.Find(sMsg.name, sMsg.password) != null)
+                    var user = accountManager.Find(sMsg.name, sMsg.password);
+
+                    if (user != null)
                     {
-                        var okMsg1 = new ConfirmMessage(RequestType.ConnectRoom, "ok");
-                        await client.SendAsync(okMsg1);
-                        Console.WriteLine($"Успешный вход пользователя {sMsg.name}");
+                        await client.SendAsync(new ErrorMessage(
+                            RequestType.SignUp,
+                            "User already exists"));
+                        Console.WriteLine($"User already exists{sMsg.name}");
                     }
                     else
                     {
-                        await client.SendAsync(new ErrorMessage
-                        {
-                            RequestType = RequestType.StartGame,
-                            TextError = "Пользователь не найден."
-                        });
+                        accountManager.Add(new UserAccount(sMsg.name, sMsg.password));
+                        accountManager.Save();
+                        client.Player.Name = sMsg.name;
+                        await client.SendAsync(new ConfirmMessage(
+                            RequestType.SignUp,
+                            "ok"));
+
+                        Console.WriteLine($"Successful registration {sMsg.name}");
                     }
 
                     break;
                 case LoginMessage lMsg:
-                    if (accountManager.Find(lMsg.name, lMsg.password) != null)
+                    var user1 = accountManager.Find(lMsg.name, lMsg.password);
+
+                    if (user1 == null)
                     {
-                        await client.SendAsync(new ErrorMessage
-                        {
-                            RequestType = RequestType.StartGame,
-                            TextError = "Данный пользователь уже существует."
-                        });
+                        await client.SendAsync(new ErrorMessage(
+                            RequestType.Login,
+                            "Invalid username or password."));
+                        Console.WriteLine($"user isnt find {lMsg.name}");
                     }
                     else
                     {
-                        var okMsg1 = new ConfirmMessage(RequestType.ConnectRoom, "ok");
-                        await client.SendAsync(okMsg1);
-                        Console.WriteLine($"Успешная регистрация пользователя {lMsg.name}");
+                        Console.WriteLine($"Socket state → {client.Socket?.State}");
+                        client.Player.Name = lMsg.name;
+                        await client.SendAsync(new ConfirmMessage(
+                            RequestType.Login,
+                            "ok"));
+
+                        Console.WriteLine($"User {lMsg.name} logged in");
                     }
                     break;
                 case ConnectMessage:
@@ -63,10 +79,10 @@ namespace ServerUNO
                             if (room.Clients[i] != client)
                             {
                                 var player = new PlayerInfo(room.Clients[i].Player.Name, -1);
-                                await client.SendAsync(new SomeoneJoin(player));
+                                await client.SendAsync(new SomeoneJoinMessage(player));
                             }
                         }
-                     
+                        Console.WriteLine($"User {client.Player.Name} connected");
                     }
                     catch(Exception ex)
                     {
@@ -77,6 +93,7 @@ namespace ServerUNO
                             TextError = "Сouldn't join the room"
                         });
                     }
+
                     break;
                 case CreateRoomMessage:
                     try

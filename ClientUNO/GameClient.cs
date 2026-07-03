@@ -10,21 +10,26 @@ namespace ClientUNO
     public class GameClient
     {
         public WebSocket Socket { get; set; }
-        public Player player { get; set; }
+        public PlayerInfo player { get; set; }
         public event Action<ServerMessage>? MessageReceived;
         public GameClient(WebSocket socket)
         {
             Socket = socket;
+            player = new PlayerInfo();
         }
         public async Task ReceiveLoop()
         {
-            while (Socket.State == WebSocketState.Open)
+            try
             {
                 while (Socket.State == WebSocketState.Open)
                 {
                     ServerMessage msg = await ReceiveAsync();
                     MessageReceived?.Invoke(msg);
                 }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex.Message);
             }
         }
         public async Task<ServerMessage> ReceiveAsync()
@@ -36,21 +41,28 @@ namespace ClientUNO
             string json = Encoding.UTF8.GetString(buffer, 0, result.Count);
 
             JsonDocument doc = JsonDocument.Parse(json);
+            Console.WriteLine("IN ← " + json);
             string type = doc.RootElement.GetProperty("Type").GetString();
 
             ServerMessage msg;
 
             switch (type)
             {
-                case "Confirm":
+                case "ConfirmMessage":
                     msg = JsonSerializer.Deserialize<ConfirmMessage>(json);
                     break;
-                case "Error":
+                case "ErrorMessage":
                     msg = JsonSerializer.Deserialize<ErrorMessage>(json);
                     break;
 
-                case "GameState":
+                case "GameStateMessage":
                     msg = JsonSerializer.Deserialize<GameStateMessage>(json);
+                    break;
+                case "SomeoneJoinMessage":
+                    msg = JsonSerializer.Deserialize<SomeoneJoinMessage>(json);
+                    break;
+                case "SomeoneLeftMessage":
+                    msg = JsonSerializer.Deserialize<SomeoneLeftMessage>(json);
                     break;
                 default:
                     throw new Exception("Unknown message type");

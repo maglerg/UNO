@@ -9,8 +9,6 @@ namespace Shared_Library
         SignUp,
         CreateRoom,
         ConnectRoom,
-        SomeoneJoin,
-        SomeoneLeft,
         StartGame,
         LeaveGame,
         GameState,
@@ -116,23 +114,23 @@ namespace Shared_Library
         }
     }
 
-    public class SomeoneJoin : ServerMessage
+    public class SomeoneJoinMessage : ServerMessage
     {
         public PlayerInfo Player { get; set; }
 
-        public SomeoneJoin(PlayerInfo player)
-            : base(nameof(SomeoneJoin))
+        public SomeoneJoinMessage(PlayerInfo player)
+            : base(nameof(SomeoneJoinMessage))
         {
             Player = player;
         }
     }
 
-    public class SomeoneLeft : ServerMessage
+    public class SomeoneLeftMessage : ServerMessage
     {
         public PlayerInfo Player { get; set; }
 
-        public SomeoneLeft(PlayerInfo player)
-            : base(nameof(SomeoneLeft))
+        public SomeoneLeftMessage(PlayerInfo player)
+            : base(nameof(SomeoneLeftMessage))
         {
             Player = player;
         }
@@ -151,7 +149,10 @@ namespace Shared_Library
     {
         public RequestType RequestType { get; set; }
         public string TextError { get; set; }
-
+        public ErrorMessage()
+    : base(nameof(ErrorMessage))
+        {
+        }
         public ErrorMessage(RequestType requestType, string textError)
             : base(nameof(ErrorMessage))
         {

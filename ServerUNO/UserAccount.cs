@@ -12,5 +12,12 @@ namespace ServerUNO
         public string Password { get; set; }
         public int Wins { get; set; }
         public int Points { get; set; }
+        public UserAccount(string username, string password)
+        {
+            Username = username;
+            Password = password;
+            Wins = 0;
+            Points = 0;
+        }
     }
 }

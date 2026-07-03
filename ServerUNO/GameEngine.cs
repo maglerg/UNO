@@ -53,7 +53,7 @@ namespace Server
                     NextPlayer();
                 }
             }
-            else throw new Exception("Игрок не является активным");
+            else throw new Exception("Player is not active");
         }
         public void PlayCard(int player, Card card, ColorCard? chosenColor = null) // сыграть карту
         {
@@ -76,10 +76,10 @@ namespace Server
                         NextPlayer();
                     }
                 }
-                else throw new Exception("Некорретная карта или не выбран цвет");
+                else throw new Exception("Uncorrected card or color is not selected");
 
             }
-            else throw new Exception("Игрок не является активным");
+            else throw new Exception("Player is not active");
         }
 
         public void PushUno(int indexPush) // нажать кнопку уно

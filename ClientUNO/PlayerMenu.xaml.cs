@@ -22,6 +22,8 @@ namespace ClientUNO
             InitializeComponent();
             Client = App.Session.Client;
             Model = App.Session.Model;
+
+            username.Text = Client.player.Name;
         }
         private async void CreateRoom_Click(object sender, RoutedEventArgs e)
         {

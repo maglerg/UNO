@@ -12,6 +12,18 @@ namespace ServerUNO
         private List<UserAccount> _users = new();
         private readonly string _filePath = "accounts.json";
 
+        public AccountManager()
+        {
+            if (File.Exists(_filePath))
+            {
+                var json = File.ReadAllText(_filePath);
+                _users = JsonSerializer.Deserialize<List<UserAccount>>(json) ?? new();
+            }
+        }
+        public void Add(UserAccount user)
+        {
+            _users.Add(user);
+        }
         public void Load()
         {
             if (!File.Exists(_filePath))
