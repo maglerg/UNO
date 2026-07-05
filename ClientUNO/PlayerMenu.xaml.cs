@@ -31,6 +31,7 @@ namespace ClientUNO
             {
                 var confirm = await App.Session.Model.CreateRoomAsync();
 
+                Logger.Log($"{Client.player.Name} create room. {confirm.roomCode}");
                 Lobby window = new Lobby(confirm.roomCode);
                 window.Show();
                 Close();
@@ -49,7 +50,8 @@ namespace ClientUNO
             {
                 var confirm = await App.Session.Model.ConnectRoomAsync(code);
 
-                Lobby window = new Lobby(confirm.roomCode);
+                Logger.Log($"{Client.player.Name} connect to room. {code}");
+                Lobby window = new Lobby(code);
                 window.Show();
                 Close();
             }

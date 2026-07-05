@@ -35,12 +35,12 @@ namespace ServerUNO
                     }
                     else
                     {
-                        accountManager.Add(new UserAccount(sMsg.name, sMsg.password));
+                        accountManager.Add(new UserAccount(client.Player.Id, sMsg.name, sMsg.password));
                         accountManager.Save();
                         client.Player.Name = sMsg.name;
                         await client.SendAsync(new ConfirmMessage(
                             RequestType.SignUp,
-                            "ok"));
+                            $"{client.Player.Id}"));
 
                         Console.WriteLine($"Successful registration {sMsg.name}");
                     }
@@ -54,15 +54,14 @@ namespace ServerUNO
                         await client.SendAsync(new ErrorMessage(
                             RequestType.Login,
                             "Invalid username or password."));
-                        Console.WriteLine($"user isnt find {lMsg.name}");
+                        Console.WriteLine($"User isnt find {lMsg.name}");
                     }
                     else
                     {
-                        Console.WriteLine($"Socket state → {client.Socket?.State}");
                         client.Player.Name = lMsg.name;
                         await client.SendAsync(new ConfirmMessage(
                             RequestType.Login,
-                            "ok"));
+                            $"{client.Player.Id}"));
 
                         Console.WriteLine($"User {lMsg.name} logged in");
                     }
@@ -71,15 +70,31 @@ namespace ServerUNO
                     try
                     {
                         var room = JoinRoom(msg, client);
-                        
+                        room.Engine.players.Add(client.Player);
+                        client.Room = room;
+                        Console.WriteLine($"Clients count = {room.Clients.Count}");
+
                         var okMsg1 = new ConfirmMessage(RequestType.ConnectRoom, "ok");
                         await client.SendAsync(okMsg1);
-                        for (int i = 0; i < room.Clients.Count; i++)
+
+                        foreach (var other in room.Clients) // отправляем игроку тех, кто уже есть в комнате
                         {
-                            if (room.Clients[i] != client)
+                            if (other.Player.Id != client.Player.Id)
                             {
-                                var player = new PlayerInfo(room.Clients[i].Player.Name, -1);
+                               
+                                Console.WriteLine($"Send existing player {other.Player.Name} to new client");
+                                var player = new PlayerInfo(client.Player.Id, other.Player.Name, -1);
                                 await client.SendAsync(new SomeoneJoinMessage(player));
+                            }
+                        }
+                        var newPlayer = new PlayerInfo(client.Player.Id, client.Player.Name, -1);
+
+                        foreach (var other in room.Clients) // отправляем остальным, что кто-то присоединился
+                        {
+                            if (other.Player.Id != client.Player.Id)
+                            {
+                                Console.WriteLine($"Notify {other.Player.Name} about new player {client.Player.Name}");
+                                await other.SendAsync(new SomeoneJoinMessage(newPlayer));
                             }
                         }
                         Console.WriteLine($"User {client.Player.Name} connected");
@@ -99,6 +114,11 @@ namespace ServerUNO
                     try
                     {
                         string code = CreateRoom();
+                        GameRoom room = GetRoom(code);
+                        room.Clients.Add(client);
+                        room.Engine.players.Add(client.Player);
+                        client.Room = room;
+                        room.HostId = client.Player.Id;
                         var okMsg = new ConfirmMessage(RequestType.CreateRoom, code);
                         await client.SendAsync(okMsg);
                     }

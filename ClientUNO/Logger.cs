@@ -5,18 +5,45 @@ namespace ClientUNO
 {
     public static class Logger
     {
-        private static readonly string path = "log.txt";
+        private static string _fileName;
 
-        public static void Log(string message)
+        public static void Initialize(string clientName)
         {
-            File.AppendAllText(path,
-                $"[{DateTime.Now:HH:mm:ss}] {message}\n");
+            Directory.CreateDirectory("Logs");
+
+            _fileName = Path.Combine("Logs", $"log_{clientName}.txt");
+
+            File.WriteAllText(
+                _fileName,
+                $"=== Session started {DateTime.Now:dd.MM.yyyy HH:mm:ss} ==={Environment.NewLine}");
         }
 
-        public static void Error(string message)
+        public static void Log(string text)
         {
-            File.AppendAllText(path,
-                $"[{DateTime.Now:HH:mm:ss}] ERROR: {message}\n");
+            Write("INFO", text);
+        }
+
+        public static void Error(string text)
+        {
+            Write("ERROR", text);
+        }
+
+        public static void Error(Exception ex)
+        {
+            Write("ERROR", ex.ToString());
+        }
+
+        private static void Write(string type, string text)
+        {
+            if (string.IsNullOrEmpty(_fileName))
+            {
+                Directory.CreateDirectory("Logs");
+                _fileName = Path.Combine("Logs", "log.txt");
+            }
+
+            File.AppendAllText(
+                _fileName,
+                $"[{DateTime.Now:HH:mm:ss}] {type}: {text}{Environment.NewLine}");
         }
     }
 }

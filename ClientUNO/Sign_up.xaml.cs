@@ -76,6 +76,8 @@ namespace ClientUNO
                 {
                     var confirm = await App.Session.Model.SignUpAsync(username, password1);
                     Client.player.Name= username;
+                    Client.player.Id = Guid.Parse(confirm.roomCode);
+                    Logger.Initialize(App.Session.Client.player.Name);
                     PlayerMenu lobby = new PlayerMenu();
                     lobby.Show();
 

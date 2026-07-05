@@ -17,7 +17,6 @@ namespace Shared_Library
         public Player Player { get; set; }
         public GameRoom Room { get; set; }
         public RoomManager roomManager { get; set; }
-        /*public bool IsConnected { get; set; }*/
 
 
         public ClientConnection(WebSocket socket, RoomManager roomManager)
@@ -31,10 +30,17 @@ namespace Shared_Library
         {
             while (Socket.State == WebSocketState.Open)
             {
-                ServerMessage msg = await ReceiveAsync();
-
-                await roomManager.ProcessMessage(this, msg);
-                // дальше в  RoomManager -> GameRoom -> GameEngine
+                try
+                {
+                    ServerMessage msg = await ReceiveAsync();
+                    Console.WriteLine($"RECEIVED: {msg?.GetType().Name}");
+                    await roomManager.ProcessMessage(this, msg);
+                }
+                catch(Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    break;
+                }
             }
         }
         public async Task<ServerMessage> ReceiveAsync()

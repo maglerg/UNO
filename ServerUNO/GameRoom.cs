@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
@@ -12,6 +13,15 @@ namespace Server
     {
         public List<ClientConnection> Clients = new List<ClientConnection>();
         public GameEngine Engine;
+        public Guid HostId { get; set; }
+        public GameRoom()
+        {
+            Engine = new GameEngine();
+            for(int i = 0; i < Clients.Count; i++) 
+            {
+                Engine.players.Add(Clients[i].Player);
+            }
+        }
 
         public async Task SendGameStage()
         {
@@ -19,7 +29,7 @@ namespace Server
             List<PlayerInfo> infos = new List<PlayerInfo>();
             for (int i = 0; i < Clients.Count; i++)
             {
-                var playerinf = new PlayerInfo(Clients[i].Player.Name, Clients[i].Player.PlayerCards.Count);
+                var playerinf = new PlayerInfo(Clients[i].Player.Id, Clients[i].Player.Name, Clients[i].Player.PlayerCards.Count);
                 infos.Add(playerinf);
             }
             for (int i = 0; i < Clients.Count; i++)
@@ -36,7 +46,7 @@ namespace Server
         public async Task ProcessMessage(Player player, ServerMessage msg)
         {
             int indexPlayer = -1;
-            for (int i = 1; i < Engine.players.Count; i++)
+            for (int i = 0; i < Engine.players.Count; i++)
             {
                 Player temp = Engine.players[i];
                 if (temp == player)
@@ -70,22 +80,31 @@ namespace Server
                     }   
                     break;
                 case LeaveGameMessage:
-                    try {
-                        Clients.Remove(Clients[indexPlayer]);
+                    try
+                    {
+                        var leavingClient = Clients[indexPlayer];
+
+                        Clients.Remove(leavingClient);
+                        Engine.players.Remove(player);
+                        leavingClient.Room = null;
 
                         var okMsg4 = new ConfirmMessage(RequestType.LeaveGame, "ok");
-                        await Clients[indexPlayer].SendAsync(okMsg4);
-                        for (int i = 1; i < Clients.Count; i++)
+                        await leavingClient.SendAsync(okMsg4);
+                        Console.WriteLine("SEND LEAVE CONFIRM");
+
+                        for (int i = 0; i < Clients.Count; i++)
                         {
-                            if (Clients[i] != Clients[indexPlayer])
-                            {
-                                var person = new PlayerInfo(Clients[i].Player.Name, -1);
-                                var msgl = new SomeoneLeftMessage(person);
-                                await Clients[i].SendAsync(msgl);
-                            }
+                            var client = Clients[i];
+
+                            var person = new PlayerInfo(
+                                leavingClient.Player.Id,
+                                leavingClient.Player.Name,
+                                -1);
+
+                            await client.SendAsync(new SomeoneLeftMessage(person));
                         }
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         foreach (var client in Clients)
                         {

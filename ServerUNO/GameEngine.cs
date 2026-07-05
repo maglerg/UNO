@@ -19,10 +19,12 @@ namespace Server
         int winner = -1;
 
 
-        public GameEngine(List<Player> players)
+        public GameEngine()
         {
-            this.players = players;
+            players = new List<Player>();
             deck = new Deck();
+            lastCard = new Card();
+            DiscardPile = new List<Card>();
         }
         public void StartGame()
         {

@@ -8,12 +8,14 @@ namespace Shared_Library
 {
     public class PlayerInfo
     {
+        public Guid Id { get; set; }
         public string Name { get; set; }
 
         public int CardCount { get; set; }
         public PlayerInfo() { }
-        public PlayerInfo(string name, int cardCount)
+        public PlayerInfo(Guid id, string name, int cardCount)
         {
+            Id = id;
             Name = name;
             CardCount = cardCount;
         }

@@ -53,7 +53,15 @@ namespace Shared_Library
             this.password = password;
         }
     }
-
+    public class RoomInfoMessage : ServerMessage
+    {
+        public Guid HostId { get; set; }
+        public RoomInfoMessage(Guid HostId)
+            : base(nameof(SignUpMessage))
+        {
+            this.HostId = HostId;
+        }
+    }
     public class CreateRoomMessage : ServerMessage
     {
         public CreateRoomMessage()

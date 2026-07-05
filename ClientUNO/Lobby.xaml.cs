@@ -28,7 +28,7 @@ namespace ClientUNO
 
             this.roomCode = roomCode;
             Players = new ObservableCollection<PlayerInfo>();
-            var player = new PlayerInfo(Client.player.Name, -1);
+            var player = new PlayerInfo(Client.player.Id, Client.player.Name, -1);
             Players.Add(player);
             roomcode.Text = roomCode;
             DataContext = this;
@@ -47,7 +47,7 @@ namespace ClientUNO
         }
         private void OnStartGame(ConfirmMessage confirm)
         {
-            Logger.Log("Game start");
+            Logger.Log($"Game start");
             GameWindow window = new GameWindow();
             window.Show();
             Close();
@@ -55,17 +55,33 @@ namespace ClientUNO
         private void OnStartGameError(ErrorMessage error)
         {
             StartGameError.Text = error.TextError;
-            Logger.Log("Cant start game");
+            Logger.Log($"Cant start game");
+            Logger.Error(error.TextError);
         }
         private void OnSomeoneJoinGame(SomeoneJoinMessage msg)
         {
-            Players.Add(msg.Player);
-            Logger.Log($"{msg.Player} join game");
+            Logger.Log($" {msg.Player.Name} join game");
+
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                Players.Add(msg.Player);
+                Logger.Log($"Players count = {Players.Count}");
+            });
         }
         private void OnSomeoneLeftGame(SomeoneLeftMessage msg)
         {
-            Players.Remove(msg.Player);
-            Logger.Log($"{msg.Player} left game");
+            Logger.Log($"{msg.Player.Name} left game");
+
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                var player = Players.FirstOrDefault(p => p.Id == msg.Player.Id);
+
+                if (player != null)
+                {
+                    Players.Remove(player);
+                }
+                Logger.Log($"Players count = {Players.Count}");
+            });
         }
         protected override void OnClosed(EventArgs e)
         {
