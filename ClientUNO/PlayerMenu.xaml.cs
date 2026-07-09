@@ -31,6 +31,7 @@ namespace ClientUNO
             {
                 var confirm = await App.Session.Model.CreateRoomAsync();
 
+                Client.player.IsHost = true;
                 Logger.Log($"{Client.player.Name} create room. {confirm.roomCode}");
                 Lobby window = new Lobby(confirm.roomCode);
                 window.Show();
@@ -49,6 +50,7 @@ namespace ClientUNO
             try
             {
                 var confirm = await App.Session.Model.ConnectRoomAsync(code);
+                Client.player.IsHost = false;
 
                 Logger.Log($"{Client.player.Name} connect to room. {code}");
                 Lobby window = new Lobby(code);
@@ -58,6 +60,8 @@ namespace ClientUNO
             catch (Exception ex)
             {
                 ConnectRoomError.Text = ex.Message;
+                ConnectRoomError.Visibility = Visibility.Visible;
+                Logger.Error($"{Client.player.Name} cant connect to room. {code}");
             }
         }
 

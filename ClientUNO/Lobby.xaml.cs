@@ -28,8 +28,7 @@ namespace ClientUNO
 
             this.roomCode = roomCode;
             Players = new ObservableCollection<PlayerInfo>();
-            var player = new PlayerInfo(Client.player.Id, Client.player.Name, -1);
-            Players.Add(player);
+            Players.Add(Client.player);
             roomcode.Text = roomCode;
             DataContext = this;
 
@@ -37,9 +36,26 @@ namespace ClientUNO
             App.Session.Model.StartGameError += OnStartGameError;
             App.Session.Model.SomeoneJoin += OnSomeoneJoinGame;
             App.Session.Model.SomeoneLeft += OnSomeoneLeftGame;
-        }
-       
+            App.Session.Model.ChangeHost += OnChangeHost;
 
+            if (Client.player.IsHost)
+            {
+                StartGame.Visibility = Visibility.Visible;
+            } 
+            else
+                StartGame.Visibility = Visibility.Collapsed;
+
+            _ = RequestPlayersAsync(); // получаем остальных игроков
+        }
+        private async Task RequestPlayersAsync()
+        {
+            await Client.SendAsync(new RequestPlayersMessage());
+        }
+        private void OnChangeHost()
+        {
+            Logger.Log($"Host is change. New host is {Client.player.Name}");
+            StartGame.Visibility = Visibility.Visible;
+        }
         public async Task StartGame_Click()
         {
             StartGameMessage msg = new StartGameMessage();

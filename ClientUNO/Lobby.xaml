@@ -112,6 +112,8 @@ FontFamily="Comic Sans MS" Foreground="SaddleBrown"/>
             </ListBox>
         </StackPanel>
         <Button Content="Start game"
+                Visibility="Collapsed"
+                x:Name="StartGame"
         Width="267"
         Height="48"
         FontSize="22"

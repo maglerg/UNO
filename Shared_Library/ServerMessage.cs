@@ -80,7 +80,13 @@ namespace Shared_Library
             CodeRoom = codeRoom;
         }
     }
-
+    public class RequestPlayersMessage : ServerMessage
+    {
+        public RequestPlayersMessage()
+            : base(nameof(RequestPlayersMessage))
+        {
+        }
+    }
     public class LeaveGameMessage : ServerMessage
     {
         public LeaveGameMessage()
@@ -148,6 +154,13 @@ namespace Shared_Library
     {
         public StartGameMessage()
             : base(nameof(StartGameMessage))
+        {
+        }
+    }
+    public class ChangeHostMessage : ServerMessage
+    {
+        public ChangeHostMessage()
+            : base(nameof(ChangeHostMessage))
         {
         }
     }

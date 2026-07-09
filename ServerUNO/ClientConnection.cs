@@ -73,6 +73,7 @@ namespace Shared_Library
                 nameof(SomeoneJoinMessage) => JsonSerializer.Deserialize<SomeoneJoinMessage>(json),
                 nameof(SomeoneLeftMessage) => JsonSerializer.Deserialize<SomeoneLeftMessage>(json),
                 nameof(LeaveGameMessage) => JsonSerializer.Deserialize<LeaveGameMessage>(json),
+                nameof(RequestPlayersMessage) => JsonSerializer.Deserialize<RequestPlayersMessage>(json),
 
                 _ => throw new Exception($"Unknown message type: {type}")
             };

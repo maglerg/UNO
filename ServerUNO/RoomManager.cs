@@ -72,28 +72,19 @@ namespace ServerUNO
                         var room = JoinRoom(msg, client);
                         room.Engine.players.Add(client.Player);
                         client.Room = room;
+                        client.Player.IsHost = false;
                         Console.WriteLine($"Clients count = {room.Clients.Count}");
 
                         var okMsg1 = new ConfirmMessage(RequestType.ConnectRoom, "ok");
                         await client.SendAsync(okMsg1);
 
-                        foreach (var other in room.Clients) // отправляем игроку тех, кто уже есть в комнате
-                        {
-                            if (other.Player.Id != client.Player.Id)
-                            {
-                               
-                                Console.WriteLine($"Send existing player {other.Player.Name} to new client");
-                                var player = new PlayerInfo(client.Player.Id, other.Player.Name, -1);
-                                await client.SendAsync(new SomeoneJoinMessage(player));
-                            }
-                        }
-                        var newPlayer = new PlayerInfo(client.Player.Id, client.Player.Name, -1);
+                        var newPlayer = new PlayerInfo(client.Player.Id, client.Player.Name, -1,client.Player.IsHost);
 
                         foreach (var other in room.Clients) // отправляем остальным, что кто-то присоединился
                         {
                             if (other.Player.Id != client.Player.Id)
                             {
-                                Console.WriteLine($"Notify {other.Player.Name} about new player {client.Player.Name}");
+                                Console.WriteLine($"Notify {other.Player.Name} about new player {other.Player.Name}");
                                 await other.SendAsync(new SomeoneJoinMessage(newPlayer));
                             }
                         }
@@ -105,11 +96,28 @@ namespace ServerUNO
                         await client.SendAsync(new ErrorMessage
                         {
                             RequestType = RequestType.ConnectRoom,
-                            TextError = "Сouldn't join the room"
+                            TextError = ex.Message
                         });
                     }
 
                     break;
+                case RequestPlayersMessage:
+                    {
+                        var room = client.Room;
+
+                        foreach (var other in room.Clients) // отправляем игроку тех, кто уже есть в комнате
+                        {
+                            if (other.Player.Id != client.Player.Id)
+                            {
+
+                                Console.WriteLine($"Send existing player {other.Player.Name} to new client");
+                                var player = new PlayerInfo(client.Player.Id, other.Player.Name, -1, client.Player.IsHost);
+                                await client.SendAsync(new SomeoneJoinMessage(player));
+                            }
+                        }
+
+                        break;
+                    }
                 case CreateRoomMessage:
                     try
                     {
@@ -119,6 +127,7 @@ namespace ServerUNO
                         room.Engine.players.Add(client.Player);
                         client.Room = room;
                         room.HostId = client.Player.Id;
+                        client.Player.IsHost = true;
                         var okMsg = new ConfirmMessage(RequestType.CreateRoom, code);
                         await client.SendAsync(okMsg);
                     }
@@ -175,13 +184,15 @@ namespace ServerUNO
             string code = connectMsg.CodeRoom;
 
             GameRoom room = GetRoom(code);
+            if (room == null)
+                throw new Exception("Room does not exist ");
 
             if (room.CanJoinPlayer(client.Player))
             {
                 room.Clients.Add(client);
                 return room;
             }
-            throw new Exception("Сouldn't find the room");
+            throw new Exception("Room is crowded");
         }
         
     }

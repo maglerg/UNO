@@ -64,6 +64,9 @@ namespace ClientUNO
                 case "SomeoneLeftMessage":
                     msg = JsonSerializer.Deserialize<SomeoneLeftMessage>(json);
                     break;
+                case "ChangeHostMessage":
+                    msg = JsonSerializer.Deserialize<ChangeHostMessage>(json);
+                    break;
                 default:
                     throw new Exception("Unknown message type");
             }

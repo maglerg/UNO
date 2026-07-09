@@ -29,7 +29,7 @@ namespace Server
             List<PlayerInfo> infos = new List<PlayerInfo>();
             for (int i = 0; i < Clients.Count; i++)
             {
-                var playerinf = new PlayerInfo(Clients[i].Player.Id, Clients[i].Player.Name, Clients[i].Player.PlayerCards.Count);
+                var playerinf = new PlayerInfo(Clients[i].Player.Id, Clients[i].Player.Name, Clients[i].Player.PlayerCards.Count, Clients[i].Player.IsHost);
                 infos.Add(playerinf);
             }
             for (int i = 0; i < Clients.Count; i++)
@@ -99,10 +99,17 @@ namespace Server
                             var person = new PlayerInfo(
                                 leavingClient.Player.Id,
                                 leavingClient.Player.Name,
-                                -1);
+                                -1, leavingClient.Player.IsHost);
 
                             await client.SendAsync(new SomeoneLeftMessage(person));
                         }
+                        if (Clients.Count > 0 )
+                        {
+                            Clients[0].Player.IsHost = true;
+                            Clients[0].SendAsync(new ChangeHostMessage());// отправить нового хоста
+                        }
+                        
+                        
                     }
                     catch (Exception ex)
                     {

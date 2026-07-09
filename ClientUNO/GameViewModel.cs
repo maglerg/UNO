@@ -14,6 +14,7 @@ namespace ClientUNO
         public event Action<ErrorMessage> StartGameError;
         public event Action<SomeoneJoinMessage> SomeoneJoin;
         public event Action<SomeoneLeftMessage> SomeoneLeft;
+        public event Action ChangeHost;
 
         private TaskCompletionSource<ConfirmMessage>? _createRoomTcs;
         private TaskCompletionSource<ConfirmMessage>? _connectRoomTcs;
@@ -105,6 +106,10 @@ namespace ClientUNO
                 case SomeoneLeftMessage someoneL:
                     SomeoneLeft?.Invoke(someoneL);
                     break;
+                case ChangeHostMessage:
+                    ChangeHost?.Invoke();
+                    break;
+                    
                 case GameStateMessage game:
                     state.Update(game);
                     OnPropertyChanged(nameof(Cards));
