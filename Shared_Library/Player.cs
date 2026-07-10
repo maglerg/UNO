@@ -20,6 +20,7 @@ namespace Shared_Library
         public Player() 
         {
             Id = Guid.NewGuid();
+            PlayerCards = new List<Card>();
         }
 
         public Player(string name)

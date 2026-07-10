@@ -10,11 +10,12 @@ namespace ClientUNO
     {
         public GameState state { get; set; }
 
-        public event Action<ConfirmMessage> StartGame;
+        public event Action<ConfirmMessage> CanStartGame;
         public event Action<ErrorMessage> StartGameError;
         public event Action<SomeoneJoinMessage> SomeoneJoin;
         public event Action<SomeoneLeftMessage> SomeoneLeft;
         public event Action ChangeHost;
+        public event Action<StartGameMessageToClient> StartGameToClient;
 
         private TaskCompletionSource<ConfirmMessage>? _createRoomTcs;
         private TaskCompletionSource<ConfirmMessage>? _connectRoomTcs;
@@ -63,22 +64,31 @@ namespace ClientUNO
 
         public ICommand ChooseColorCommand { get; }
 
-        public PlayerInfo TopPlayer => state.Players[0];
-        public PlayerInfo LeftPlayer => state.Players[1];
-        public PlayerInfo RightPlayer => state.Players[2];
-        public PlayerInfo Me => state.Players[3];
-
-        public Visibility TopPlayerUnoVisibility =>
-    TopPlayer.CardCount == 1 ? Visibility.Visible : Visibility.Collapsed;
-
-        public Visibility LeftPlayerUnoVisibility =>
-            LeftPlayer.CardCount == 1 ? Visibility.Visible : Visibility.Collapsed;
+        public PlayerInfo? TopPlayer => state.Players.Count > 0 ? state.Players[0] : null;
+        public PlayerInfo? LeftPlayer => state.Players.Count > 1 ? state.Players[1] : null;
+        public PlayerInfo? RightPlayer => state.Players.Count > 2 ? state.Players[2] : null;
+        public PlayerInfo? Me => state.Players.Count > 3 ? state.Players[3] : null;
 
         public Visibility RightPlayerUnoVisibility =>
-            RightPlayer.CardCount == 1 ? Visibility.Visible : Visibility.Collapsed;
+    RightPlayer != null && RightPlayer.CardCount == 1
+        ? Visibility.Visible
+        : Visibility.Collapsed;
+       
+        public Visibility TopPlayerUnoVisibility =>
+    TopPlayer != null && TopPlayer.CardCount == 1
+        ? Visibility.Visible
+        : Visibility.Collapsed;
+
+        public Visibility LeftPlayerUnoVisibility =>
+            LeftPlayer != null && LeftPlayer.CardCount == 1
+                ? Visibility.Visible
+                : Visibility.Collapsed;
 
         public Visibility MyUnoVisibility =>
-            Me.CardCount == 1 ? Visibility.Visible : Visibility.Collapsed;
+            Me != null && Me.CardCount == 1
+                ? Visibility.Visible
+                : Visibility.Collapsed;
+       
 
 
         public GameViewModel()
@@ -109,23 +119,12 @@ namespace ClientUNO
                 case ChangeHostMessage:
                     ChangeHost?.Invoke();
                     break;
+                case StartGameMessageToClient gamestage:
+                    StartGameToClient?.Invoke(gamestage);
+                    break;
                     
                 case GameStateMessage game:
-                    state.Update(game);
-                    OnPropertyChanged(nameof(Cards));
-                    OnPropertyChanged(nameof(TopCard));
-                    OnPropertyChanged(nameof(MyCardsCount));
-                    OnPropertyChanged(nameof(CanSayUno));
-
-                    OnPropertyChanged(nameof(TopPlayer));
-                    OnPropertyChanged(nameof(LeftPlayer));
-                    OnPropertyChanged(nameof(RightPlayer));
-                    OnPropertyChanged(nameof(Me));
-
-                    OnPropertyChanged(nameof(TopPlayerUnoVisibility));
-                    OnPropertyChanged(nameof(LeftPlayerUnoVisibility));
-                    OnPropertyChanged(nameof(RightPlayerUnoVisibility));
-                    OnPropertyChanged(nameof(MyUnoVisibility));
+                    InitializeGame(game);
                     break;
 
                 default:
@@ -156,7 +155,7 @@ namespace ClientUNO
                     _connectRoomTcs = null;
                     break;
                 case RequestType.StartGame:
-                    StartGame?.Invoke(confirm);
+                    CanStartGame?.Invoke(confirm);
                     break;
                 case RequestType.LeaveGame:
                     _leaveRoomTcs?.SetResult(confirm);
@@ -223,6 +222,25 @@ namespace ClientUNO
                     _playUnoTcs = null;
                     break;
             }
+        }
+        public void InitializeGame(GameStateMessage game)
+        {
+            state.Update(game);
+
+            OnPropertyChanged(nameof(Cards));
+            OnPropertyChanged(nameof(TopCard));
+            OnPropertyChanged(nameof(MyCardsCount));
+            OnPropertyChanged(nameof(CanSayUno));
+
+            OnPropertyChanged(nameof(TopPlayer));
+            OnPropertyChanged(nameof(LeftPlayer));
+            OnPropertyChanged(nameof(RightPlayer));
+            OnPropertyChanged(nameof(Me));
+
+            OnPropertyChanged(nameof(TopPlayerUnoVisibility));
+            OnPropertyChanged(nameof(LeftPlayerUnoVisibility));
+            OnPropertyChanged(nameof(RightPlayerUnoVisibility));
+            OnPropertyChanged(nameof(MyUnoVisibility));
         }
         public async Task<ConfirmMessage> CreateRoomAsync()
         {

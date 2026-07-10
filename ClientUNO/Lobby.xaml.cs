@@ -32,11 +32,12 @@ namespace ClientUNO
             roomcode.Text = roomCode;
             DataContext = this;
 
-            App.Session.Model.StartGame += OnStartGame;
+            App.Session.Model.CanStartGame += OnStartGame;
             App.Session.Model.StartGameError += OnStartGameError;
             App.Session.Model.SomeoneJoin += OnSomeoneJoinGame;
             App.Session.Model.SomeoneLeft += OnSomeoneLeftGame;
             App.Session.Model.ChangeHost += OnChangeHost;
+            Model.StartGameToClient += OnStartGameToClient;
 
             if (Client.player.IsHost)
             {
@@ -56,17 +57,25 @@ namespace ClientUNO
             Logger.Log($"Host is change. New host is {Client.player.Name}");
             StartGame.Visibility = Visibility.Visible;
         }
-        public async Task StartGame_Click()
+        private async void StartGame_Click(object sender, RoutedEventArgs e)
         {
-            StartGameMessage msg = new StartGameMessage();
+            CanStartGameMessage msg = new CanStartGameMessage();
+
             await Client.SendAsync(msg);
         }
-        private void OnStartGame(ConfirmMessage confirm)
+        private async void OnStartGame(ConfirmMessage message)
         {
+            await Client.SendAsync(new StartGameMessageToServer());
             Logger.Log($"Game start");
-            GameWindow window = new GameWindow();
-            window.Show();
-            Close();
+        }
+        private void OnStartGameToClient(StartGameMessageToClient msg)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                GameWindow window = new GameWindow(msg.GameState);
+                window.Show();
+                Close();
+            });
         }
         private void OnStartGameError(ErrorMessage error)
         {
@@ -101,7 +110,7 @@ namespace ClientUNO
         }
         protected override void OnClosed(EventArgs e)
         {
-            App.Session.Model.StartGame -= OnStartGame;
+            App.Session.Model.CanStartGame -= OnStartGame;
             App.Session.Model.StartGameError -= OnStartGameError;
             App.Session.Model.SomeoneJoin -= OnSomeoneJoinGame;
             App.Session.Model.SomeoneLeft -= OnSomeoneLeftGame;

@@ -67,6 +67,9 @@ namespace ClientUNO
                 case "ChangeHostMessage":
                     msg = JsonSerializer.Deserialize<ChangeHostMessage>(json);
                     break;
+                case "StartGameMessageToClient":
+                    msg = JsonSerializer.Deserialize<StartGameMessageToClient>(json);
+                    break;
                 default:
                     throw new Exception("Unknown message type");
             }

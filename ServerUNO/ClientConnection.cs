@@ -64,7 +64,7 @@ namespace Shared_Library
                 nameof(CreateRoomMessage) => JsonSerializer.Deserialize<CreateRoomMessage>(json),
                 nameof(TakeCardMessage) => JsonSerializer.Deserialize<TakeCardMessage>(json),
                 nameof(PlayCardMessage) => JsonSerializer.Deserialize<PlayCardMessage>(json),
-                nameof(StartGameMessage) => JsonSerializer.Deserialize<StartGameMessage>(json),
+                nameof(CanStartGameMessage) => JsonSerializer.Deserialize<CanStartGameMessage>(json),
                 nameof(ErrorMessage) => JsonSerializer.Deserialize<ErrorMessage>(json),
                 nameof(PushUNOMessage) => JsonSerializer.Deserialize<PushUNOMessage>(json),
                 nameof(GameStateMessage) => JsonSerializer.Deserialize<GameStateMessage>(json),
@@ -74,6 +74,8 @@ namespace Shared_Library
                 nameof(SomeoneLeftMessage) => JsonSerializer.Deserialize<SomeoneLeftMessage>(json),
                 nameof(LeaveGameMessage) => JsonSerializer.Deserialize<LeaveGameMessage>(json),
                 nameof(RequestPlayersMessage) => JsonSerializer.Deserialize<RequestPlayersMessage>(json),
+                nameof(StartGameMessageToServer) => JsonSerializer.Deserialize<StartGameMessageToServer>(json),
+                
 
                 _ => throw new Exception($"Unknown message type: {type}")
             };

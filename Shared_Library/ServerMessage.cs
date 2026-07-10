@@ -87,6 +87,13 @@ namespace Shared_Library
         {
         }
     }
+    /*public class RequestGameStateMessage : ServerMessage
+    {
+        public RequestGameStateMessage()
+            : base(nameof(RequestGameStateMessage))
+        {
+        }
+    }*/
     public class LeaveGameMessage : ServerMessage
     {
         public LeaveGameMessage()
@@ -150,11 +157,29 @@ namespace Shared_Library
         }
     }
 
-    public class StartGameMessage : ServerMessage
+    public class CanStartGameMessage : ServerMessage
     {
-        public StartGameMessage()
-            : base(nameof(StartGameMessage))
+        public CanStartGameMessage()
+            : base(nameof(CanStartGameMessage))
         {
+        }
+    }
+    public class StartGameMessageToServer : ServerMessage
+    {
+        
+        public StartGameMessageToServer()
+            : base(nameof(StartGameMessageToServer))
+        {
+        }
+    }
+    public class StartGameMessageToClient : ServerMessage
+    {
+        public GameStateMessage GameState { get; set; }
+
+        public StartGameMessageToClient(GameStateMessage gameState)
+            : base(nameof(StartGameMessageToClient))
+        {
+            GameState = gameState;
         }
     }
     public class ChangeHostMessage : ServerMessage
@@ -194,7 +219,7 @@ namespace Shared_Library
             this.roomCode = roomCode;
         }
     }
-
+    
     public class GameStateMessage : ServerMessage
     {
         public List<PlayerInfo> players { get; set; }

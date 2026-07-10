@@ -123,6 +123,7 @@ FontFamily="Comic Sans MS" Foreground="SaddleBrown"/>
         Opacity="0.7"
         HorizontalAlignment="Left"
         VerticalAlignment="Top"
+        Click="StartGame_Click"
         Margin="72,230,0,0"/>
 
         <TextBlock x:Name="StartGameError"

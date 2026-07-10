@@ -16,11 +16,14 @@ namespace ClientUNO
 {
     public partial class GameWindow : Window
     {
-        public GameWindow()
+        public GameWindow(GameStateMessage state)
         {
             InitializeComponent();
+
             DataContext = App.Session.Model;
 
+            App.Session.Model.InitializeGame(state);
         }
+        
     }
 }

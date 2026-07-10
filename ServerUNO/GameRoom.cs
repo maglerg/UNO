@@ -14,6 +14,7 @@ namespace Server
         public List<ClientConnection> Clients = new List<ClientConnection>();
         public GameEngine Engine;
         public Guid HostId { get; set; }
+        bool IsGameStarted { get; set; }
         public GameRoom()
         {
             Engine = new GameEngine();
@@ -21,6 +22,7 @@ namespace Server
             {
                 Engine.players.Add(Clients[i].Player);
             }
+            IsGameStarted = false;
         }
 
         public async Task SendGameStage()
@@ -60,24 +62,73 @@ namespace Server
 
             switch (msg)
             {
-                case StartGameMessage:
-                    if (CheckStartGame())
+                case StartGameMessageToServer:
+                    try
                     {
                         Engine.StartGame();
-                        // отправиль подтверждение игры
-                        await SendGameStage();
+                        Console.WriteLine("Start game.");
+                        IsGameStarted = true;
+
+                        List<PlayerInfo> infos = new List<PlayerInfo>();
+                        for (int i = 0; i < Clients.Count; i++)
+                        {
+                            var playerinf = new PlayerInfo(Clients[i].Player.Id, Clients[i].Player.Name, Clients[i].Player.PlayerCards.Count, Clients[i].Player.IsHost);
+                            infos.Add(playerinf);
+                        }
+                        for (int i = 0; i < Clients.Count; i++)
+                        {
+                            bool isMyTurn = false;
+                            if (i == Engine.currentPlayer)
+                                isMyTurn = true;
+                            var msgdto = new GameStateMessage(infos, Clients[i].Player.PlayerCards, Engine.currentPlayer,
+                            Engine.direction, Engine.lastCard, Engine.currentColor, isMyTurn);
+                            await Clients[i].SendAsync(new StartGameMessageToClient(msgdto));
+                        }
+                    } 
+                    catch(Exception ex)
+                    {
+                        await Clients[indexPlayer].SendAsync(new ErrorMessage
+                        {
+                            RequestType = RequestType.StartGame,
+                            TextError = ex.Message
+                        });
+                    }
+                    break;
+                case CanStartGameMessage:
+                    if (CheckStartGame())
+                    {
+                        if(Clients[indexPlayer].Player.Id == HostId)
+                        {
+                            if (!IsGameStarted)
+                            {
+                                await Clients[indexPlayer].SendAsync(new ConfirmMessage(RequestType.StartGame, "ok"));
+                            }
+                            else
+                            {
+                                await Clients[indexPlayer].SendAsync(new ErrorMessage
+                                {
+                                    RequestType = RequestType.StartGame,
+                                    TextError = "Game already started."
+                                });
+                            }
+                        }
+                        else
+                        {
+                            await Clients[indexPlayer].SendAsync(new ErrorMessage
+                            {
+                                RequestType = RequestType.StartGame,
+                                TextError = "This player isn't host."
+                            });
+                        }
                     }
                     else
                     {
-                        foreach (var client in Clients)
+                        await Clients[indexPlayer].SendAsync(new ErrorMessage
                         {
-                            await client.SendAsync(new ErrorMessage
-                            {
-                                RequestType = RequestType.StartGame,
-                                TextError = "Can't start the game"
-                            });
-                        }
-                    }   
+                            RequestType = RequestType.StartGame,
+                            TextError = "Not enough players to start the game."
+                        });
+                    }
                     break;
                 case LeaveGameMessage:
                     try
