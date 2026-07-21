@@ -1,11 +1,4 @@
 ﻿using Shared_Library;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
-using System.Threading.Tasks.Dataflow;
 
 namespace Server
 {
@@ -27,23 +20,66 @@ namespace Server
 
         public async Task SendGameStage()
         {
+            for (int k = 0; k < Clients.Count; k++)
+            {
+                List<PlayerInfo> infos = new List<PlayerInfo>();
+                int currPl = -1;
 
-            List<PlayerInfo> infos = new List<PlayerInfo>();
-            for (int i = 0; i < Clients.Count; i++)
-            {
-                var playerinf = new PlayerInfo(Clients[i].Player.Id, Clients[i].Player.Name, Clients[i].Player.PlayerCards.Count, Clients[i].Player.IsHost);
-                infos.Add(playerinf);
+
+                // добавляем себя первым
+                if (k == Engine.currentPlayer)
+                    currPl = infos.Count;
+
+                infos.Add(new PlayerInfo(
+                    Clients[k].Player.Id,
+                    Clients[k].Player.Name,
+                    Clients[k].Player.PlayerCards.Count,
+                    Clients[k].Player.IsHost));
+
+
+                // игроки после k
+                for (int i = k + 1; i < Clients.Count; i++)
+                {
+                    if (i == Engine.currentPlayer)
+                        currPl = infos.Count;
+
+                    infos.Add(new PlayerInfo(
+                        Clients[i].Player.Id,
+                        Clients[i].Player.Name,
+                        Clients[i].Player.PlayerCards.Count,
+                        Clients[i].Player.IsHost));
+                }
+
+
+                // игроки до k
+                for (int i = 0; i < k; i++)
+                {
+                    if (i == Engine.currentPlayer)
+                        currPl = infos.Count;
+
+                    infos.Add(new PlayerInfo(
+                        Clients[i].Player.Id,
+                        Clients[i].Player.Name,
+                        Clients[i].Player.PlayerCards.Count,
+                        Clients[i].Player.IsHost));
+                }
+
+
+                bool isMyTurn = k == Engine.currentPlayer;
+
+
+                var msgdto = new GameStateMessage(
+                    infos,
+                    Clients[k].Player.PlayerCards,
+                    currPl,
+                    Engine.direction,
+                    Engine.lastCard,
+                    Engine.currentColor,
+                    isMyTurn);
+
+
+                await Clients[k].SendAsync(msgdto);
             }
-            for (int i = 0; i < Clients.Count; i++)
-            {
-                bool isMyTurn = false;
-                if (i == Engine.currentPlayer)
-                    isMyTurn = true;
-                    var msgdto = new GameStateMessage(infos, Clients[i].Player.PlayerCards, Engine.currentPlayer,
-                    Engine.direction, Engine.lastCard, Engine.currentColor, isMyTurn);
-                await Clients[i].SendAsync(msgdto);
-            }
-            
         }
         public async Task ProcessMessage(Player player, ServerMessage msg)
         {
@@ -69,20 +105,65 @@ namespace Server
                         Console.WriteLine("Start game.");
                         IsGameStarted = true;
 
-                        List<PlayerInfo> infos = new List<PlayerInfo>();
-                        for (int i = 0; i < Clients.Count; i++)
+                        for (int k = 0; k < Clients.Count; k++)
                         {
-                            var playerinf = new PlayerInfo(Clients[i].Player.Id, Clients[i].Player.Name, Clients[i].Player.PlayerCards.Count, Clients[i].Player.IsHost);
-                            infos.Add(playerinf);
-                        }
-                        for (int i = 0; i < Clients.Count; i++)
-                        {
-                            bool isMyTurn = false;
-                            if (i == Engine.currentPlayer)
-                                isMyTurn = true;
-                            var msgdto = new GameStateMessage(infos, Clients[i].Player.PlayerCards, Engine.currentPlayer,
-                            Engine.direction, Engine.lastCard, Engine.currentColor, isMyTurn);
-                            await Clients[i].SendAsync(new StartGameMessageToClient(msgdto));
+                            List<PlayerInfo> infos = new List<PlayerInfo>();
+                            int currPl = -1;
+
+
+                            // добавляем себя первым
+                            if (k == Engine.currentPlayer)
+                                currPl = infos.Count;
+
+                            infos.Add(new PlayerInfo(
+                                Clients[k].Player.Id,
+                                Clients[k].Player.Name,
+                                Clients[k].Player.PlayerCards.Count,
+                                Clients[k].Player.IsHost));
+
+
+                            // игроки после k
+                            for (int i = k + 1; i < Clients.Count; i++)
+                            {
+                                if (i == Engine.currentPlayer)
+                                    currPl = infos.Count;
+
+                                infos.Add(new PlayerInfo(
+                                    Clients[i].Player.Id,
+                                    Clients[i].Player.Name,
+                                    Clients[i].Player.PlayerCards.Count,
+                                    Clients[i].Player.IsHost));
+                            }
+
+
+                            // игроки до k
+                            for (int i = 0; i < k; i++)
+                            {
+                                if (i == Engine.currentPlayer)
+                                    currPl = infos.Count;
+
+                                infos.Add(new PlayerInfo(
+                                    Clients[i].Player.Id,
+                                    Clients[i].Player.Name,
+                                    Clients[i].Player.PlayerCards.Count,
+                                    Clients[i].Player.IsHost));
+                            }
+
+
+                            bool isMyTurn = k == Engine.currentPlayer;
+
+
+                            var msgdto = new GameStateMessage(
+                                infos,
+                                Clients[k].Player.PlayerCards,
+                                currPl,
+                                Engine.direction,
+                                Engine.lastCard,
+                                Engine.currentColor,
+                                isMyTurn);
+
+
+                            await Clients[k].SendAsync(new StartGameMessageToClient(msgdto));
                         }
                     } 
                     catch(Exception ex)
@@ -175,24 +256,63 @@ namespace Server
                     }
                     break;
                 case TakeCardMessage:
-                    Engine.TakeCard(indexPlayer);
-                    var okMsg1 = new ConfirmMessage(RequestType.TakeCard, "ok");
-                    await Clients[indexPlayer].SendAsync(okMsg1);
-                    await SendGameStage();
-                    break;
+                    try
+                    {
+                        Engine.TakeCard(indexPlayer);
+                        var okMsg1 = new ConfirmMessage(RequestType.TakeCard, "ok");
+                        await Clients[indexPlayer].SendAsync(okMsg1);
+                        await SendGameStage();
+                        break;
+                    }
+                    catch(Exception ex)
+                    {
+                        await Clients[indexPlayer].SendAsync(new ErrorMessage
+                        {
+                            RequestType = RequestType.GameState,
+                            TextError = $"{ex.Message}"
+                        });
+                        break;
+                    }
+                   
 
                 case PlayCardMessage playMsg:
-                    Engine.PlayCard(indexPlayer, playMsg.card, playMsg.chosenColor);
-                    var okMsg2 = new ConfirmMessage(RequestType.PlayCard, "ok");
-                    await Clients[indexPlayer].SendAsync(okMsg2);
-                    await SendGameStage();
-                    break;
+                    try
+                    {
+                        Engine.PlayCard(indexPlayer, playMsg.card, playMsg.chosenColor);
+                        var okMsg2 = new ConfirmMessage(RequestType.PlayCard, "ok");
+                        await Clients[indexPlayer].SendAsync(okMsg2);
+                        await SendGameStage();
+                        break;
+                    }
+                    catch (Exception ex)
+                    {
+                        await Clients[indexPlayer].SendAsync(new ErrorMessage
+                        {
+                            RequestType = RequestType.GameState,
+                            TextError = $"{ex.Message}"
+                        });
+                        break;
+                    }
+                    
                 case PushUNOMessage pushunoMsg:
-                    Engine.PushUno(pushunoMsg.indexPush);
-                    var okMsg3 = new ConfirmMessage(RequestType.PlayUno, "ok");
-                    await Clients[indexPlayer].SendAsync(okMsg3);
-                    await SendGameStage();
-                    break;
+                    try
+                    {
+                        Engine.PushUno(pushunoMsg.indexPush);
+                        var okMsg3 = new ConfirmMessage(RequestType.PlayUno, "ok");
+                        await Clients[indexPlayer].SendAsync(okMsg3);
+                        await SendGameStage();
+                        break;
+                    }
+                    catch (Exception ex)
+                    {
+                        await Clients[indexPlayer].SendAsync(new ErrorMessage
+                        {
+                            RequestType = RequestType.GameState,
+                            TextError = $"{ex.Message}"
+                        });
+                        break;
+                    }
+                    
                 default:
                     foreach (var client in Clients)
                     {

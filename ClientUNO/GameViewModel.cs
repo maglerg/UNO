@@ -1,4 +1,4 @@
-﻿
+﻿using System.Windows.Media;
 using Shared_Library;
 using System.ComponentModel;
 using System.Windows;
@@ -64,12 +64,24 @@ namespace ClientUNO
 
         public ICommand ChooseColorCommand { get; }
 
-        public PlayerInfo? TopPlayer => state.Players.Count > 0 ? state.Players[0] : null;
+        public PlayerInfo? MePlayer => state.Players.Count > 0 ? state.Players[0] : null;
         public PlayerInfo? LeftPlayer => state.Players.Count > 1 ? state.Players[1] : null;
-        public PlayerInfo? RightPlayer => state.Players.Count > 2 ? state.Players[2] : null;
-        public PlayerInfo? Me => state.Players.Count > 3 ? state.Players[3] : null;
+        public PlayerInfo? TopPlayer => state.Players.Count > 2 ? state.Players[2] : null;
+        public PlayerInfo? RightPlayer => state.Players.Count > 3 ? state.Players[3] : null;
+        public Visibility LeftPlayerVisibility => // видимость игроков
+    LeftPlayer == null
+        ? Visibility.Collapsed
+        : Visibility.Visible;
+        public Visibility TopPlayerVisibility =>
+    TopPlayer == null
+        ? Visibility.Collapsed
+        : Visibility.Visible;
+        public Visibility RightPlayerVisibility =>
+    RightPlayer == null
+        ? Visibility.Collapsed
+        : Visibility.Visible;
 
-        public Visibility RightPlayerUnoVisibility =>
+        public Visibility RightPlayerUnoVisibility => // видимость кнопки уно
     RightPlayer != null && RightPlayer.CardCount == 1
         ? Visibility.Visible
         : Visibility.Collapsed;
@@ -84,13 +96,33 @@ namespace ClientUNO
                 ? Visibility.Visible
                 : Visibility.Collapsed;
 
-        public Visibility MyUnoVisibility =>
-            Me != null && Me.CardCount == 1
-                ? Visibility.Visible
-                : Visibility.Collapsed;
-       
+        public Visibility MePlayerUnoVisibility =>
+             MePlayer != null && MePlayer.CardCount == 1
+                 ? Visibility.Visible
+                 : Visibility.Collapsed;
+
+        public Brush TopPlayerBorderColor =>
+    TopPlayer != null && 2 == state.currentPlayer
+        ? Brushes.Green
+        : Brushes.Gray;
 
 
+        public Brush LeftPlayerBorderColor =>
+            LeftPlayer != null && 1 == state.currentPlayer
+                ? Brushes.Green
+                : Brushes.Gray;
+
+
+        public Brush RightPlayerBorderColor =>
+            RightPlayer != null && 3 == state.currentPlayer
+                ? Brushes.Green
+                : Brushes.Gray;
+
+
+        public Brush MePlayerBorderColor =>
+            MePlayer != null && 0 == state.currentPlayer
+                ? Brushes.Green
+                : Brushes.Gray;
         public GameViewModel()
         {
             state = new GameState();
@@ -235,12 +267,17 @@ namespace ClientUNO
             OnPropertyChanged(nameof(TopPlayer));
             OnPropertyChanged(nameof(LeftPlayer));
             OnPropertyChanged(nameof(RightPlayer));
-            OnPropertyChanged(nameof(Me));
+            OnPropertyChanged(nameof(MePlayer));
 
             OnPropertyChanged(nameof(TopPlayerUnoVisibility));
             OnPropertyChanged(nameof(LeftPlayerUnoVisibility));
             OnPropertyChanged(nameof(RightPlayerUnoVisibility));
-            OnPropertyChanged(nameof(MyUnoVisibility));
+            OnPropertyChanged(nameof(MePlayerUnoVisibility));
+
+            OnPropertyChanged(nameof(TopPlayerBorderColor));
+            OnPropertyChanged(nameof(LeftPlayerBorderColor));
+            OnPropertyChanged(nameof(RightPlayerBorderColor));
+            OnPropertyChanged(nameof(MePlayerBorderColor));
         }
         public async Task<ConfirmMessage> CreateRoomAsync()
         {

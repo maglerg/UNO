@@ -30,10 +30,10 @@
     <Grid>
 
         <!-- ================= TOP PLAYERS ================= -->
-        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="120">
+        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="120" Visibility="{Binding TopPlayerVisibility}">
 
             <StackPanel HorizontalAlignment="Center" Orientation="Vertical">
-                <Border Width="106" Height="104" CornerRadius="6" BorderThickness="5" BorderBrush="Gray"/>
+                <Border Width="106" Height="104" CornerRadius="6" BorderThickness="5" BorderBrush="{Binding TopPlayerBorderColor}"/>
                 <TextBlock Text="{Binding TopPlayer.Name}"
            HorizontalAlignment="Center"/>
 
@@ -50,9 +50,9 @@
         </Grid>
 
         <!-- ================= LEFT PLAYER ================= -->
-        <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20">
+        <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20" Visibility="{Binding LeftPlayerVisibility}">
 
-            <Border Width="106" Height="104" CornerRadius="6" BorderThickness="5" BorderBrush="Gray"/>
+            <Border Width="106" Height="104" CornerRadius="6" BorderThickness="5" BorderBrush="{Binding LeftPlayerBorderColor}"/>
             <TextBlock Text="{Binding LeftPlayer.Name}"/>
 
             <TextBlock Text="{Binding LeftPlayer.CardCount,
@@ -67,9 +67,9 @@
         </StackPanel>
 
         <!-- ================= RIGHT PLAYER ================= -->
-        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center" Margin="20">
+        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center" Margin="20" Visibility="{Binding RightPlayerVisibility}">
 
-            <Border Width="106" Height="104" CornerRadius="6" BorderThickness="5" BorderBrush="Gray"/>
+            <Border Width="106" Height="104" CornerRadius="6" BorderThickness="5" BorderBrush="{Binding RightPlayerBorderColor}"/>
             <TextBlock Text="{Binding RightPlayer.Name}"/>
 
             <TextBlock Text="{Binding RightPlayer.CardCount,
@@ -139,7 +139,7 @@
 
             <!-- player info -->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <Border Width="139" Height="139" CornerRadius="6" BorderThickness="5" BorderBrush="Gray"/>
+                <Border Width="139" Height="139" CornerRadius="6" BorderThickness="5" BorderBrush="{Binding MePlayerBorderColor}"/>
                 <StackPanel Margin="10,0,0,0">
                     <TextBlock Text="{Binding Me.Name}"/>
 

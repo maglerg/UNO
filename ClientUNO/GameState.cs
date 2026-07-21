@@ -8,8 +8,9 @@ namespace ClientUNO
     public class GameState
     {
         public List<PlayerInfo> Players { get; set; }
-        public string password { get; set; }
+        /*public string password { get; set; }*/
         public List<Card> MyCards { get; set; }
+        public int currentPlayer { get; set; }
         public int direction;
         public Card lastCard;
         public ColorCard currentColor;
@@ -19,6 +20,7 @@ namespace ClientUNO
         {
             Players = msg.players;
             MyCards = msg.MyCards;
+            currentPlayer= msg.currentPlayer;
             this.direction = msg.direction;
             this.lastCard = msg.lastCard;
             this.currentColor = msg.currentColor;
