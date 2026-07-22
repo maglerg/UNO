@@ -353,6 +353,7 @@ namespace ClientUNO
         }
         public async Task<ConfirmMessage> PlayUnoAsync(int indexPush)
         {
+            Logger.Log($"UNO pressed. index = {indexPush}");
             _playUnoTcs = new TaskCompletionSource<ConfirmMessage>();
 
             await App.Session.Client.SendAsync(new PushUNOMessage(indexPush));

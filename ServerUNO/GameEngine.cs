@@ -49,13 +49,9 @@ namespace Server
             {
                 DrawCard(players[currentPlayer]);
 
-                var action = players[currentPlayer].Action;
-
-                players[currentPlayer].Action = PlayerAction.None;
-
                 NextPlayer();
 
-                ApplyAction(action);
+                ApplyAction(players[currentPlayer]);
             }
             else throw new Exception("Player is not active");
         }
@@ -73,34 +69,36 @@ namespace Server
             DiscardPile.Add(lastCard);
             lastCard = card;
 
-            var action = players[currentPlayer].Action;
-
-            players[currentPlayer].Action = PlayerAction.None;
-
             NextPlayer();
 
-            ApplyAction(action);
+            ApplyAction(players[currentPlayer]);
         }
-        private void ApplyAction(PlayerAction action)
+        private void ApplyAction(Player player)
         {
-            switch (action)
+            switch (player.Action)
             {
                 case PlayerAction.Skip:
                     NextPlayer();
+                    player.Action = PlayerAction.None;
                     break;
                 case PlayerAction.Reverse:
                     direction *= -1;
+                    if (players.Count == 2)
+                        NextPlayer();
+                    player.Action = PlayerAction.None;
                     break;
 
                 case PlayerAction.Two:
                     for (int i = 0; i < 2; i++)
                         DrawCard(players[currentPlayer]);
+                    player.Action = PlayerAction.None;
                     break;
 
 
                 case PlayerAction.Four:
                     for (int i = 0; i < 4; i++)
                         DrawCard(players[currentPlayer]);
+                    player.Action = PlayerAction.None;
                     break;
             }
         }
@@ -146,58 +144,68 @@ namespace Server
             }
             else return false;
         }*/
-        public bool CheckTurn(Card card, ColorCard? chosenColor = null) // применение карты + выбранного цвета
+        public bool CheckTurn(Card card, ColorCard? chosenColor = null)
         {
+            // Черные карты
             if (card.Color == ColorCard.Black)
             {
                 if (!chosenColor.HasValue)
                     return false;
+
                 currentColor = chosenColor.Value;
+
                 if (card.Type == TypeCard.Wild)
                     return true;
+
                 if (card.Type == TypeCard.WildDrawFour)
                 {
                     players[GetNextPlayerIndex()].Action = PlayerAction.Four;
                     return true;
                 }
-                else
-                    return false;
-            }
 
-            else if (lastCard.Color == ColorCard.Black)
-            {
-                if (card.Color == currentColor)
-                    return true;
-                else return false;
-            }
-            if (card.Color == lastCard.Color)
-                return true;
-            if (card.Type == lastCard.Type)
-            {
-                if (card.Type == TypeCard.Number)
-                {
-                    if (card.Value != CardValue.None && card.Value == lastCard.Value)
-                        return true;
-                    else return false;
-                }
-                if (card.Type == TypeCard.Skip)
-                {
-                    players[GetNextPlayerIndex()].Action = PlayerAction.Skip;
-                    return true;
-                }
-                if (card.Type == TypeCard.Reverse)
-                {
-                    direction *= -1;
-                    return true;
-                }
-                if (card.Type == TypeCard.DrawTwo)
-                {
-                    players[GetNextPlayerIndex()].Action = PlayerAction.Two;
-                    return true;
-                }
                 return false;
             }
-            else return false;
+
+            if (lastCard.Color == ColorCard.Black)
+            {
+                if (card.Color != currentColor)
+                    return false;
+            }
+            else
+            {
+                if (card.Color != lastCard.Color)
+                {
+                    if (card.Type != lastCard.Type)
+                        return false;
+
+
+                    if (card.Type == TypeCard.Number &&
+                        card.Value != lastCard.Value)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            switch (card.Type)
+            {
+                case TypeCard.Skip:
+                    players[GetNextPlayerIndex()].Action = PlayerAction.Skip;
+                    break;
+
+
+                case TypeCard.Reverse:
+                    direction *= -1;
+                    break;
+
+
+                case TypeCard.DrawTwo:
+                    players[GetNextPlayerIndex()].Action = PlayerAction.Two;
+                    break;
+            }
+
+
+            return true;
         }
         public void DrawCard(Player player) //выдать карты игроку
         {
