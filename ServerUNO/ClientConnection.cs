@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
 using System.Net.WebSockets;
+using System.Numerics;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -87,6 +88,8 @@ namespace Shared_Library
 
             byte[] data = Encoding.UTF8.GetBytes(json);
             Console.WriteLine("OUT → " + json);
+            Console.WriteLine(
+ $"У игрока {Player.Name} карт осталось {Player.PlayerCards.Count}");
             await Socket.SendAsync(
                 new ArraySegment<byte>(data),
                 WebSocketMessageType.Text,

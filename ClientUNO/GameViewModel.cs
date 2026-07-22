@@ -260,6 +260,8 @@ namespace ClientUNO
         public void InitializeGame(GameStateMessage game)
         {
             state.Update(game);
+            Logger.Log(
+ $"Получил карты: {state.MyCards.Count}");
 
             OnPropertyChanged(nameof(Cards));
             OnPropertyChanged(nameof(TopCard));

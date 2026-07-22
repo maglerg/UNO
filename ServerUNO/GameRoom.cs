@@ -278,7 +278,9 @@ namespace Server
                 case PlayCardMessage playMsg:
                     try
                     {
+                        Console.WriteLine($"До хода: {Clients[indexPlayer].Player.PlayerCards.Count}");
                         Engine.PlayCard(indexPlayer, playMsg.card, playMsg.chosenColor);
+                        Console.WriteLine($"После хода: {Clients[indexPlayer].Player.PlayerCards.Count}");
                         var okMsg2 = new ConfirmMessage(RequestType.PlayCard, "ok");
                         await Clients[indexPlayer].SendAsync(okMsg2);
                         await SendGameStage();

@@ -155,14 +155,14 @@
                 <Button Content="UNO"
         Command="{Binding UnoCommand}"
         CommandParameter="{Binding Me.Index}"
-        Visibility="{Binding MyUnoVisibility}"/>
+        Visibility="{Binding MePlayerUnoVisibility}"/>
             </StackPanel>
 
             <!-- cards hand -->
             <ScrollViewer HorizontalScrollBarVisibility="Auto"
               VerticalScrollBarVisibility="Disabled"
               Margin="10"
-              Width="870">
+              Width="850">
 
                 <ItemsControl ItemsSource="{Binding Cards}">
 
@@ -193,7 +193,7 @@
             </ScrollViewer>
 
         </StackPanel>
-        <!--<Grid x:Name="ColorOverlay"
+        <Grid x:Name="ColorOverlay"
           Background="#80000000"
           Visibility="{Binding ColorSelectionVisibility}">
 
@@ -209,7 +209,7 @@
         CommandParameter="{x:Static local:ColorCard.Yellow}"/>
 
             </StackPanel>
-        </Grid>-->
+        </Grid>
     </Grid>
 </Window>
 

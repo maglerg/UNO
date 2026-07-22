@@ -49,41 +49,61 @@ namespace Server
             {
                 DrawCard(players[currentPlayer]);
 
+                var action = players[currentPlayer].Action;
+
+                players[currentPlayer].Action = PlayerAction.None;
+
                 NextPlayer();
-                while (CheckAction())
-                {
-                    NextPlayer();
-                }
+
+                ApplyAction(action);
             }
             else throw new Exception("Player is not active");
         }
         public void PlayCard(int player, Card card, ColorCard? chosenColor = null) // сыграть карту
         {
-            if (player == currentPlayer)
-            {
-                if (CheckTurn(card, chosenColor))
-                {
-                    players[currentPlayer].PlayerCards.Remove(card);
-                    DiscardPile.Add(lastCard);
-                    lastCard = card;
+            if (player != currentPlayer)
+                throw new Exception("Player is not active");
 
-                    //проверка уно
+            if (!CheckTurn(card, chosenColor))
+                throw new Exception("Uncorrected card or color is not selected");
 
-                    if (players[player].PlayerCards.Count == 0)
-                        EndGame(player);
 
-                    NextPlayer();
-                    while (CheckAction())
-                    {
-                        NextPlayer();
-                    }
-                }
-                else throw new Exception("Uncorrected card or color is not selected");
+            players[currentPlayer].PlayerCards.Remove(card);
 
-            }
-            else throw new Exception("Player is not active");
+            DiscardPile.Add(lastCard);
+            lastCard = card;
+
+            var action = players[currentPlayer].Action;
+
+            players[currentPlayer].Action = PlayerAction.None;
+
+            NextPlayer();
+
+            ApplyAction(action);
         }
+        private void ApplyAction(PlayerAction action)
+        {
+            switch (action)
+            {
+                case PlayerAction.Skip:
+                    NextPlayer();
+                    break;
+                case PlayerAction.Reverse:
+                    direction *= -1;
+                    break;
 
+                case PlayerAction.Two:
+                    for (int i = 0; i < 2; i++)
+                        DrawCard(players[currentPlayer]);
+                    break;
+
+
+                case PlayerAction.Four:
+                    for (int i = 0; i < 4; i++)
+                        DrawCard(players[currentPlayer]);
+                    break;
+            }
+        }
         public void PushUno(int indexPush) // нажать кнопку уно
         {
             if (indexPush != currentPlayer)
@@ -95,7 +115,7 @@ namespace Server
             }
         }
 
-        public bool CheckAction() // проверка + выполнение условий action
+        /*public bool CheckAction() // проверка + выполнение условий action
         {
             if (players[currentPlayer].Action != PlayerAction.None)
             {
@@ -125,7 +145,7 @@ namespace Server
                 else return false;
             }
             else return false;
-        }
+        }*/
         public bool CheckTurn(Card card, ColorCard? chosenColor = null) // применение карты + выбранного цвета
         {
             if (card.Color == ColorCard.Black)

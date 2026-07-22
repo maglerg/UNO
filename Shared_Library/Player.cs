@@ -8,7 +8,8 @@ namespace Shared_Library
         None,
         Two,
         Four,
-        Skip
+        Skip,
+        Reverse
     }
     public class Player
     {

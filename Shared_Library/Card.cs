@@ -27,5 +27,20 @@ namespace Shared_Library
         {
             return $"{Color} {Type} {Value}";
         }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is not Card other)
+                return false;
+
+            return Color == other.Color &&
+                   Type == other.Type &&
+                   Value == other.Value;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Color, Type, Value);
+        }
     }
 }
