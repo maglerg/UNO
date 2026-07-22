@@ -123,6 +123,8 @@ namespace ClientUNO
             MePlayer != null && 0 == state.currentPlayer
                 ? Brushes.Green
                 : Brushes.Gray;
+
+        
         public GameViewModel()
         {
             state = new GameState();

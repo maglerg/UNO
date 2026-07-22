@@ -8,6 +8,8 @@ namespace ClientUNO
     // подключить бд
     // добавить музыку
     // убрать мусор/ оптимизировать код/ добавить вывод в консоль на сервере при любых действиях
+    // добавить таймер при ходе игрока
+    // добавить сортировку карт по цветам и значения в руке 
     public partial class App : Application
     {
         public static AppSession Session { get; private set; }
