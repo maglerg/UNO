@@ -132,6 +132,18 @@ namespace ClientUNO
             DrawCardCommand = new RelayCommand(() => _ =  TakeCardAsync());
             PlayCardCommand = new RelayCommand<Card>(card => _ = PlayCardCommandExecute(card));
             UnoCommand = new RelayCommand<int>(index => _ = PlayUnoAsync(index));
+
+            ChooseColorCommand = new RelayCommand<ColorCard>(async color =>
+            {
+                Logger.Log($"Выбран цвет {color}");
+
+                if (_selectedCard == null)
+                    return;
+                
+                await PlayCardAsync(_selectedCard, color);
+                _selectedCard = null;
+                IsColorSelectionVisible = false;
+            });
         }
         public void ProcessMessage(ServerMessage msg)
         {
@@ -242,26 +254,32 @@ namespace ClientUNO
                     _leaveRoomTcs = null;
                     break;
                 case RequestType.GameState:
+                    ProcessGameError(error);
                     break;
                 case RequestType.TakeCard:
+                    ProcessGameError(error);
                     _takeCardTcs?.SetException(new Exception(error.TextError));
                     _takeCardTcs = null;
                     break;
                 case RequestType.PlayCard:
+                    ProcessGameError(error);
                     _playCardTcs?.SetException(new Exception(error.TextError));
                     _playCardTcs = null;
                     break;
                 case RequestType.PlayUno:
+                    ProcessGameError(error);
                     _playUnoTcs?.SetException(new Exception(error.TextError));
                     _playUnoTcs = null;
                     break;
             }
         }
+        private void ProcessGameError(ErrorMessage error)
+        {
+            ShowError(error.TextError);
+        }
         public void InitializeGame(GameStateMessage game)
         {
             state.Update(game);
-            Logger.Log(
- $"Получил карты: {state.MyCards.Count}");
 
             OnPropertyChanged(nameof(Cards));
             OnPropertyChanged(nameof(TopCard));

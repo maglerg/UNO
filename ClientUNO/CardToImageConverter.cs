@@ -24,7 +24,7 @@ namespace ClientUNO.Converters
             return card.Type switch
             {
                 TypeCard.Number => $"Images/{color}_{card.Value}.png",
-                TypeCard.Skip => $"Images/{color}_Skip.png",
+                TypeCard.Skip => $"Images/{color}_Block.png",
                 TypeCard.Reverse => $"Images/{color}_Reverse.png",
                 TypeCard.DrawTwo => $"Images/{color}_PlusTwo.png",
                 _ => null
