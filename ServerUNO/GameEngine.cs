@@ -81,12 +81,6 @@ namespace Server
                     NextPlayer();
                     player.Action = PlayerAction.None;
                     break;
-                case PlayerAction.Reverse:
-                    direction *= -1;
-                    if (players.Count == 2)
-                        NextPlayer();
-                    player.Action = PlayerAction.None;
-                    break;
 
                 case PlayerAction.Two:
                     for (int i = 0; i < 2; i++)
@@ -112,38 +106,6 @@ namespace Server
                 }
             }
         }
-
-        /*public bool CheckAction() // проверка + выполнение условий action
-        {
-            if (players[currentPlayer].Action != PlayerAction.None)
-            {
-                if (players[currentPlayer].Action == PlayerAction.Two)
-                {
-                    for (int i = 0; i < 2; i++)
-                    {
-                        DrawCard(players[currentPlayer]);
-                    }
-                    players[currentPlayer].Action = PlayerAction.None;
-                    return true;
-                }
-                else if (players[currentPlayer].Action == PlayerAction.Four)
-                {
-                    for (int i = 0; i < 4; i++)
-                    {
-                        DrawCard(players[currentPlayer]);
-                    }
-                    players[currentPlayer].Action = PlayerAction.None;
-                    return true;
-                }
-                else if (players[currentPlayer].Action == PlayerAction.Skip)
-                {
-                    players[currentPlayer].Action = PlayerAction.None;
-                    return true;
-                }
-                else return false;
-            }
-            else return false;
-        }*/
         public bool CheckTurn(Card card, ColorCard? chosenColor = null)
         {
             // Черные карты
@@ -196,6 +158,8 @@ namespace Server
 
                 case TypeCard.Reverse:
                     direction *= -1;
+                    if (players.Count == 2)
+                        players[GetNextPlayerIndex()].Action = PlayerAction.Skip;
                     break;
 
 

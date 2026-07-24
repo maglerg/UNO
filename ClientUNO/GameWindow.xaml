@@ -91,51 +91,56 @@
         <Grid HorizontalAlignment="Center"
       VerticalAlignment="Top"
       Margin="0,212,0,0">
+            <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Horizontal">
+                    <!-- Deck -->
+                    <Button Width="120"
+                     Height="160"
+                     Command="{Binding DrawCardCommand}"
+                     HorizontalAlignment="Left"
+                     Margin="-160,0,0,0">
 
-            <!-- Deck -->
-            <Button Width="120"
-            Height="160"
-            Command="{Binding DrawCardCommand}"
-            HorizontalAlignment="Left"
-            Margin="-160,0,0,0">
+                        <Image Source="Images/back.png"/>
+                    </Button>
 
-                <Image Source="Images/back.png"/>
-            </Button>
+                    <!-- Last card -->
+                    <Border Width="120"
+                     Height="160"
+                     HorizontalAlignment="Right"
+                     Margin="0,0,-160,0">
 
-            <!-- Last card -->
-            <Border Width="120"
-            Height="160"
-            HorizontalAlignment="Right"
-            Margin="0,0,-160,0">
+                        <Image Source="{Binding TopCard,
+             Converter={StaticResource CardToImageConverter}}"/>
+                    </Border>
+                    <StackPanel HorizontalAlignment="Right"
+                     VerticalAlignment="Top"
+                     Margin="0,200,-160,0"
+                     Width="160">
 
-                <Image Source="{Binding TopCard,
-                        Converter={StaticResource CardToImageConverter}}"/>
-            </Border>
-            <StackPanel HorizontalAlignment="Right"
-            VerticalAlignment="Top"
-            Margin="0,200,-160,0"
-            Width="160">
+                        <Border Background="#AAFF4444"
+                             CornerRadius="10"
+                             Padding="8"
+                             Visibility="{Binding ErrorVisibility}">
 
-                <Border Background="#AAFF4444"
-            CornerRadius="10"
-            Padding="8"
-            Visibility="{Binding ErrorVisibility}">
+                            <TextBlock Text="{Binding ErrorMessage}"
+                            Foreground="White"
+                            TextWrapping="Wrap"
+                            HorizontalAlignment="Center"/>
+                        </Border>
 
-                    <TextBlock Text="{Binding ErrorMessage}"
-                   Foreground="White"
-                   TextWrapping="Wrap"
-                   HorizontalAlignment="Center"/>
-                </Border>
-
+                    </StackPanel>
+                    <!-- Draw button -->
+                    <Button Content="Взять карту"
+                     Width="120"
+                     Height="35"
+                     HorizontalAlignment="Left"
+                     VerticalAlignment="Bottom"
+                     Margin="-160,175,0,0"
+                     Command="{Binding DrawCardCommand}"/>
+                </StackPanel>
             </StackPanel>
-            <!-- Draw button -->
-            <Button Content="Взять карту"
-            Width="120"
-            Height="35"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Bottom"
-            Margin="-160,175,0,0"
-            Command="{Binding DrawCardCommand}"/>
+
+           
 
         </Grid>
         
@@ -210,6 +215,19 @@
 
             </StackPanel>
         </Grid>
+        <Border Background="#80000000"
+        CornerRadius="10"
+        Padding="15"
+        Visibility="{Binding NotificationVisibility}"
+        HorizontalAlignment="Center"
+        VerticalAlignment="Top"
+        Margin="0,180,0,0" Width="361">
+
+            <TextBlock Text="{Binding NotificationText}"
+               Foreground="White"
+               FontSize="20"
+               FontWeight="Bold"/>
+        </Border>
     </Grid>
 </Window>
 

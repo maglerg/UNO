@@ -133,9 +133,14 @@ namespace ClientUNO
                 LeaveGameError.Text = ex.Message;
             }
         }
-        private void CopyRoomCode_Click(object sender, RoutedEventArgs e)
+        private async void CopyRoomCode_Click(object sender, RoutedEventArgs e)
         {
             Clipboard.SetText(roomcode.Text);
+            roomcopy.Visibility = Visibility.Visible;
+
+            await Task.Delay(1500);
+
+            roomcopy.Visibility = Visibility.Collapsed;
         }
 
     }

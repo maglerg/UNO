@@ -8,6 +8,7 @@ namespace ClientUNO
 {
     public class GameViewModel : INotifyPropertyChanged
     {
+        private bool _startMessageShown;
         public GameState state { get; set; }
 
         public event Action<ConfirmMessage> CanStartGame;
@@ -32,6 +33,76 @@ namespace ClientUNO
 
         public List<Card> Cards => state.MyCards;
         public Card TopCard => state.lastCard;
+        private string _notificationText;
+
+        public string NotificationText
+        {
+            get => _notificationText;
+            set
+            {
+                _notificationText = value;
+                OnPropertyChanged(nameof(NotificationText));
+            }
+        }
+
+
+        private Visibility _notificationVisibility = Visibility.Collapsed;
+
+        public Visibility NotificationVisibility
+        {
+            get => _notificationVisibility;
+            set
+            {
+                _notificationVisibility = value;
+                OnPropertyChanged(nameof(NotificationVisibility));
+            }
+        }
+        private async Task ShowNotification(string text)
+        {
+            Logger.Log(text);
+            NotificationText = text;
+
+            NotificationVisibility = Visibility.Visible;
+
+
+            await Task.Delay(2000);
+
+
+            NotificationVisibility = Visibility.Collapsed;
+        }
+        private string GetCardNotification(Card card)
+        {
+            int nextPlayer =
+                (state.currentPlayer + state.direction + state.Players.Count)
+                % state.Players.Count;
+
+
+            PlayerInfo player = state.Players[nextPlayer];
+
+            switch (card.Type)
+            {
+                case TypeCard.Skip:
+                    return $"{player.Name} must skip a turn";
+
+                case TypeCard.DrawTwo:
+                    return $"{player.Name} must draw 2 cards";
+
+                case TypeCard.Wild:
+                    return $"Color selected: {card.Color}";
+
+                case TypeCard.WildDrawFour:
+                    return $"{player.Name} must draw 4 cards. Color selected: {card.Color}";
+
+                case TypeCard.Reverse:
+                    return "Game direction has changed";
+
+                case TypeCard.Number:
+                    return null;
+
+                default:
+                    return null;
+            }
+        }
         public int MyCardsCount => state.MyCards.Count;
         public bool CanSayUno => state.MyCards.Count == 1;
 
@@ -47,6 +118,16 @@ namespace ClientUNO
         private Card? _selectedCard;
 
         private bool _isColorSelectionVisible;
+        public string SelectedColorText
+        {
+            get
+            {
+                if (TopCard == null || TopCard.Color != ColorCard.Black)
+                    return "";
+
+                return $"The color is selected: {state.currentColor}";
+            }
+        }
 
         public bool IsColorSelectionVisible
         {
@@ -135,8 +216,6 @@ namespace ClientUNO
 
             ChooseColorCommand = new RelayCommand<ColorCard>(async color =>
             {
-                Logger.Log($"Выбран цвет {color}");
-
                 if (_selectedCard == null)
                     return;
                 
@@ -280,6 +359,12 @@ namespace ClientUNO
         public void InitializeGame(GameStateMessage game)
         {
             state.Update(game);
+            if (!_startMessageShown)
+            {
+                ShowFirstPlayerMessage();
+                _startMessageShown = true;
+            }
+            CheckTopCardNotification();
 
             OnPropertyChanged(nameof(Cards));
             OnPropertyChanged(nameof(TopCard));
@@ -300,6 +385,53 @@ namespace ClientUNO
             OnPropertyChanged(nameof(LeftPlayerBorderColor));
             OnPropertyChanged(nameof(RightPlayerBorderColor));
             OnPropertyChanged(nameof(MePlayerBorderColor));
+            OnPropertyChanged(nameof(SelectedColorText));
+
+            OnPropertyChanged(nameof(SelectedColorText));
+        }
+        private void ShowFirstPlayerMessage()
+        {
+            if (state.Players.Count == 0)
+                return;
+
+            var firstPlayer = state.Players[state.currentPlayer];
+
+            _ = ShowNotification(
+                $"{firstPlayer.Name} goes first"
+            );
+        }
+        private Card _previousTopCard;
+        private void CheckTopCardNotification()
+        {
+            var currentCard = state.lastCard;
+
+
+            if (currentCard == null)
+                return;
+
+
+            if (_previousTopCard == null)
+            {
+                _previousTopCard = currentCard;
+                return;
+            }
+
+
+            if (_previousTopCard.Type != currentCard.Type ||
+               _previousTopCard.Color != currentCard.Color)
+            {
+                string message = GetCardNotification(currentCard);
+                Logger.Log(message);
+
+
+                if (message != null)
+                {
+                    _ = ShowNotification(message);
+                }
+            }
+
+
+            _previousTopCard = currentCard;
         }
         public async Task<ConfirmMessage> CreateRoomAsync()
         {
@@ -352,8 +484,9 @@ namespace ClientUNO
         }
         private async Task PlayCardCommandExecute(Card card)
         {
-            if (card.Color == ColorCard.Black)
+            if (card.Color == ColorCard.Black && MePlayerBorderColor == Brushes.Green)
             {
+                
                 _selectedCard = card;
                 IsColorSelectionVisible = true;
                 return;
