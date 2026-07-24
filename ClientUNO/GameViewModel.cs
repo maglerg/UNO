@@ -8,6 +8,7 @@ namespace ClientUNO
 {
     public class GameViewModel : INotifyPropertyChanged
     {
+        public int avatarcount = 6;
         private bool _startMessageShown;
         public GameState state { get; set; }
 

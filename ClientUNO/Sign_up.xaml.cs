@@ -23,11 +23,13 @@ namespace ClientUNO
     {
         public GameViewModel Model { get; }
         public GameClient Client { get; }
+        private static readonly Random random = new();
         public SignUp()
         {
             InitializeComponent();
             Client = App.Session.Client;
             Model = App.Session.Model;
+
         }
         private async void SignUp_Click(object sender, RoutedEventArgs e)
         {
@@ -74,9 +76,11 @@ namespace ClientUNO
             {
                 try
                 {
-                    var confirm = await App.Session.Model.SignUpAsync(username, password1);
+                    int number = random.Next(1, Model.avatarcount + 1);
+                    var confirm = await App.Session.Model.SignUpAsync(username, password1, number); 
                     Client.player.Name= username;
                     Client.player.Id = Guid.Parse(confirm.roomCode);
+                    Client.player.AvatarId = number;
                     Logger.Initialize(App.Session.Client.player.Name);
                     PlayerMenu lobby = new PlayerMenu();
                     lobby.Show();

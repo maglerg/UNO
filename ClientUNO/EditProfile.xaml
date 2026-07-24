@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:ClientUNO"
         mc:Ignorable="d"
         Title="Profile"
-        Height="430"
+        Height="380"
         Width="600">
 
 
@@ -31,7 +31,23 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
+        <Style x:Key="TextButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="SaddleBrown"/>
+            <Setter Property="FontFamily" Value="Comic Sans MS"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
 
 
@@ -106,7 +122,7 @@
 
                 <Border Width="120"
                         Height="120"
-                        CornerRadius="60"
+                        CornerRadius="10"
                         BorderBrush="SaddleBrown"
                         BorderThickness="3"
                         Cursor="Hand"
@@ -120,12 +136,11 @@
                 </Border>
 
 
-                <TextBlock Text="Change avatar"
-                           FontFamily="Comic Sans MS"
-                           Foreground="SaddleBrown"
-                           FontSize="14"
-                           HorizontalAlignment="Center"
-                           Margin="0,10,0,0"/>
+                <Button Content="Change avatar"
+        Style="{StaticResource TextButtonStyle}"
+        HorizontalAlignment="Center"
+        Margin="0,10,0,0"
+        Click="Avatar_Click"/>
 
 
             </StackPanel>

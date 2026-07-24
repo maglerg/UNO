@@ -48,6 +48,12 @@
     <None Remove="Images\Green_Three.png" />
     <None Remove="Images\Green_Two.png" />
     <None Remove="Images\Green_Zero.png" />
+    <None Remove="Images\Icon\1.jpg" />
+    <None Remove="Images\Icon\2.jpg" />
+    <None Remove="Images\Icon\3.jpg" />
+    <None Remove="Images\Icon\4.jpg" />
+    <None Remove="Images\Icon\5.jpg" />
+    <None Remove="Images\Icon\6.jpg" />
     <None Remove="Images\nails.jpg" />
     <None Remove="Images\nails3.jpg" />
     <None Remove="Images\Red_Block.png" />
@@ -81,6 +87,18 @@
     <None Remove="Images\Yellow_Three.png" />
     <None Remove="Images\Yellow_Two.png" />
     <None Remove="Images\Yellow_Zero.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\Icon\3.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\Icon\1.jpg" />
+    <Resource Include="Images\Icon\2.jpg" />
+    <Resource Include="Images\Icon\4.jpg" />
+    <Resource Include="Images\Icon\5.jpg" />
+    <Resource Include="Images\Icon\6.jpg" />
   </ItemGroup>
 
   <ItemGroup>

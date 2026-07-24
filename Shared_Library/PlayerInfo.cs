@@ -10,7 +10,8 @@ namespace Shared_Library
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-
+        public string Status { get; set; }
+        public int AvatarId { get; set; }
         public int CardCount { get; set; }
         public bool IsHost { get; set; }
         public PlayerInfo() { }
