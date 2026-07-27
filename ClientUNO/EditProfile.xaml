@@ -1,4 +1,4 @@
-﻿<Window x:Class="ClientUNO.EditProfileWindow"
+﻿<Window x:Class="ClientUNO.EditProfile"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -125,8 +125,7 @@
                         CornerRadius="10"
                         BorderBrush="SaddleBrown"
                         BorderThickness="3"
-                        Cursor="Hand"
-                        MouseDown="Avatar_Click">
+                        Cursor="Hand">
 
 
                     <Image x:Name="AvatarImage"
@@ -139,8 +138,7 @@
                 <Button Content="Change avatar"
         Style="{StaticResource TextButtonStyle}"
         HorizontalAlignment="Center"
-        Margin="0,10,0,0"
-        Click="Avatar_Click"/>
+        Margin="0,10,0,0"/>
 
 
             </StackPanel>
@@ -203,8 +201,7 @@
                     FontFamily="Comic Sans MS"
                     Foreground="#6F4E37"
                     Background="White"
-                    Opacity="0.7"
-                    Click="Save_Click"/>
+                    Opacity="0.7"/>
 
 
             <Button Content="Exit"
@@ -215,8 +212,7 @@
                     FontFamily="Comic Sans MS"
                     Foreground="#6F4E37"
                     Background="White"
-                    Opacity="0.7"
-                    Click="Exit_Click"/>
+                    Opacity="0.7"/>
 
 
         </StackPanel>

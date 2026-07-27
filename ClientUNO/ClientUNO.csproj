@@ -9,108 +9,86 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Images\back.png" />
+    <None Remove="Images\Avatars\1.jpg" />
+    <None Remove="Images\Avatars\2.jpg" />
+    <None Remove="Images\Avatars\3.jpg" />
+    <None Remove="Images\Avatars\4.jpg" />
+    <None Remove="Images\Avatars\5.jpg" />
+    <None Remove="Images\Avatars\6.jpg" />
     <None Remove="Images\beige.jpg" />
-    <None Remove="Images\Blue_Block.png" />
-    <None Remove="Images\Blue_Eight.png" />
-    <None Remove="Images\Blue_Five.png" />
-    <None Remove="Images\Blue_Four.png" />
-    <None Remove="Images\Blue_Nine.png" />
-    <None Remove="Images\Blue_One.png" />
-    <None Remove="Images\Blue_PlusTwo.png" />
-    <None Remove="Images\Blue_Reverse.png" />
-    <None Remove="Images\Blue_Seven.png" />
-    <None Remove="Images\Blue_Six.png" />
-    <None Remove="Images\Blue_Three.png" />
-    <None Remove="Images\Blue_Two.png" />
-    <None Remove="Images\Blue_Zero.png" />
+    <None Remove="Images\Cards\back.png" />
+    <None Remove="Images\Cards\Blue_Block.png" />
+    <None Remove="Images\Cards\Blue_Eight.png" />
+    <None Remove="Images\Cards\Blue_Five.png" />
+    <None Remove="Images\Cards\Blue_Four.png" />
+    <None Remove="Images\Cards\Blue_Nine.png" />
+    <None Remove="Images\Cards\Blue_One.png" />
+    <None Remove="Images\Cards\Blue_PlusTwo.png" />
+    <None Remove="Images\Cards\Blue_Reverse.png" />
+    <None Remove="Images\Cards\Blue_Seven.png" />
+    <None Remove="Images\Cards\Blue_Six.png" />
+    <None Remove="Images\Cards\Blue_Three.png" />
+    <None Remove="Images\Cards\Blue_Two.png" />
+    <None Remove="Images\Cards\Blue_Zero.png" />
+    <None Remove="Images\Cards\Green_Block.png" />
+    <None Remove="Images\Cards\Green_Eight.png" />
+    <None Remove="Images\Cards\Green_Five.png" />
+    <None Remove="Images\Cards\Green_Four.png" />
+    <None Remove="Images\Cards\Green_Nine.png" />
+    <None Remove="Images\Cards\Green_One.png" />
+    <None Remove="Images\Cards\Green_PlusTwo.png" />
+    <None Remove="Images\Cards\Green_Reverse.png" />
+    <None Remove="Images\Cards\Green_Seven.png" />
+    <None Remove="Images\Cards\Green_Six.png" />
+    <None Remove="Images\Cards\Green_Three.png" />
+    <None Remove="Images\Cards\Green_Two.png" />
+    <None Remove="Images\Cards\Green_Zero.png" />
+    <None Remove="Images\Cards\Red_Block.png" />
+    <None Remove="Images\Cards\Red_Eight.png" />
+    <None Remove="Images\Cards\Red_Five.png" />
+    <None Remove="Images\Cards\Red_Four.png" />
+    <None Remove="Images\Cards\Red_Nine.png" />
+    <None Remove="Images\Cards\Red_One.png" />
+    <None Remove="Images\Cards\Red_PlusTwo.png" />
+    <None Remove="Images\Cards\Red_Reverse.png" />
+    <None Remove="Images\Cards\Red_Seven.png" />
+    <None Remove="Images\Cards\Red_Six.png" />
+    <None Remove="Images\Cards\Red_Three.png" />
+    <None Remove="Images\Cards\Red_Two.png" />
+    <None Remove="Images\Cards\Red_Zero.png" />
+    <None Remove="Images\Cards\Wild.png" />
+    <None Remove="Images\Cards\WildFour.png" />
+    <None Remove="Images\Cards\Yellow_Block.png" />
+    <None Remove="Images\Cards\Yellow_Eight.png" />
+    <None Remove="Images\Cards\Yellow_Five.png" />
+    <None Remove="Images\Cards\Yellow_Four.png" />
+    <None Remove="Images\Cards\Yellow_Nine.png" />
+    <None Remove="Images\Cards\Yellow_One.png" />
+    <None Remove="Images\Cards\Yellow_PlusTwo.png" />
+    <None Remove="Images\Cards\Yellow_Reverse.png" />
+    <None Remove="Images\Cards\Yellow_Seven.png" />
+    <None Remove="Images\Cards\Yellow_Six.png" />
+    <None Remove="Images\Cards\Yellow_Three.png" />
+    <None Remove="Images\Cards\Yellow_Two.png" />
+    <None Remove="Images\Cards\Yellow_Zero.png" />
     <None Remove="Images\Coffeeeee.jpg" />
     <None Remove="Images\cozy girl.jpg" />
-    <None Remove="Images\cute cat.jpg" />
-    <None Remove="Images\cute_cat_1.jpg" />
     <None Remove="Images\cute_cat_2.jpg" />
     <None Remove="Images\cute_cat_3.jpg" />
-    <None Remove="Images\cute_cat_4.jpg" />
-    <None Remove="Images\cute_cat_5.jpg" />
     <None Remove="Images\cute_cat_6.jpg" />
     <None Remove="Images\Cute_cat_7.jpg" />
     <None Remove="Images\Cute_girl.jpg" />
-    <None Remove="Images\Green_Block.png" />
-    <None Remove="Images\Green_Eight.png" />
-    <None Remove="Images\Green_Five.png" />
-    <None Remove="Images\Green_Four.png" />
-    <None Remove="Images\Green_Nine.png" />
-    <None Remove="Images\Green_One.png" />
-    <None Remove="Images\Green_PlusTwo.png" />
-    <None Remove="Images\Green_Reverse.png" />
-    <None Remove="Images\Green_Seven.png" />
-    <None Remove="Images\Green_Six.png" />
-    <None Remove="Images\Green_Three.png" />
-    <None Remove="Images\Green_Two.png" />
-    <None Remove="Images\Green_Zero.png" />
-    <None Remove="Images\Icon\1.jpg" />
-    <None Remove="Images\Icon\2.jpg" />
-    <None Remove="Images\Icon\3.jpg" />
-    <None Remove="Images\Icon\4.jpg" />
-    <None Remove="Images\Icon\5.jpg" />
-    <None Remove="Images\Icon\6.jpg" />
     <None Remove="Images\nails.jpg" />
     <None Remove="Images\nails3.jpg" />
-    <None Remove="Images\Red_Block.png" />
-    <None Remove="Images\Red_Eight.png" />
-    <None Remove="Images\Red_Five.png" />
-    <None Remove="Images\Red_Four.png" />
-    <None Remove="Images\Red_Nine.png" />
-    <None Remove="Images\Red_One.png" />
-    <None Remove="Images\Red_PlusTwo.png" />
-    <None Remove="Images\Red_Reverse.png" />
-    <None Remove="Images\Red_Seven.png" />
-    <None Remove="Images\Red_Six.png" />
-    <None Remove="Images\Red_Three.png" />
-    <None Remove="Images\Red_Two.png" />
-    <None Remove="Images\Red_Zero.png" />
-    <None Remove="Images\Strawberry.jpg" />
-    <None Remove="Images\sunflowers.jpg" />
-    <None Remove="Images\Watermelon.jpg" />
-    <None Remove="Images\Wild.png" />
-    <None Remove="Images\WildFour.png" />
-    <None Remove="Images\Yellow_Block.png" />
-    <None Remove="Images\Yellow_Eight.png" />
-    <None Remove="Images\Yellow_Five.png" />
-    <None Remove="Images\Yellow_Four.png" />
-    <None Remove="Images\Yellow_Nine.png" />
-    <None Remove="Images\Yellow_One.png" />
-    <None Remove="Images\Yellow_PlusTwo.png" />
-    <None Remove="Images\Yellow_Reverse.png" />
-    <None Remove="Images\Yellow_Seven.png" />
-    <None Remove="Images\Yellow_Six.png" />
-    <None Remove="Images\Yellow_Three.png" />
-    <None Remove="Images\Yellow_Two.png" />
-    <None Remove="Images\Yellow_Zero.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Images\Icon\3.jpg" />
+    <Resource Include="Images\beige.jpg" />
+    <Resource Include="Images\Cards\Red_One.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Images\Icon\1.jpg" />
-    <Resource Include="Images\Icon\2.jpg" />
-    <Resource Include="Images\Icon\4.jpg" />
-    <Resource Include="Images\Icon\5.jpg" />
-    <Resource Include="Images\Icon\6.jpg" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="Images\Yellow_Two.png" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="Images\Yellow_Five.png" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="Images\Green_Five.png" />
+    <Resource Include="Images\Cards\Red_Four.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -118,77 +96,75 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Images\back.png" />
-    <Resource Include="Images\Blue_Block.png" />
-    <Resource Include="Images\Blue_Eight.png" />
-    <Resource Include="Images\Blue_Five.png" />
-    <Resource Include="Images\Blue_Four.png" />
-    <Resource Include="Images\Blue_Nine.png" />
-    <Resource Include="Images\Blue_One.png" />
-    <Resource Include="Images\Blue_PlusTwo.png" />
-    <Resource Include="Images\Blue_Reverse.png" />
-    <Resource Include="Images\Blue_Seven.png" />
-    <Resource Include="Images\Blue_Six.png" />
-    <Resource Include="Images\Blue_Three.png" />
-    <Resource Include="Images\Blue_Two.png" />
-    <Resource Include="Images\Blue_Zero.png" />
-    <Resource Include="Images\Green_Block.png" />
-    <Resource Include="Images\Green_Eight.png" />
-    <Resource Include="Images\Green_Four.png" />
-    <Resource Include="Images\Green_Nine.png" />
-    <Resource Include="Images\Green_One.png" />
-    <Resource Include="Images\Green_PlusTwo.png" />
-    <Resource Include="Images\Green_Reverse.png" />
-    <Resource Include="Images\Green_Seven.png" />
-    <Resource Include="Images\Green_Six.png" />
-    <Resource Include="Images\Green_Three.png" />
-    <Resource Include="Images\Green_Two.png" />
-    <Resource Include="Images\Green_Zero.png" />
-    <Resource Include="Images\nails3.jpg" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="Images\Cute_girl.jpg" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="Images\cute_cat_3.jpg" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="Images\beige.jpg" />
+    <Resource Include="Images\Avatars\1.jpg" />
+    <Resource Include="Images\Avatars\2.jpg" />
+    <Resource Include="Images\Avatars\3.jpg" />
+    <Resource Include="Images\Avatars\4.jpg" />
+    <Resource Include="Images\Avatars\5.jpg" />
+    <Resource Include="Images\Avatars\6.jpg" />
+    <Resource Include="Images\Cards\back.png" />
+    <Resource Include="Images\Cards\Blue_Block.png" />
+    <Resource Include="Images\Cards\Blue_Eight.png" />
+    <Resource Include="Images\Cards\Blue_Five.png" />
+    <Resource Include="Images\Cards\Blue_Four.png" />
+    <Resource Include="Images\Cards\Blue_Nine.png" />
+    <Resource Include="Images\Cards\Blue_One.png" />
+    <Resource Include="Images\Cards\Blue_PlusTwo.png" />
+    <Resource Include="Images\Cards\Blue_Reverse.png" />
+    <Resource Include="Images\Cards\Blue_Seven.png" />
+    <Resource Include="Images\Cards\Blue_Six.png" />
+    <Resource Include="Images\Cards\Blue_Three.png" />
+    <Resource Include="Images\Cards\Blue_Two.png" />
+    <Resource Include="Images\Cards\Blue_Zero.png" />
+    <Resource Include="Images\Cards\Green_Block.png" />
+    <Resource Include="Images\Cards\Green_Eight.png" />
+    <Resource Include="Images\Cards\Green_Five.png" />
+    <Resource Include="Images\Cards\Green_Four.png" />
+    <Resource Include="Images\Cards\Green_Nine.png" />
+    <Resource Include="Images\Cards\Green_One.png" />
+    <Resource Include="Images\Cards\Green_PlusTwo.png" />
+    <Resource Include="Images\Cards\Green_Reverse.png" />
+    <Resource Include="Images\Cards\Green_Seven.png" />
+    <Resource Include="Images\Cards\Green_Six.png" />
+    <Resource Include="Images\Cards\Green_Three.png" />
+    <Resource Include="Images\Cards\Green_Two.png" />
+    <Resource Include="Images\Cards\Green_Zero.png" />
+    <Resource Include="Images\Cards\Red_Block.png" />
+    <Resource Include="Images\Cards\Red_Eight.png" />
+    <Resource Include="Images\Cards\Red_Five.png" />
+    <Resource Include="Images\Cards\Red_Nine.png" />
+    <Resource Include="Images\Cards\Red_PlusTwo.png" />
+    <Resource Include="Images\Cards\Red_Reverse.png" />
+    <Resource Include="Images\Cards\Red_Seven.png" />
+    <Resource Include="Images\Cards\Red_Six.png" />
+    <Resource Include="Images\Cards\Red_Three.png" />
+    <Resource Include="Images\Cards\Red_Two.png" />
+    <Resource Include="Images\Cards\Red_Zero.png" />
+    <Resource Include="Images\Cards\Wild.png" />
+    <Resource Include="Images\Cards\WildFour.png" />
+    <Resource Include="Images\Cards\Yellow_Block.png" />
+    <Resource Include="Images\Cards\Yellow_Eight.png" />
+    <Resource Include="Images\Cards\Yellow_Five.png" />
+    <Resource Include="Images\Cards\Yellow_Four.png" />
+    <Resource Include="Images\Cards\Yellow_Nine.png" />
+    <Resource Include="Images\Cards\Yellow_One.png" />
+    <Resource Include="Images\Cards\Yellow_PlusTwo.png" />
+    <Resource Include="Images\Cards\Yellow_Reverse.png" />
+    <Resource Include="Images\Cards\Yellow_Seven.png" />
+    <Resource Include="Images\Cards\Yellow_Six.png" />
+    <Resource Include="Images\Cards\Yellow_Three.png" />
+    <Resource Include="Images\Cards\Yellow_Two.png" />
+    <Resource Include="Images\Cards\Yellow_Zero.png" />
     <Resource Include="Images\Coffeeeee.jpg" />
     <Resource Include="Images\cozy girl.jpg" />
     <Resource Include="Images\cute_cat_2.jpg" />
+    <Resource Include="Images\cute_cat_3.jpg" />
     <Resource Include="Images\cute_cat_6.jpg" />
     <Resource Include="Images\Cute_cat_7.jpg" />
+    <Resource Include="Images\Cute_girl.jpg" />
     <Resource Include="Images\nails.jpg" />
-    <Resource Include="Images\Red_Block.png" />
-    <Resource Include="Images\Red_Eight.png" />
-    <Resource Include="Images\Red_Five.png" />
-    <Resource Include="Images\Red_Four.png" />
-    <Resource Include="Images\Red_Nine.png" />
-    <Resource Include="Images\Red_One.png" />
-    <Resource Include="Images\Red_PlusTwo.png" />
-    <Resource Include="Images\Red_Reverse.png" />
-    <Resource Include="Images\Red_Seven.png" />
-    <Resource Include="Images\Red_Six.png" />
-    <Resource Include="Images\Red_Three.png" />
-    <Resource Include="Images\Red_Two.png" />
-    <Resource Include="Images\Red_Zero.png" />
-    <Resource Include="Images\Wild.png" />
-    <Resource Include="Images\WildFour.png" />
-    <Resource Include="Images\Yellow_Block.png" />
-    <Resource Include="Images\Yellow_Eight.png" />
-    <Resource Include="Images\Yellow_Four.png" />
-    <Resource Include="Images\Yellow_Nine.png" />
-    <Resource Include="Images\Yellow_One.png" />
-    <Resource Include="Images\Yellow_PlusTwo.png" />
-    <Resource Include="Images\Yellow_Reverse.png" />
-    <Resource Include="Images\Yellow_Seven.png" />
-    <Resource Include="Images\Yellow_Six.png" />
-    <Resource Include="Images\Yellow_Three.png" />
-    <Resource Include="Images\Yellow_Zero.png" />
+    <Resource Include="Images\nails3.jpg" />
   </ItemGroup>
-
+  
+ 
 </Project>

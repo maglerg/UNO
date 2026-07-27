@@ -34,7 +34,10 @@ namespace Server
                     Clients[k].Player.Id,
                     Clients[k].Player.Name,
                     Clients[k].Player.PlayerCards.Count,
-                    Clients[k].Player.IsHost));
+                    Clients[k].Player.IsHost,
+                    Clients[k].Player.Status,
+                    Clients[k].Player.AvatarId
+                    ));
 
 
                 // игроки после k
@@ -47,7 +50,10 @@ namespace Server
                         Clients[i].Player.Id,
                         Clients[i].Player.Name,
                         Clients[i].Player.PlayerCards.Count,
-                        Clients[i].Player.IsHost));
+                        Clients[i].Player.IsHost,
+                        Clients[i].Player.Status,
+                        Clients[i].Player.AvatarId
+                    ));
                 }
 
 
@@ -61,7 +67,10 @@ namespace Server
                         Clients[i].Player.Id,
                         Clients[i].Player.Name,
                         Clients[i].Player.PlayerCards.Count,
-                        Clients[i].Player.IsHost));
+                        Clients[i].Player.IsHost,
+                        Clients[i].Player.Status,
+                        Clients[i].Player.AvatarId
+                    ));
                 }
 
 
@@ -119,7 +128,10 @@ namespace Server
                                 Clients[k].Player.Id,
                                 Clients[k].Player.Name,
                                 Clients[k].Player.PlayerCards.Count,
-                                Clients[k].Player.IsHost));
+                                Clients[k].Player.IsHost,
+                                Clients[k].Player.Status,
+                                Clients[k].Player.AvatarId
+                            ));
 
 
                             // игроки после k
@@ -132,7 +144,10 @@ namespace Server
                                     Clients[i].Player.Id,
                                     Clients[i].Player.Name,
                                     Clients[i].Player.PlayerCards.Count,
-                                    Clients[i].Player.IsHost));
+                                    Clients[i].Player.IsHost,
+                                    Clients[i].Player.Status,
+                                    Clients[i].Player.AvatarId
+                                ));
                             }
 
 
@@ -146,7 +161,10 @@ namespace Server
                                     Clients[i].Player.Id,
                                     Clients[i].Player.Name,
                                     Clients[i].Player.PlayerCards.Count,
-                                    Clients[i].Player.IsHost));
+                                    Clients[i].Player.IsHost,
+                                    Clients[i].Player.Status,
+                                    Clients[i].Player.AvatarId
+                                    ));
                             }
 
 
@@ -231,7 +249,9 @@ namespace Server
                             var person = new PlayerInfo(
                                 leavingClient.Player.Id,
                                 leavingClient.Player.Name,
-                                -1, leavingClient.Player.IsHost);
+                                -1, leavingClient.Player.IsHost,
+                                leavingClient.Player.Status,
+                                leavingClient.Player.AvatarId);
 
                             await client.SendAsync(new SomeoneLeftMessage(person));
                         }

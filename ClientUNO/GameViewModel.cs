@@ -206,7 +206,9 @@ namespace ClientUNO
                 ? Brushes.Green
                 : Brushes.Gray;
 
-        
+        public ImageSource MyAvatar =>
+    AvatarHelper.GetAvatar(App.Session.Client.player.AvatarId);
+
         public GameViewModel()
         {
             state = new GameState();
@@ -459,11 +461,11 @@ namespace ClientUNO
 
             return await _leaveRoomTcs.Task;
         }
-        public async Task<ConfirmMessage> SignUpAsync(string name, string password)
+        public async Task<ConfirmMessage> SignUpAsync(string name, string password, int avatarId)
         {
             _signUpTcs = new TaskCompletionSource<ConfirmMessage>();
 
-            await App.Session.Client.SendAsync(new SignUpMessage(name, password));
+            await App.Session.Client.SendAsync(new SignUpMessage(name, password, avatarId));
 
             return await _signUpTcs.Task;
         }

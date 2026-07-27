@@ -15,12 +15,14 @@ namespace Shared_Library
         public int CardCount { get; set; }
         public bool IsHost { get; set; }
         public PlayerInfo() { }
-        public PlayerInfo(Guid id, string name, int cardCount, bool isHost  )
+        public PlayerInfo(Guid id, string name, int cardCount, bool isHost, string status, int avatarId )
         {
             Id = id;
             Name = name;
             CardCount = cardCount;
             IsHost = isHost;
+            Status = status;
+            AvatarId = avatarId;
         }
     }
 }

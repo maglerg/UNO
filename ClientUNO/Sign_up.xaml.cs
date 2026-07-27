@@ -76,11 +76,13 @@ namespace ClientUNO
             {
                 try
                 {
-                    int number = random.Next(1, Model.avatarcount + 1);
-                    var confirm = await App.Session.Model.SignUpAsync(username, password1, number); 
-                    Client.player.Name= username;
-                    Client.player.Id = Guid.Parse(confirm.roomCode);
-                    Client.player.AvatarId = number;
+                    int numberAvatar = random.Next(1, Model.avatarcount + 1);
+                    var confirm = await App.Session.Model.SignUpAsync(username, password1, numberAvatar); 
+                    // отдельно имя пользователя отдельно username
+                    Client.player.Name= confirm.player.Name;
+                    Client.player.Id = confirm.player.Id;
+                    Client.player.AvatarId = confirm.player.AvatarId;
+                    Client.player.Status = confirm.player.Status;
                     Logger.Initialize(App.Session.Client.player.Name);
                     PlayerMenu lobby = new PlayerMenu();
                     lobby.Show();

@@ -4,8 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace ServerUNO
 {
@@ -35,12 +37,15 @@ namespace ServerUNO
                     }
                     else
                     {
-                        accountManager.Add(new UserAccount(client.Player.Id, sMsg.name, sMsg.password));
+                        accountManager.Add(new UserAccount(client.Player.Id, sMsg.name, sMsg.password, sMsg.avatarId, ""));
                         accountManager.Save();
                         client.Player.Name = sMsg.name;
+                        client.Player.AvatarId = sMsg.avatarId;
+                        client.Player.Status = "";
+                        var pl = new PlayerInfo(client.Player.Id, client.Player.Name, -1, false, client.Player.Status, client.Player.AvatarId);
                         await client.SendAsync(new ConfirmMessage(
                             RequestType.SignUp,
-                            $"{client.Player.Id}"));
+                            "", pl));
 
                         Console.WriteLine($"Successful registration {sMsg.name}");
                     }
@@ -58,10 +63,13 @@ namespace ServerUNO
                     }
                     else
                     {
-                        client.Player.Name = lMsg.name;
+                        client.Player.Name = user1.Username;
+                        client.Player.AvatarId = user1.AvatarId;
+                        client.Player.Status = user1.Status;
+                        var pl = new PlayerInfo(user1.Id, user1.Username, -1, false, user1.Status, user1.AvatarId);
                         await client.SendAsync(new ConfirmMessage(
                             RequestType.Login,
-                            $"{client.Player.Id}"));
+                            $"", pl));
 
                         Console.WriteLine($"User {lMsg.name} logged in");
                     }
@@ -78,8 +86,8 @@ namespace ServerUNO
                         var okMsg1 = new ConfirmMessage(RequestType.ConnectRoom, "ok");
                         await client.SendAsync(okMsg1);
 
-                        var newPlayer = new PlayerInfo(client.Player.Id, client.Player.Name, -1,client.Player.IsHost);
-
+                        var newPlayer = new PlayerInfo(client.Player.Id, client.Player.Name, -1,client.Player.IsHost, client.Player.Status, client.Player.AvatarId);
+                        
                         foreach (var other in room.Clients) // отправляем остальным, что кто-то присоединился
                         {
                             if (other.Player.Id != client.Player.Id)
@@ -111,7 +119,7 @@ namespace ServerUNO
                             {
 
                                 Console.WriteLine($"Send existing player {other.Player.Name} to new client");
-                                var player = new PlayerInfo(client.Player.Id, other.Player.Name, -1, client.Player.IsHost);
+                                var player = new PlayerInfo(client.Player.Id, other.Player.Name, -1, client.Player.IsHost, client.Player.Status, client.Player.AvatarId);
                                 await client.SendAsync(new SomeoneJoinMessage(player));
                             }
                         }

@@ -86,8 +86,17 @@
                         <TranslateTransform X="0.797"/>
                     </TransformGroup>
                 </StackPanel.RenderTransform>
-                <Border BorderBrush="Black" Width="210" Height="198"
-BorderThickness="2" RenderTransformOrigin="0.512,0.571" CornerRadius="20"/>
+                <Border BorderBrush="Black"
+        BorderThickness="2"
+        Width="210"
+        Height="198"
+        CornerRadius="20"
+        ClipToBounds="True">
+
+                    <Image Source="{Binding MyAvatar}"
+           Stretch="UniformToFill"/>
+
+                </Border>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Number of victories" FontSize="15"
 FontFamily="Comic Sans MS" Foreground="SaddleBrown" Margin="10"/>

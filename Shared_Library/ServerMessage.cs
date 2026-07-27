@@ -45,12 +45,14 @@ namespace Shared_Library
     {
         public string name { get; set; }
         public string password { get; set; }
+        public int avatarId { get; set; }
 
-        public SignUpMessage(string name, string password)
+        public SignUpMessage(string name, string password, int avatarId)
             : base(nameof(SignUpMessage))
         {
             this.name = name;
             this.password = password;
+            this.avatarId = avatarId;
         }
     }
     public class RoomInfoMessage : ServerMessage
@@ -87,13 +89,7 @@ namespace Shared_Library
         {
         }
     }
-    /*public class RequestGameStateMessage : ServerMessage
-    {
-        public RequestGameStateMessage()
-            : base(nameof(RequestGameStateMessage))
-        {
-        }
-    }*/
+    
     public class LeaveGameMessage : ServerMessage
     {
         public LeaveGameMessage()
@@ -211,12 +207,14 @@ namespace Shared_Library
     {
         public RequestType RequestType { get; set; }
         public string roomCode { get; set; }
+        public PlayerInfo player {  get; set; }
 
-        public ConfirmMessage(RequestType requestType, string roomCode)
+        public ConfirmMessage(RequestType requestType, string roomCode, PlayerInfo player = null)
             : base(nameof(ConfirmMessage))
         {
             RequestType = requestType;
             this.roomCode = roomCode;
+            this.player = player;
         }
     }
     

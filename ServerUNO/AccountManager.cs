@@ -14,11 +14,20 @@ namespace ServerUNO
 
         public AccountManager()
         {
-            if (File.Exists(_filePath))
+            if (!File.Exists(_filePath))
+                return;
+
+            var json = File.ReadAllText(_filePath);
+
+            if (string.IsNullOrWhiteSpace(json))
             {
-                var json = File.ReadAllText(_filePath);
-                _users = JsonSerializer.Deserialize<List<UserAccount>>(json) ?? new();
+                _users = new List<UserAccount>();
+                return;
             }
+
+            _users = JsonSerializer.Deserialize<List<UserAccount>>(json)
+                     ?? new List<UserAccount>();
+
         }
         public void Add(UserAccount user)
         {
@@ -34,6 +43,11 @@ namespace ServerUNO
 
             string json = File.ReadAllText(_filePath);
 
+            if (string.IsNullOrWhiteSpace(json))
+            {
+                _users = new List<UserAccount>();
+                return;
+            }
             _users = JsonSerializer.Deserialize<List<UserAccount>>(json)
                      ?? new List<UserAccount>();
         }
