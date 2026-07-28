@@ -9,7 +9,7 @@ namespace ServerUNO
 {
     public class AccountManager
     {
-        private List<UserAccount> _users = new();
+        public List<UserAccount> _users = new();
         private readonly string _filePath = "accounts.json";
 
         public AccountManager()
@@ -68,7 +68,16 @@ namespace ServerUNO
                 u.Username == username &&
                 u.Password == password);
         }
-
+        public UserAccount Get(UserAccount account)
+        {
+            return _users.FirstOrDefault(u => ReferenceEquals(u, account));
+        }
+        public bool UsernameExists(string username, Guid exceptId)
+        {
+            return _users.Any(u =>
+                u.Username == username &&
+                u.Id != exceptId);
+        }
         public bool Register(UserAccount user)
         {
             if (_users.Any(u => u.Username == user.Username))

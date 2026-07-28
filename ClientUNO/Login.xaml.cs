@@ -58,7 +58,10 @@ namespace ClientUNO
                 Client.player.Id = confirm.player.Id;
                 Client.player.AvatarId = confirm.player.AvatarId;
                 Client.player.Status = confirm.player.Status;
+                Logger.Log($"{confirm.player.Name} {confirm.player.Id} {confirm.player.AvatarId} {confirm.player.Status}");
                 Logger.Initialize(App.Session.Client.player.Name);
+                Logger.Log($"после входа {App.Session.Client.player.Id.ToString()}");
+                Logger.Log($"после входа {App.Session.Client.player.Name}");
                 PlayerMenu lobby = new PlayerMenu();
                 lobby.Show();
 

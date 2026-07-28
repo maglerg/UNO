@@ -78,8 +78,9 @@ namespace ClientUNO
 
         public async Task SendAsync(object message)
         {
-            string json = JsonSerializer.Serialize(message);
 
+            string json = JsonSerializer.Serialize(message);
+            Logger.Log(json);
             byte[] data = Encoding.UTF8.GetBytes(json);
 
             await Socket.SendAsync(

@@ -7,6 +7,7 @@ namespace Shared_Library
     {
         Login,
         SignUp,
+        EditProfile,
         CreateRoom,
         ConnectRoom,
         StartGame,
@@ -55,6 +56,21 @@ namespace Shared_Library
             this.avatarId = avatarId;
         }
     }
+    public class EditProfileMessage : ServerMessage
+    {
+        public string name { get; set; }
+        public string status { get; set; }
+        public int avatarId { get; set; }
+
+        public EditProfileMessage(string name, string status, int avatarId)
+            : base(nameof(EditProfileMessage))
+        {
+            this.name = name;
+            this.status = status;
+            this.avatarId = avatarId;
+        }
+    }
+
     public class RoomInfoMessage : ServerMessage
     {
         public Guid HostId { get; set; }

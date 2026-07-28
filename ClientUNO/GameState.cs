@@ -8,7 +8,6 @@ namespace ClientUNO
     public class GameState
     {
         public List<PlayerInfo> Players { get; set; }
-        /*public string password { get; set; }*/
         public List<Card> MyCards { get; set; }
         public int currentPlayer { get; set; }
         public int direction;

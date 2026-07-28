@@ -16,6 +16,7 @@ namespace ServerUNO
         private readonly Dictionary<string, GameRoom> Rooms = new();
         const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         private readonly AccountManager accountManager;
+        private int MaxAvatar = 6;
         public RoomManager(AccountManager accountManager)
         {
             this.accountManager = accountManager?? throw new ArgumentNullException(nameof(accountManager));
@@ -37,11 +38,13 @@ namespace ServerUNO
                     }
                     else
                     {
-                        accountManager.Add(new UserAccount(client.Player.Id, sMsg.name, sMsg.password, sMsg.avatarId, ""));
+                        var newAcc = new UserAccount(client.Player.Id, sMsg.name, sMsg.name, sMsg.password, sMsg.avatarId, "");
+                        accountManager.Add(newAcc);
                         accountManager.Save();
                         client.Player.Name = sMsg.name;
                         client.Player.AvatarId = sMsg.avatarId;
                         client.Player.Status = "";
+                        client.userAcc = newAcc;
                         var pl = new PlayerInfo(client.Player.Id, client.Player.Name, -1, false, client.Player.Status, client.Player.AvatarId);
                         await client.SendAsync(new ConfirmMessage(
                             RequestType.SignUp,
@@ -53,6 +56,11 @@ namespace ServerUNO
                     break;
                 case LoginMessage lMsg:
                     var user1 = accountManager.Find(lMsg.name, lMsg.password);
+                    Console.WriteLine($"{user1.Name}   {user1.Id.ToString()}");
+                    foreach (var u in accountManager._users)
+                    {
+                        Console.WriteLine($"{u.Name}  {u.Id}");
+                    }
 
                     if (user1 == null)
                     {
@@ -63,15 +71,71 @@ namespace ServerUNO
                     }
                     else
                     {
-                        client.Player.Name = user1.Username;
+                        client.Player.Name = user1.Name;
                         client.Player.AvatarId = user1.AvatarId;
                         client.Player.Status = user1.Status;
-                        var pl = new PlayerInfo(user1.Id, user1.Username, -1, false, user1.Status, user1.AvatarId);
+                        client.userAcc = user1;
+                        var pl = new PlayerInfo(user1.Id, user1.Name, -1, false, user1.Status, user1.AvatarId);
                         await client.SendAsync(new ConfirmMessage(
                             RequestType.Login,
                             $"", pl));
 
                         Console.WriteLine($"User {lMsg.name} logged in");
+                    }
+                    break;
+                case EditProfileMessage eMsg:
+                    var userAccount = client.userAcc;
+
+                    if (userAccount == null)
+                    {
+                        await client.SendAsync(new ErrorMessage
+                        {
+                            RequestType = RequestType.EditProfile,
+                            TextError = "User not found"
+                        });
+
+                        break;
+                    }
+                    bool isCorrect = true;
+                    /*if ( eMsg.name.Length < 3 || eMsg.name.Length > 20)
+                        isCorrect = false;*/
+                    if (eMsg.status.Length > 100)
+                        isCorrect = false;
+                    if (eMsg.avatarId > MaxAvatar || eMsg.avatarId < 0)
+                        isCorrect = false;
+                    if (accountManager.UsernameExists(eMsg.name, userAccount.Id))
+                    {
+                        await client.SendAsync(new ErrorMessage
+                        {
+                            RequestType = RequestType.EditProfile,
+                            TextError = "This user exist"
+                        });
+                        break;
+                    }
+                    if (isCorrect)
+                    {
+                        userAccount.Name = eMsg.name;
+                        userAccount.Status = eMsg.status;
+                        userAccount.AvatarId = eMsg.avatarId;
+                        accountManager.Save();
+
+                        client.Player.Name = eMsg.name;
+                        client.Player.AvatarId = eMsg.avatarId;
+                        client.Player.Status = eMsg.status;
+                        
+                        await client.SendAsync(new ConfirmMessage(
+                            RequestType.EditProfile,
+                            ""));
+
+                        Console.WriteLine($"Account data changed {client.Player.Id}");
+                    }
+                    else
+                    {
+                        await client.SendAsync(new ErrorMessage
+                        {
+                            RequestType = RequestType.EditProfile,
+                            TextError = "Incorrect data"
+                        });
                     }
                     break;
                 case ConnectMessage:
@@ -119,7 +183,7 @@ namespace ServerUNO
                             {
 
                                 Console.WriteLine($"Send existing player {other.Player.Name} to new client");
-                                var player = new PlayerInfo(client.Player.Id, other.Player.Name, -1, client.Player.IsHost, client.Player.Status, client.Player.AvatarId);
+                                var player = new PlayerInfo(other.Player.Id, other.Player.Name, -1, other.Player.IsHost, other.Player.Status, other.Player.AvatarId);
                                 await client.SendAsync(new SomeoneJoinMessage(player));
                             }
                         }

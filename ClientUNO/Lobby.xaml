@@ -8,6 +8,8 @@
         Title="Lobby" Height="700" Width="1100">
 
     <Window.Resources>
+        <local:AvatarConverter x:Key="AvatarConverter"/>
+        <local:PlayerColorConverter x:Key="PlayerColorConverter"/>
         <Style TargetType="Button">
             <Setter Property="Template">
                 <Setter.Value>
@@ -110,25 +112,70 @@ FontFamily="Comic Sans MS" Foreground="#6F4E37" Background="White" Opacity="0.7"
         </StackPanel>
 
         <StackPanel Margin="514,104,53,41">
-            <TextBlock Text="Players" FontSize="20"
-FontFamily="Comic Sans MS" Foreground="SaddleBrown"/>
-            <ListBox ItemsSource="{Binding Players}">
+
+            <TextBlock Text="Players"
+               FontSize="20"
+               FontFamily="Comic Sans MS"
+               Foreground="SaddleBrown"/>
+
+            <ListBox ItemsSource="{Binding Players}"
+             Width="523"
+             Height="450"
+             ScrollViewer.VerticalScrollBarVisibility="Auto"
+             ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+
+
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Border Background="White"
-                    CornerRadius="10"
-                    Padding="10"
-                    Margin="5"
-                    Opacity="0.8">
 
-                            <TextBlock Text="{Binding Name}"
-                           FontSize="18"
-                           FontFamily="Comic Sans MS"
-                           Foreground="Black"/>
+                        <Border CornerRadius="10"
+                        Padding="10"
+                        Margin="5"
+                        Opacity="0.8">
+
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="Background" Value="White"/>
+
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Id, Converter={StaticResource PlayerColorConverter}}" 
+                                             Value="True">
+                                            <Setter Property="Background" Value="LightGreen"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+
+                                </Style>
+                            </Border.Style>
+
+                            <StackPanel Orientation="Horizontal">
+
+                                <Image Width="100"
+                               Height="100"
+                               Margin="0,0,15,0"
+                               Source="{Binding AvatarId,
+                               Converter={StaticResource AvatarConverter}}"/>
+
+                                <TextBlock Text="{Binding Name}"
+                                   FontSize="18"
+                                   FontFamily="Comic Sans MS"
+                                   Foreground="Black"
+                                   VerticalAlignment="Center"/>
+
+                            </StackPanel>
+
                         </Border>
+
                     </DataTemplate>
                 </ListBox.ItemTemplate>
+
             </ListBox>
+
         </StackPanel>
         <Button Content="Start game"
                 Visibility="Collapsed"

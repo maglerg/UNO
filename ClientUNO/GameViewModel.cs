@@ -23,6 +23,7 @@ namespace ClientUNO
         private TaskCompletionSource<ConfirmMessage>? _connectRoomTcs;
         private TaskCompletionSource<ConfirmMessage>? _leaveRoomTcs;
         private TaskCompletionSource<ConfirmMessage>? _signUpTcs;
+        private TaskCompletionSource<ConfirmMessage>? _editProfileTcs; 
         private TaskCompletionSource<ConfirmMessage>? _loginTcs;
         private TaskCompletionSource<ConfirmMessage>? _takeCardTcs;
         private TaskCompletionSource<ConfirmMessage>? _playCardTcs;
@@ -274,6 +275,10 @@ namespace ClientUNO
                     _signUpTcs?.SetResult(confirm);
                     _signUpTcs = null;
                     break;
+                case RequestType.EditProfile:
+                    _editProfileTcs?.SetResult(confirm);
+                    _editProfileTcs = null;
+                    break;
                 case RequestType.CreateRoom:
                     _createRoomTcs?.SetResult(confirm);
                     _createRoomTcs = null;
@@ -320,10 +325,15 @@ namespace ClientUNO
                     _signUpTcs?.SetException(new Exception(error.TextError));
                     _signUpTcs = null;
                     break;
+                case RequestType.EditProfile:
+                    _editProfileTcs?.SetException(new Exception(error.TextError));
+                    _editProfileTcs = null;
+                    break;
                 case RequestType.CreateRoom:
                     _createRoomTcs?.SetException(new Exception(error.TextError));
                     _createRoomTcs = null;
                     break;
+                
                 case RequestType.ConnectRoom:
                     _connectRoomTcs?.SetException(new Exception(error.TextError));
                     _connectRoomTcs = null;
@@ -468,6 +478,14 @@ namespace ClientUNO
             await App.Session.Client.SendAsync(new SignUpMessage(name, password, avatarId));
 
             return await _signUpTcs.Task;
+        }
+        public async Task<ConfirmMessage> EditProfileAsync(string name, string password, int avatarId)
+        {
+            _editProfileTcs = new TaskCompletionSource<ConfirmMessage>();
+            Logger.Log($"пееред отправкой в EditProfileAsync в GameViewModel{App.Session.Client.player.Id.ToString()}");
+            await App.Session.Client.SendAsync(new EditProfileMessage(name, password, avatarId));
+
+            return await _editProfileTcs.Task;
         }
         public async Task<ConfirmMessage> LoginAsync(string name, string password)
         {

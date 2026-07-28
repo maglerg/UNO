@@ -1,11 +1,4 @@
-﻿
-
-
-
-
-
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -23,7 +16,6 @@ namespace ClientUNO
     {
         public GameViewModel Model { get; }
         public GameClient Client { get; }
-        private static readonly Random random = new();
         public SignUp()
         {
             InitializeComponent();
@@ -76,7 +68,7 @@ namespace ClientUNO
             {
                 try
                 {
-                    int numberAvatar = random.Next(1, Model.avatarcount + 1);
+                    int numberAvatar = Random.Shared.Next(1, Model.avatarcount + 1);
                     var confirm = await App.Session.Model.SignUpAsync(username, password1, numberAvatar); 
                     // отдельно имя пользователя отдельно username
                     Client.player.Name= confirm.player.Name;

@@ -24,8 +24,11 @@ namespace ClientUNO
             Model = App.Session.Model;
 
             username.Text = Client.player.Name;
+            status.Text = Client.player.Status;
 
             DataContext = Model;
+            Logger.Log($"при создании PlayerMenu {App.Session.Client.player.Id.ToString()}");
+            /*Logger.Log($"при создании PlayerMenu {App.Session.Client.player.Name.ToString()}");*/
         }
         private async void CreateRoom_Click(object sender, RoutedEventArgs e)
         {
@@ -66,7 +69,12 @@ namespace ClientUNO
                 Logger.Error($"{Client.player.Name} cant connect to room. {code}");
             }
         }
-
+        private void Edit_Click(object sender, RoutedEventArgs e)
+        {
+            EditProfile window = new EditProfile();
+            window.Show();
+            this.Close();
+        }
         private async void LogOut_Click(object sender, RoutedEventArgs e)
         {
             MainWindow window = new MainWindow();

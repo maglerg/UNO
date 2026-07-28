@@ -3,12 +3,14 @@ using ServerUNO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Net.WebSockets;
 using System.Numerics;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Shared_Library
 {
@@ -18,6 +20,8 @@ namespace Shared_Library
         public Player Player { get; set; }
         public GameRoom Room { get; set; }
         public RoomManager roomManager { get; set; }
+        public UserAccount userAcc {  get; set; }
+
 
 
         public ClientConnection(WebSocket socket, RoomManager roomManager)
@@ -26,6 +30,7 @@ namespace Shared_Library
             this.roomManager = roomManager;
             Player = new Player();
             Room = new GameRoom();
+            userAcc = new UserAccount(Guid.NewGuid(), "", "", "", -1, "");
         }
         public async Task ReceiveLoop()
         {
@@ -71,6 +76,7 @@ namespace Shared_Library
                 nameof(GameStateMessage) => JsonSerializer.Deserialize<GameStateMessage>(json),
                 nameof(SignUpMessage) => JsonSerializer.Deserialize<SignUpMessage>(json),
                 nameof(LoginMessage) => JsonSerializer.Deserialize<LoginMessage>(json),
+                nameof(EditProfileMessage) => JsonSerializer.Deserialize<EditProfileMessage>(json),
                 nameof(SomeoneJoinMessage) => JsonSerializer.Deserialize<SomeoneJoinMessage>(json),
                 nameof(SomeoneLeftMessage) => JsonSerializer.Deserialize<SomeoneLeftMessage>(json),
                 nameof(LeaveGameMessage) => JsonSerializer.Deserialize<LeaveGameMessage>(json),
@@ -88,8 +94,6 @@ namespace Shared_Library
 
             byte[] data = Encoding.UTF8.GetBytes(json);
             Console.WriteLine("OUT → " + json);
-            Console.WriteLine(
- $"У игрока {Player.Name} карт осталось {Player.PlayerCards.Count}");
             await Socket.SendAsync(
                 new ArraySegment<byte>(data),
                 WebSocketMessageType.Text,
