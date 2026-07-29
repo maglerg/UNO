@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:ClientUNO"
         Title="Player Profile"
-        Height="500"
+        Height="480"
         Width="700">
 
     <Window.Resources>
@@ -53,8 +53,7 @@
                 BorderBrush="Black"
                 BorderThickness="2">
 
-                <Image Source="{Binding AvatarId,
-                           Converter={StaticResource AvatarConverter}}"
+                <Image x:Name="avatar"
                    Stretch="UniformToFill"/>
 
             </Border>
@@ -64,14 +63,14 @@
             <StackPanel Grid.Column="1"
                     Margin="30,10,0,0">
 
-                <TextBlock Text="{Binding Name}"
+                <TextBlock x:Name="username"
                        FontSize="30"
                        FontWeight="Bold"
                        FontFamily="Comic Sans MS"
                        Foreground="SaddleBrown"/>
 
 
-                <TextBlock Text="{Binding Status}"
+                <TextBlock x:Name="status"
                        FontSize="18"
                        Margin="0,15,0,0"
                        FontFamily="Comic Sans MS"
@@ -97,7 +96,7 @@
                        FontFamily="Comic Sans MS"
                        Foreground="SaddleBrown"/>
 
-                <TextBlock Text="{Binding RatingPlace}"
+                <TextBlock x:Name="rating"
                        FontSize="20"
                        Margin="20,0,0,0"
                        FontWeight="Bold"/>
@@ -115,7 +114,7 @@
                        FontFamily="Comic Sans MS"
                        Foreground="SaddleBrown"/>
 
-                <TextBlock Text="{Binding Wins}"
+                <TextBlock x:Name="wins"
                        FontSize="20"
                        Margin="20,0,0,0"
                        FontWeight="Bold"/>
@@ -133,7 +132,7 @@
                        FontFamily="Comic Sans MS"
                        Foreground="SaddleBrown"/>
 
-                <TextBlock Text="{Binding Points}"
+                <TextBlock x:Name="points"
                        FontSize="20"
                        Margin="20,0,0,0"
                        FontWeight="Bold"/>

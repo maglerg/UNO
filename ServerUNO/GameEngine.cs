@@ -96,13 +96,15 @@ namespace Server
                     break;
             }
         }
-        public void PushUno(int indexPush) // нажать кнопку уно
+        public void PushUno(Player player)
         {
-            if (indexPush != currentPlayer)
+            player.UnoPressed = true;
+
+            if (player != players[currentPlayer])
             {
                 for (int i = 0; i < 2; i++)
                 {
-                    DrawCard(players[indexPush]);
+                    DrawCard(player);
                 }
             }
         }

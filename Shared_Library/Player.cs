@@ -20,10 +20,12 @@ namespace Shared_Library
         public List<Card> PlayerCards { get; set; }
         public PlayerAction Action { get; set; }
         public bool IsHost { get; set; }
+        public bool UnoPressed { get; set; }
         public Player() 
         {
             Id = Guid.NewGuid();
             PlayerCards = new List<Card>();
+            UnoPressed = false;
         }
 
         public Player(string name)
@@ -32,6 +34,7 @@ namespace Shared_Library
             this.Name = name;
             PlayerCards = new List<Card>();
             Action = PlayerAction.None;
+            UnoPressed = false;
         }
     }
 }

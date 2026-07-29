@@ -138,12 +138,12 @@ namespace Shared_Library
 
     public class PushUNOMessage : ServerMessage
     {
-        public int indexPush { get; set; }
+        public Guid PlayerId { get; set; }
 
-        public PushUNOMessage(int indexPush)
+        public PushUNOMessage(Guid PlayerId)
             : base(nameof(PushUNOMessage))
         {
-            this.indexPush = indexPush;
+            this.PlayerId = PlayerId;
         }
     }
 

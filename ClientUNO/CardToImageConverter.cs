@@ -15,8 +15,8 @@ namespace ClientUNO.Converters
             if (card.Color == ColorCard.Black)
             {
                 return card.Type == TypeCard.Wild
-                    ? "Images/Wild.png"
-                    : "Images/WildFour.png";
+                    ? "Images/Cards/Wild.png"
+                    : "Images/Cards/WildFour.png";
             }
 
             string color = card.Color.ToString();

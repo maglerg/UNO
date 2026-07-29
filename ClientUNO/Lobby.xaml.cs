@@ -142,6 +142,13 @@ namespace ClientUNO
 
             roomcopy.Visibility = Visibility.Collapsed;
         }
-
+        private void PlayersList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (((ListBox)sender).SelectedItem is PlayerInfo player)
+            {
+                PlayerProfile window = new PlayerProfile(player);
+                window.ShowDialog();
+            }
+        }
     }
 }

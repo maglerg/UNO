@@ -122,7 +122,8 @@ FontFamily="Comic Sans MS" Foreground="#6F4E37" Background="White" Opacity="0.7"
              Width="523"
              Height="450"
              ScrollViewer.VerticalScrollBarVisibility="Auto"
-             ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+             ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
+             MouseDoubleClick="PlayersList_MouseDoubleClick">
 
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="ListBoxItem">

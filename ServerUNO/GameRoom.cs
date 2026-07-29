@@ -279,6 +279,10 @@ namespace Server
                     try
                     {
                         Engine.TakeCard(indexPlayer);
+                        if (player.PlayerCards.Count != 1)
+                        {
+                            player.UnoPressed = false;
+                        }
                         var okMsg1 = new ConfirmMessage(RequestType.TakeCard, "ok");
                         await Clients[indexPlayer].SendAsync(okMsg1);
                         await SendGameStage();
@@ -299,6 +303,10 @@ namespace Server
                     try
                     {
                         Engine.PlayCard(indexPlayer, playMsg.card, playMsg.chosenColor);
+                        if (player.PlayerCards.Count != 1)
+                        {
+                            player.UnoPressed = false;
+                        }
                         var okMsg2 = new ConfirmMessage(RequestType.PlayCard, "ok");
                         await Clients[indexPlayer].SendAsync(okMsg2);
                         await SendGameStage();
@@ -314,13 +322,93 @@ namespace Server
                         break;
                     }
                     
-                case PushUNOMessage pushunoMsg:
+                case PushUNOMessage pushunoMsg: // не тому присваивается флаг
                     try
                     {
-                        Engine.PushUno(pushunoMsg.indexPush);
+                        var playerr = Engine.players.FirstOrDefault(p => p.Id == pushunoMsg.PlayerId);
+
+
+                        if (playerr == null)
+                            break;
+                        Engine.PushUno(playerr);
                         var okMsg3 = new ConfirmMessage(RequestType.PlayUno, "ok");
                         await Clients[indexPlayer].SendAsync(okMsg3);
-                        await SendGameStage();
+                        for (int k = 0; k < Clients.Count; k++)
+                        {
+                            List<PlayerInfo> infos = new List<PlayerInfo>();
+                            int currPl = -1;
+
+
+                            // добавляем себя первым
+                            if (k == Engine.currentPlayer)
+                                currPl = infos.Count;
+                            var player1 = new PlayerInfo(
+                                Clients[k].Player.Id,
+                                Clients[k].Player.Name,
+                                Clients[k].Player.PlayerCards.Count,
+                                Clients[k].Player.IsHost,
+                                Clients[k].Player.Status,
+                                Clients[k].Player.AvatarId
+                                );
+                            player1.UnoPressed = Clients[k].Player.UnoPressed;
+
+                            infos.Add(player1);
+
+
+                            // игроки после k
+                            for (int i = k + 1; i < Clients.Count; i++)
+                            {
+                                if (i == Engine.currentPlayer)
+                                    currPl = infos.Count;
+                                var player2 = new PlayerInfo(
+                                    Clients[i].Player.Id,
+                                    Clients[i].Player.Name,
+                                    Clients[i].Player.PlayerCards.Count,
+                                    Clients[i].Player.IsHost,
+                                    Clients[i].Player.Status,
+                                    Clients[i].Player.AvatarId
+                                );
+                                player2.UnoPressed = Clients[i].Player.UnoPressed;
+                                infos.Add(player2);
+                            }
+
+
+                            // игроки до k
+                            for (int i = 0; i < k; i++)
+                            {
+                                if (i == Engine.currentPlayer)
+                                    currPl = infos.Count;
+
+                                var player3 = new PlayerInfo(
+                                    Clients[i].Player.Id,
+                                    Clients[i].Player.Name,
+                                    Clients[i].Player.PlayerCards.Count,
+                                    Clients[i].Player.IsHost,
+                                    Clients[i].Player.Status,
+                                    Clients[i].Player.AvatarId
+                                );
+
+                                player3.UnoPressed = Clients[i].Player.UnoPressed; ; 
+                                infos.Add(player3);
+                            }
+
+
+                            bool isMyTurn = k == Engine.currentPlayer;
+
+
+                            var msgdto = new GameStateMessage(
+                                infos,
+                                Clients[k].Player.PlayerCards,
+                                currPl,
+                                Engine.direction,
+                                Engine.lastCard,
+                                Engine.currentColor,
+                                isMyTurn);
+
+
+                            await Clients[k].SendAsync(msgdto);
+                        }
+                        
                         break;
                     }
                     catch (Exception ex)

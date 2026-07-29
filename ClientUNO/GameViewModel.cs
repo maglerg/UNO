@@ -61,7 +61,6 @@ namespace ClientUNO
         }
         private async Task ShowNotification(string text)
         {
-            Logger.Log(text);
             NotificationText = text;
 
             NotificationVisibility = Visibility.Visible;
@@ -165,17 +164,20 @@ namespace ClientUNO
         : Visibility.Visible;
 
         public Visibility RightPlayerUnoVisibility => // видимость кнопки уно
-    RightPlayer != null && RightPlayer.CardCount == 1
+    RightPlayer != null && RightPlayer.CardCount == 1 &&
+    !RightPlayer.UnoPressed
         ? Visibility.Visible
         : Visibility.Collapsed;
        
         public Visibility TopPlayerUnoVisibility =>
-    TopPlayer != null && TopPlayer.CardCount == 1
+    TopPlayer != null && TopPlayer.CardCount == 1 &&
+    !TopPlayer.UnoPressed
         ? Visibility.Visible
         : Visibility.Collapsed;
 
         public Visibility LeftPlayerUnoVisibility =>
-            LeftPlayer != null && LeftPlayer.CardCount == 1
+            LeftPlayer != null && LeftPlayer.CardCount == 1 &&
+    !LeftPlayer.UnoPressed
                 ? Visibility.Visible
                 : Visibility.Collapsed;
 
@@ -216,7 +218,13 @@ namespace ClientUNO
 
             DrawCardCommand = new RelayCommand(() => _ =  TakeCardAsync());
             PlayCardCommand = new RelayCommand<Card>(card => _ = PlayCardCommandExecute(card));
-            UnoCommand = new RelayCommand<int>(index => _ = PlayUnoAsync(index));
+            UnoCommand = new RelayCommand<PlayerInfo>(player =>
+            {
+                if (player == null)
+                    return;
+
+                _ = PlayUnoAsync(player.Id);
+            });
 
             ChooseColorCommand = new RelayCommand<ColorCard>(async color =>
             {
@@ -400,7 +408,6 @@ namespace ClientUNO
             OnPropertyChanged(nameof(MePlayerBorderColor));
             OnPropertyChanged(nameof(SelectedColorText));
 
-            OnPropertyChanged(nameof(SelectedColorText));
         }
         private void ShowFirstPlayerMessage()
         {
@@ -434,7 +441,6 @@ namespace ClientUNO
                _previousTopCard.Color != currentCard.Color)
             {
                 string message = GetCardNotification(currentCard);
-                Logger.Log(message);
 
 
                 if (message != null)
@@ -482,7 +488,7 @@ namespace ClientUNO
         public async Task<ConfirmMessage> EditProfileAsync(string name, string password, int avatarId)
         {
             _editProfileTcs = new TaskCompletionSource<ConfirmMessage>();
-            Logger.Log($"пееред отправкой в EditProfileAsync в GameViewModel{App.Session.Client.player.Id.ToString()}");
+            
             await App.Session.Client.SendAsync(new EditProfileMessage(name, password, avatarId));
 
             return await _editProfileTcs.Task;
@@ -523,12 +529,12 @@ namespace ClientUNO
 
             return await _playCardTcs.Task;
         }
-        public async Task<ConfirmMessage> PlayUnoAsync(int indexPush)
+        public async Task<ConfirmMessage> PlayUnoAsync(Guid Id)
         {
-            Logger.Log($"UNO pressed. index = {indexPush}");
+            Logger.Log($"UNO pressed. Id = {Id}");
             _playUnoTcs = new TaskCompletionSource<ConfirmMessage>();
 
-            await App.Session.Client.SendAsync(new PushUNOMessage(indexPush));
+            await App.Session.Client.SendAsync(new PushUNOMessage(Id));
 
             return await _playUnoTcs.Task;
         }

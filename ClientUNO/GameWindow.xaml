@@ -47,7 +47,7 @@
 
                 <Button Content="UNO"
         Command="{Binding UnoCommand}"
-        CommandParameter="{Binding TopPlayer.Index}"
+        CommandParameter="{Binding TopPlayer}"
         Visibility="{Binding TopPlayerUnoVisibility}"/>
             </StackPanel>
 
@@ -64,7 +64,7 @@
 
             <Button Content="UNO"
         Command="{Binding UnoCommand}"
-        CommandParameter="{Binding LeftPlayer.Index}"
+        CommandParameter="{Binding LeftPlayer}"
         Visibility="{Binding LeftPlayerUnoVisibility}"/>
 
             <Border Width="120" Height="160" BorderThickness="2" BorderBrush="Transparent"/>
@@ -81,7 +81,7 @@
 
             <Button Content="UNO"
         Command="{Binding UnoCommand}"
-        CommandParameter="{Binding RightPlayer.Index}"
+        CommandParameter="{Binding RightPlayer}"
         Visibility="{Binding RightPlayerUnoVisibility}"/>
 
             <Border Width="120" Height="160" BorderThickness="2" BorderBrush="Transparent"/>
@@ -100,7 +100,7 @@
                      HorizontalAlignment="Left"
                      Margin="-160,0,0,0">
 
-                        <Image Source="Images/back.png"/>
+                        <Image Source="Images/Cards/back.png"/>
                     </Button>
 
                     <!-- Last card -->
@@ -159,7 +159,7 @@
 
                 <Button Content="UNO"
         Command="{Binding UnoCommand}"
-        CommandParameter="{Binding Me.Index}"
+        CommandParameter="{Binding MePlayer}"
         Visibility="{Binding MePlayerUnoVisibility}"/>
             </StackPanel>
 

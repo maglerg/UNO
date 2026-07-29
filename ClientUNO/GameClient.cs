@@ -41,7 +41,7 @@ namespace ClientUNO
             string json = Encoding.UTF8.GetString(buffer, 0, result.Count);
 
             JsonDocument doc = JsonDocument.Parse(json);
-            Console.WriteLine("IN ← " + json);
+            
             string type = doc.RootElement.GetProperty("Type").GetString();
 
             ServerMessage msg;
@@ -80,7 +80,6 @@ namespace ClientUNO
         {
 
             string json = JsonSerializer.Serialize(message);
-            Logger.Log(json);
             byte[] data = Encoding.UTF8.GetBytes(json);
 
             await Socket.SendAsync(

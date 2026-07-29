@@ -27,8 +27,7 @@ namespace ClientUNO
             status.Text = Client.player.Status;
 
             DataContext = Model;
-            Logger.Log($"при создании PlayerMenu {App.Session.Client.player.Id.ToString()}");
-            /*Logger.Log($"при создании PlayerMenu {App.Session.Client.player.Name.ToString()}");*/
+            
         }
         private async void CreateRoom_Click(object sender, RoutedEventArgs e)
         {
