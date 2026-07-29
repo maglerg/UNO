@@ -90,7 +90,7 @@
 
         <StackPanel Orientation="Horizontal" Margin="48,104,-48,-104">
             <StackPanel>
-                <StackPanel Orientation="Horizontal" Width="321" RenderTransformOrigin="0.5,0.5" Height="43">
+                <StackPanel Orientation="Horizontal" Width="335" RenderTransformOrigin="0.5,0.5" Height="43">
                     <StackPanel.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>
@@ -111,7 +111,7 @@ FontFamily="Comic Sans MS" Foreground="#6F4E37" Background="White" Opacity="0.7"
             </StackPanel>
         </StackPanel>
 
-        <StackPanel Margin="514,104,53,41">
+        <StackPanel Margin="444,104,53,41">
 
             <TextBlock Text="Players"
                FontSize="20"
@@ -119,7 +119,7 @@ FontFamily="Comic Sans MS" Foreground="#6F4E37" Background="White" Opacity="0.7"
                Foreground="SaddleBrown"/>
 
             <ListBox ItemsSource="{Binding Players}"
-             Width="523"
+             Width="594"
              Height="450"
              ScrollViewer.VerticalScrollBarVisibility="Auto"
              ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
@@ -163,11 +163,30 @@ FontFamily="Comic Sans MS" Foreground="#6F4E37" Background="White" Opacity="0.7"
                                Converter={StaticResource AvatarConverter}}"/>
 
                                 <TextBlock Text="{Binding Name}"
-                                   FontSize="18"
+                                   FontSize="22"
                                    FontFamily="Comic Sans MS"
                                    Foreground="Black"
                                    VerticalAlignment="Center"/>
+                                <TextBlock Text="👑 Room Owner"
+                                FontSize="18"
+                                FontFamily="Comic Sans MS"
+                                Foreground="Goldenrod"
+                                VerticalAlignment="Center"
+                                Margin="60,0,0,0">
 
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsHost}" Value="True">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+
+                                </TextBlock>
                             </StackPanel>
 
                         </Border>
@@ -195,9 +214,9 @@ FontFamily="Comic Sans MS" Foreground="#6F4E37" Background="White" Opacity="0.7"
 
         <TextBlock x:Name="StartGameError"
                Foreground="Red"
-               FontSize="12"
+               FontSize="16"
                Visibility="Collapsed"
-               Margin="168,2,0,0"/>
+               Margin="48,240,0,0"/>
         <Button Content="Leave game |->"
                 Click="LeaveGame_Click"
 Width="267"
@@ -209,11 +228,11 @@ Background="White"
 Opacity="0.7"
 HorizontalAlignment="Left"
 VerticalAlignment="Top"
-Margin="48,265,0,0"/>
+Margin="48,283,0,0"/>
 
         <TextBlock x:Name="LeaveGameError"
        Foreground="Red"
-       FontSize="12"
+       FontSize="16"
        Visibility="Collapsed"
        Margin="168,2,0,0"/>
 

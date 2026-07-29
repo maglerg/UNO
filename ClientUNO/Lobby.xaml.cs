@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ClientUNO
 {
@@ -77,9 +78,20 @@ namespace ClientUNO
                 Close();
             });
         }
-        private void OnStartGameError(ErrorMessage error)
+        private async void OnStartGameError(ErrorMessage error)
         {
-            StartGameError.Text = error.TextError;
+            Dispatcher.Invoke(() =>
+            {
+                StartGameError.Text = error.TextError;
+                StartGameError.Visibility = Visibility.Visible;
+            });
+
+            await Task.Delay(3000);
+
+            Dispatcher.Invoke(() =>
+            {
+                StartGameError.Visibility = Visibility.Collapsed;
+            });
             Logger.Log($"Cant start game");
             Logger.Error(error.TextError);
         }
@@ -130,7 +142,20 @@ namespace ClientUNO
             }
             catch (Exception ex)
             {
-                LeaveGameError.Text = ex.Message;
+
+                Dispatcher.Invoke(() =>
+                {
+                    LeaveGameError.Text = ex.Message;
+                    LeaveGameError.Visibility = Visibility.Visible;
+                });
+
+                await Task.Delay(3000);
+
+                Dispatcher.Invoke(() =>
+                {
+                    LeaveGameError.Visibility = Visibility.Collapsed;
+                });
+                
             }
         }
         private async void CopyRoomCode_Click(object sender, RoutedEventArgs e)
