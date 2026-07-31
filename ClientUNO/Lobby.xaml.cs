@@ -32,7 +32,6 @@ namespace ClientUNO
             Players.Add(Client.player);
             roomcode.Text = roomCode;
             DataContext = this;
-
             App.Session.Model.CanStartGame += OnStartGame;
             App.Session.Model.StartGameError += OnStartGameError;
             App.Session.Model.SomeoneJoin += OnSomeoneJoinGame;
@@ -53,10 +52,38 @@ namespace ClientUNO
         {
             await Client.SendAsync(new RequestPlayersMessage());
         }
-        private void OnChangeHost()
+        private void OnChangeHost(ChangeHostMessage mess)
         {
-            Logger.Log($"Host is change. New host is {Client.player.Name}");
-            StartGame.Visibility = Visibility.Visible;
+            Logger.Log($"Host is change.");
+
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                for (int i = 0; i < Players.Count; i++)
+                {
+                    var p = Players[i];
+
+                    bool isNewHost = p.Id == mess.player.Id;
+
+                    Players[i] = new PlayerInfo(
+                        p.Id,
+                        p.Name,
+                        p.CardCount,
+                        isNewHost,
+                        p.Status,
+                        p.AvatarId,
+                        p.Wins,
+                        p.CountGames,
+                        p.Points,
+                        p.UnoPressed
+                    );
+                }
+
+                // Показываем кнопку только новому хосту
+                StartGame.Visibility =
+                    Client.player.Id == mess.player.Id
+                        ? Visibility.Visible
+                        : Visibility.Collapsed;
+            });
         }
         private async void StartGame_Click(object sender, RoutedEventArgs e)
         {
@@ -135,7 +162,7 @@ namespace ClientUNO
             try
             {
                 var confirm = await App.Session.Model.LeftRoomAsync();
-
+                Client.roomCode = null;
                 PlayerMenu window = new PlayerMenu();
                 window.Show();
                 Close();

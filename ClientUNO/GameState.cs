@@ -14,6 +14,7 @@ namespace ClientUNO
         public Card lastCard;
         public ColorCard currentColor;
         public bool IsMyTurn {  get; set; }
+        public bool IsGameEnd { get; set; }
 
         public void Update(GameStateMessage msg)
         {
@@ -24,6 +25,7 @@ namespace ClientUNO
             this.lastCard = msg.lastCard;
             this.currentColor = msg.currentColor;
             IsMyTurn = msg.IsMyTurn;
+            IsGameEnd = msg.IsGameEnd;
         }
     }
 }

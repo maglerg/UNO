@@ -8,7 +8,6 @@
         Title="Lobby" Height="700" Width="1100">
 
     <Window.Resources>
-        <local:AvatarConverter x:Key="AvatarConverter"/>
         <local:PlayerColorConverter x:Key="PlayerColorConverter"/>
         <Style TargetType="Button">
             <Setter Property="Template">

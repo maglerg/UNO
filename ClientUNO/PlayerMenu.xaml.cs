@@ -27,7 +27,6 @@ namespace ClientUNO
             status.Text = Client.player.Status;
 
             DataContext = Model;
-            
         }
         private async void CreateRoom_Click(object sender, RoutedEventArgs e)
         {
@@ -37,6 +36,7 @@ namespace ClientUNO
 
                 Client.player.IsHost = true;
                 Logger.Log($"{Client.player.Name} create room. {confirm.roomCode}");
+                Client.roomCode = confirm.roomCode;
                 Lobby window = new Lobby(confirm.roomCode);
                 window.Show();
                 Close();
@@ -57,6 +57,7 @@ namespace ClientUNO
                 Client.player.IsHost = false;
 
                 Logger.Log($"{Client.player.Name} connect to room. {code}");
+                Client.roomCode = code;
                 Lobby window = new Lobby(code);
                 window.Show();
                 Close();

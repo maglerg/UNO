@@ -36,7 +36,10 @@ namespace Server
                     Clients[k].Player.PlayerCards.Count,
                     Clients[k].Player.IsHost,
                     Clients[k].Player.Status,
-                    Clients[k].Player.AvatarId
+                    Clients[k].Player.AvatarId,
+                    Clients[k].Player.Wins,
+                    Clients[k].Player.CountGames,
+                    Clients[k].Player.Points
                     ));
 
 
@@ -52,8 +55,11 @@ namespace Server
                         Clients[i].Player.PlayerCards.Count,
                         Clients[i].Player.IsHost,
                         Clients[i].Player.Status,
-                        Clients[i].Player.AvatarId
-                    ));
+                        Clients[i].Player.AvatarId,
+                        Clients[i].Player.Wins,
+                        Clients[i].Player.CountGames,
+                        Clients[i].Player.Points
+                        ));
                 }
 
 
@@ -69,7 +75,10 @@ namespace Server
                         Clients[i].Player.PlayerCards.Count,
                         Clients[i].Player.IsHost,
                         Clients[i].Player.Status,
-                        Clients[i].Player.AvatarId
+                        Clients[i].Player.AvatarId,
+                        Clients[i].Player.Wins,
+                        Clients[i].Player.CountGames,
+                        Clients[i].Player.Points
                     ));
                 }
 
@@ -84,7 +93,8 @@ namespace Server
                     Engine.direction,
                     Engine.lastCard,
                     Engine.currentColor,
-                    isMyTurn);
+                    isMyTurn,
+                    Engine.isEndGame);
 
 
                 await Clients[k].SendAsync(msgdto);
@@ -130,7 +140,10 @@ namespace Server
                                 Clients[k].Player.PlayerCards.Count,
                                 Clients[k].Player.IsHost,
                                 Clients[k].Player.Status,
-                                Clients[k].Player.AvatarId
+                                Clients[k].Player.AvatarId,
+                    Clients[k].Player.Wins,
+                    Clients[k].Player.CountGames,
+                    Clients[k].Player.Points
                             ));
 
 
@@ -146,7 +159,10 @@ namespace Server
                                     Clients[i].Player.PlayerCards.Count,
                                     Clients[i].Player.IsHost,
                                     Clients[i].Player.Status,
-                                    Clients[i].Player.AvatarId
+                                    Clients[i].Player.AvatarId,
+                    Clients[i].Player.Wins,
+                    Clients[i].Player.CountGames,
+                    Clients[i].Player.Points
                                 ));
                             }
 
@@ -163,7 +179,10 @@ namespace Server
                                     Clients[i].Player.PlayerCards.Count,
                                     Clients[i].Player.IsHost,
                                     Clients[i].Player.Status,
-                                    Clients[i].Player.AvatarId
+                                    Clients[i].Player.AvatarId,
+                    Clients[i].Player.Wins,
+                    Clients[i].Player.CountGames,
+                    Clients[i].Player.Points
                                     ));
                             }
 
@@ -240,7 +259,6 @@ namespace Server
 
                         var okMsg4 = new ConfirmMessage(RequestType.LeaveGame, "ok");
                         await leavingClient.SendAsync(okMsg4);
-                        Console.WriteLine("SEND LEAVE CONFIRM");
 
                         for (int i = 0; i < Clients.Count; i++)
                         {
@@ -251,14 +269,32 @@ namespace Server
                                 leavingClient.Player.Name,
                                 -1, leavingClient.Player.IsHost,
                                 leavingClient.Player.Status,
-                                leavingClient.Player.AvatarId);
+                                leavingClient.Player.AvatarId,
+                    leavingClient.Player.Wins,
+                    leavingClient.Player.CountGames,
+                    leavingClient.Player.Points);
 
                             await client.SendAsync(new SomeoneLeftMessage(person));
                         }
                         if (Clients.Count > 0 )
                         {
                             Clients[0].Player.IsHost = true;
-                            Clients[0].SendAsync(new ChangeHostMessage());// отправить нового хоста
+                            for(int i = 0; i < Clients.Count; i++)
+                            {
+                                var client = Clients[i];
+
+                                var person1 = new PlayerInfo(
+                                    Clients[0].Player.Id,
+                                    Clients[0].Player.Name,
+                                    -1, Clients[0].Player.IsHost,
+                                    Clients[0].Player.Status,
+                                    Clients[0].Player.AvatarId,
+                    Clients[0].Player.Wins,
+                    Clients[0].Player.CountGames,
+                    Clients[0].Player.Points);
+
+                                await client.SendAsync(new ChangeHostMessage(person1));
+                            }
                         }
                         
                         
@@ -303,6 +339,10 @@ namespace Server
                     try
                     {
                         Engine.PlayCard(indexPlayer, playMsg.card, playMsg.chosenColor);
+                        if(Engine.isEndGame)
+                        {
+                            IsGameStarted = false;
+                        }
                         if (player.PlayerCards.Count != 1)
                         {
                             player.UnoPressed = false;
@@ -322,7 +362,7 @@ namespace Server
                         break;
                     }
                     
-                case PushUNOMessage pushunoMsg: // не тому присваивается флаг
+                case PushUNOMessage pushunoMsg: 
                     try
                     {
                         var playerr = Engine.players.FirstOrDefault(p => p.Id == pushunoMsg.PlayerId);
@@ -348,8 +388,10 @@ namespace Server
                                 Clients[k].Player.PlayerCards.Count,
                                 Clients[k].Player.IsHost,
                                 Clients[k].Player.Status,
-                                Clients[k].Player.AvatarId
-                                );
+                                Clients[k].Player.AvatarId,
+                    Clients[k].Player.Wins,
+                    Clients[k].Player.CountGames,
+                    Clients[k].Player.Points);
                             player1.UnoPressed = Clients[k].Player.UnoPressed;
 
                             infos.Add(player1);
@@ -366,7 +408,10 @@ namespace Server
                                     Clients[i].Player.PlayerCards.Count,
                                     Clients[i].Player.IsHost,
                                     Clients[i].Player.Status,
-                                    Clients[i].Player.AvatarId
+                                    Clients[i].Player.AvatarId,
+                    Clients[i].Player.Wins,
+                    Clients[i].Player.CountGames,
+                    Clients[i].Player.Points
                                 );
                                 player2.UnoPressed = Clients[i].Player.UnoPressed;
                                 infos.Add(player2);
@@ -385,7 +430,10 @@ namespace Server
                                     Clients[i].Player.PlayerCards.Count,
                                     Clients[i].Player.IsHost,
                                     Clients[i].Player.Status,
-                                    Clients[i].Player.AvatarId
+                                    Clients[i].Player.AvatarId,
+                    Clients[i].Player.Wins,
+                    Clients[i].Player.CountGames,
+                    Clients[i].Player.Points
                                 );
 
                                 player3.UnoPressed = Clients[i].Player.UnoPressed; ; 

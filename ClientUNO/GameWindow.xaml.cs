@@ -18,7 +18,7 @@ namespace ClientUNO
     {
         // если один из игроков вышел то игра заканчивается и игрок возвращается в лобби комнаты + появляется сообщение что игрок отключился
         //при броске дикой карты 4 не понятно какой цвет выбал игрок тк видна только надпись что игрок берет 4 карты
-        // нет адекватного конца игры
+        // доделать интерфейс с окном игры (иконки + имена и норм количество карт)
         // в лобби баг если хост игры выходит нет обозначения нового хоста и нет кнопки старт
         // сделать настройки для игры 
         public GameWindow(GameStateMessage state)
@@ -28,6 +28,17 @@ namespace ClientUNO
             DataContext = App.Session.Model;
 
             App.Session.Model.InitializeGame(state);
+
+            App.Session.Model.GameEnded += OnGameEnded;
+        }
+        private void OnGameEnded()
+        {
+            Dispatcher.Invoke(() =>
+            {
+                GameOverWindow window = new GameOverWindow();
+                window.Show();
+                Close();
+            });
         }
     }
 }

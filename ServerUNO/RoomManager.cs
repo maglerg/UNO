@@ -45,7 +45,8 @@ namespace ServerUNO
                         client.Player.AvatarId = sMsg.avatarId;
                         client.Player.Status = "";
                         client.userAcc = newAcc;
-                        var pl = new PlayerInfo(client.Player.Id, client.Player.Name, -1, false, client.Player.Status, client.Player.AvatarId);
+                        var pl = new PlayerInfo(client.Player.Id, client.Player.Name, -1, false, client.Player.Status, client.Player.AvatarId, client.Player.Wins, client.Player.CountGames, client.Player.Points);
+                        
                         await client.SendAsync(new ConfirmMessage(
                             RequestType.SignUp,
                             "", pl));
@@ -56,12 +57,7 @@ namespace ServerUNO
                     break;
                 case LoginMessage lMsg:
                     var user1 = accountManager.Find(lMsg.name, lMsg.password);
-                    Console.WriteLine($"{user1.Name}   {user1.Id.ToString()}");
-                    foreach (var u in accountManager._users)
-                    {
-                        Console.WriteLine($"{u.Name}  {u.Id}");
-                    }
-
+                    
                     if (user1 == null)
                     {
                         await client.SendAsync(new ErrorMessage(
@@ -71,11 +67,16 @@ namespace ServerUNO
                     }
                     else
                     {
+                        client.Player.Id = user1.Id;
                         client.Player.Name = user1.Name;
                         client.Player.AvatarId = user1.AvatarId;
                         client.Player.Status = user1.Status;
+                        client.Player.Wins = user1.Wins;
+                        client.Player.CountGames = user1.CountGames;
+                        client.Player.Points = user1.Points;
                         client.userAcc = user1;
-                        var pl = new PlayerInfo(user1.Id, user1.Name, -1, false, user1.Status, user1.AvatarId);
+                        var pl = new PlayerInfo(user1.Id, user1.Name, -1, false, user1.Status, user1.AvatarId, user1.Wins, user1.CountGames, user1.Points);
+                        
                         await client.SendAsync(new ConfirmMessage(
                             RequestType.Login,
                             $"", pl));
@@ -145,18 +146,19 @@ namespace ServerUNO
                         room.Engine.players.Add(client.Player);
                         client.Room = room;
                         client.Player.IsHost = false;
-                        Console.WriteLine($"Clients count = {room.Clients.Count}");
 
                         var okMsg1 = new ConfirmMessage(RequestType.ConnectRoom, "ok");
                         await client.SendAsync(okMsg1);
 
-                        var newPlayer = new PlayerInfo(client.Player.Id, client.Player.Name, -1,client.Player.IsHost, client.Player.Status, client.Player.AvatarId);
+
+                        var newPlayer = new PlayerInfo(client.Player.Id, client.Player.Name, -1,client.Player.IsHost, client.Player.Status, client.Player.AvatarId, client.Player.Wins, client.Player.CountGames, client.Player.Points);
                         
                         foreach (var other in room.Clients) // отправляем остальным, что кто-то присоединился
                         {
                             if (other.Player.Id != client.Player.Id)
                             {
-                                Console.WriteLine($"Notify {other.Player.Name} about new player {other.Player.Name}");
+                                Console.WriteLine($"Notify {other.Player.Name} about new player {client.Player.Name}");
+                                
                                 await other.SendAsync(new SomeoneJoinMessage(newPlayer));
                             }
                         }
@@ -183,7 +185,8 @@ namespace ServerUNO
                             {
 
                                 Console.WriteLine($"Send existing player {other.Player.Name} to new client");
-                                var player = new PlayerInfo(other.Player.Id, other.Player.Name, -1, other.Player.IsHost, other.Player.Status, other.Player.AvatarId);
+                                var player = new PlayerInfo(other.Player.Id, other.Player.Name, -1, other.Player.IsHost, other.Player.Status, other.Player.AvatarId, other.Player.Wins, other.Player.CountGames, other.Player.Points);
+                                
                                 await client.SendAsync(new SomeoneJoinMessage(player));
                             }
                         }

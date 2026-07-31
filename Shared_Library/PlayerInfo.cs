@@ -15,8 +15,12 @@ namespace Shared_Library
         public int CardCount { get; set; }
         public bool UnoPressed { get; set; }
         public bool IsHost { get; set; }
+        public int Wins {  get; set; }
+        public int CountGames { get; set; }
+        public int Points { get; set; }
+        public bool IsWinner { get; set; }
         public PlayerInfo() { }
-        public PlayerInfo(Guid id, string name, int cardCount, bool isHost, string status, int avatarId, bool unoPressed = false)
+        public PlayerInfo(Guid id, string name, int cardCount, bool isHost, string status, int avatarId, int wins, int countgames, int points, bool unoPressed = false, bool isWinner = false)
         {
             Id = id;
             Name = name;
@@ -25,6 +29,10 @@ namespace Shared_Library
             Status = status;
             AvatarId = avatarId;
             UnoPressed = unoPressed;
+            Wins = wins;
+            CountGames = countgames;
+            Points = points;
+            IsWinner = isWinner;
         }
     }
 }

@@ -196,9 +196,11 @@ namespace Shared_Library
     }
     public class ChangeHostMessage : ServerMessage
     {
-        public ChangeHostMessage()
+        public PlayerInfo player { get; set;  }
+        public ChangeHostMessage(PlayerInfo player)
             : base(nameof(ChangeHostMessage))
         {
+            this.player = player;
         }
     }
 
@@ -243,8 +245,9 @@ namespace Shared_Library
         public Card lastCard { get; set; }
         public ColorCard currentColor { get; set; }
         public bool IsMyTurn { get; set; }
+        public bool IsGameEnd { get; set; }
 
-        public GameStateMessage(List<PlayerInfo> players, List<Card> MyCards, int currentPlayer, int direction, Card lastCard, ColorCard currentColor, bool IsMyTurn)
+        public GameStateMessage(List<PlayerInfo> players, List<Card> MyCards, int currentPlayer, int direction, Card lastCard, ColorCard currentColor, bool IsMyTurn, bool isGameEnd = false)
             : base(nameof(GameStateMessage))
         {
             this.players = players;
@@ -254,6 +257,7 @@ namespace Shared_Library
             this.lastCard = lastCard;
             this.currentColor = currentColor;
             this.IsMyTurn = IsMyTurn;
+            IsGameEnd = isGameEnd;
         }
     }
 }

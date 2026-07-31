@@ -16,8 +16,9 @@ namespace ClientUNO
         public event Action<ErrorMessage> StartGameError;
         public event Action<SomeoneJoinMessage> SomeoneJoin;
         public event Action<SomeoneLeftMessage> SomeoneLeft;
-        public event Action ChangeHost;
+        public event Action<ChangeHostMessage> ChangeHost;
         public event Action<StartGameMessageToClient> StartGameToClient;
+        public event Action? GameEnded;
 
         private TaskCompletionSource<ConfirmMessage>? _createRoomTcs;
         private TaskCompletionSource<ConfirmMessage>? _connectRoomTcs;
@@ -253,8 +254,8 @@ namespace ClientUNO
                 case SomeoneLeftMessage someoneL:
                     SomeoneLeft?.Invoke(someoneL);
                     break;
-                case ChangeHostMessage:
-                    ChangeHost?.Invoke();
+                case ChangeHostMessage newHost:
+                    ChangeHost?.Invoke(newHost);
                     break;
                 case StartGameMessageToClient gamestage:
                     StartGameToClient?.Invoke(gamestage);
@@ -407,7 +408,10 @@ namespace ClientUNO
             OnPropertyChanged(nameof(RightPlayerBorderColor));
             OnPropertyChanged(nameof(MePlayerBorderColor));
             OnPropertyChanged(nameof(SelectedColorText));
-
+            if (state.IsGameEnd)
+            {
+                GameEnded?.Invoke();
+            }
         }
         private void ShowFirstPlayerMessage()
         {

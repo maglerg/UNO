@@ -4,6 +4,6 @@
              xmlns:local="clr-namespace:ClientUNO"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <local:AvatarConverter x:Key="AvatarConverter"/>
     </Application.Resources>
 </Application>

@@ -16,7 +16,8 @@ namespace Server
         public Card lastCard;
         public List<Card> DiscardPile { get; set; } // сброс
         public ColorCard currentColor;
-        int winner = -1;
+        Player winner = null;
+        public bool isEndGame = false;
 
 
         public GameEngine()
@@ -25,9 +26,11 @@ namespace Server
             deck = new Deck();
             lastCard = new Card();
             DiscardPile = new List<Card>();
+            isEndGame = false;
         }
         public void StartGame()
         {
+            isEndGame = false;
             deck.CreateDeck();
 
             for (int i = 0; i < 7; i++)
@@ -53,21 +56,26 @@ namespace Server
 
                 ApplyAction(players[currentPlayer]);
             }
-            else throw new Exception("Player is not active");
+            else throw new Exception("It's not your move.");
         }
         public void PlayCard(int player, Card card, ColorCard? chosenColor = null) // сыграть карту
         {
             if (player != currentPlayer)
-                throw new Exception("Player is not active");
+                throw new Exception("It's not your move.");
 
             if (!CheckTurn(card, chosenColor))
-                throw new Exception("Uncorrected card or color is not selected");
+                throw new Exception("Uncorrected card.");
 
 
             players[currentPlayer].PlayerCards.Remove(card);
 
             DiscardPile.Add(lastCard);
             lastCard = card;
+            if(players[currentPlayer].PlayerCards.Count == 0)
+            {
+                EndGame(players[currentPlayer]);
+                isEndGame = true;
+            }
 
             NextPlayer();
 
@@ -189,8 +197,13 @@ namespace Server
                         deck.Cards.Add(temp);
                     }
                     deck.Cards = deck.Cards.OrderBy(x => random.Next()).ToList();
+
                     if (deck.Cards.Count == 0)
-                        EndGame();
+                    {
+                        EndGame(null);
+                        isEndGame = true;
+                    }
+                        
                 }
                 else
 
@@ -217,39 +230,37 @@ namespace Server
             else if (currentPlayer >= players.Count)
                 currentPlayer = 0;
         }
-        public void EndGame(int winner = -1) // конец игры 
+        public void EndGame(Player winner) // конец игры 
         {
             this.winner = winner;
-            List<Player> rating = RatingPlayers(players[winner]);
-            //дальше если нужны данные для бд их можно взять отсюда
-        }
-        public List<Player> RatingPlayers(Player winner = null) // подсчет статистики
-        {
-            int score = 0;
-            List<(Player player, int score)> rating = new();
-            List<Player> list = new List<Player>();
+            RatingPlayers(winner);
+            for(int i = 0; i < players.Count; i++)
+            {
+                players[i].CountGames += 1;
 
+                if(players[i] == winner )
+                    players[i].Wins += 1;
+            }
+        }
+        public void RatingPlayers(Player winner = null) // подсчет статистики
+        {
             foreach (var player in players)
             {
-                score = 0;
                 if (player == winner)
                 {
-                    rating.Add((player, 0));
+                    player.Points = 0;
                     continue;
                 }
 
+                int score = 0;
+
                 foreach (var card in player.PlayerCards)
+                {
                     score += GetScore(card);
+                }
 
-                rating.Add((player, score));
+                player.Points = score;
             }
-            rating.Sort((a, b) => a.score.CompareTo(b.score));
-            for (int i = 0; i < rating.Count; i++)
-            {
-                list.Add(rating[i].player);
-            }
-
-            return list;
         }
         public int GetScore(Card card) // получение номинала карты
         {

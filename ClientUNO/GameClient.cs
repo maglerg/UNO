@@ -12,10 +12,12 @@ namespace ClientUNO
         public WebSocket Socket { get; set; }
         public PlayerInfo player { get; set; }
         public event Action<ServerMessage>? MessageReceived;
+        public string roomCode { get; set; }
         public GameClient(WebSocket socket)
         {
             Socket = socket;
             player = new PlayerInfo();
+            roomCode = null;
         }
         public async Task ReceiveLoop()
         {

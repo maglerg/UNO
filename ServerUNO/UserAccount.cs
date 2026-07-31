@@ -13,6 +13,7 @@ namespace ServerUNO
         public string Password { get; set; }
         public string Name { get; set; }
         public int Wins { get; set; }
+        public int CountGames { get; set; }
         public int Points { get; set; }
         public int AvatarId { get; set; }
         public string Status { get; set; }
@@ -24,6 +25,7 @@ namespace ServerUNO
             Name = name;
             Wins = 0;
             Points = 0;
+            CountGames = 0;
             AvatarId = avatarId;
             Status = status;
         }
