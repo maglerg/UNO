@@ -25,6 +25,7 @@ namespace ClientUNO
 
             username.Text = Client.player.Name;
             status.Text = Client.player.Status;
+            wins.Text = Client.player.Wins.ToString();
 
             DataContext = Model;
         }

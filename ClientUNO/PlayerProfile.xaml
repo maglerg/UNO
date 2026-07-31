@@ -98,8 +98,7 @@
 
                 <TextBlock x:Name="rating"
                        FontSize="20"
-                       Margin="20,0,0,0"
-                       FontWeight="Bold"/>
+                       Margin="20,0,0,0"/>
 
             </StackPanel>
 
@@ -116,28 +115,13 @@
 
                 <TextBlock x:Name="wins"
                        FontSize="20"
-                       Margin="20,0,0,0"
-                       FontWeight="Bold"/>
+                       Margin="20,0,0,0"/>
 
             </StackPanel>
 
 
 
-            <!-- Очки -->
-            <StackPanel Orientation="Horizontal"
-                    Margin="0,15,0,0">
-
-                <TextBlock Text="Points:"
-                       FontSize="20"
-                       FontFamily="Comic Sans MS"
-                       Foreground="SaddleBrown"/>
-
-                <TextBlock x:Name="points"
-                       FontSize="20"
-                       Margin="20,0,0,0"
-                       FontWeight="Bold"/>
-
-            </StackPanel>
+            
 
 
         </StackPanel>

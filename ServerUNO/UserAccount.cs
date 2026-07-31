@@ -17,15 +17,15 @@ namespace ServerUNO
         public int Points { get; set; }
         public int AvatarId { get; set; }
         public string Status { get; set; }
-        public UserAccount(Guid id, string username, string password, string name, int avatarId, string status)
+        public UserAccount(Guid id, string username, string password, string name, int avatarId, string status, int wins, int countGames, int points)
         {
             Id = id;
             Username = username;
             Password = password;
             Name = name;
-            Wins = 0;
-            Points = 0;
-            CountGames = 0;
+            Wins = wins;
+            Points = points;
+            CountGames = countGames;
             AvatarId = avatarId;
             Status = status;
         }

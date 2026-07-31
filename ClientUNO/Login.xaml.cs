@@ -58,6 +58,9 @@ namespace ClientUNO
                 Client.player.Id = confirm.player.Id;
                 Client.player.AvatarId = confirm.player.AvatarId;
                 Client.player.Status = confirm.player.Status;
+                Client.player.Wins = confirm.player.Wins;
+                Client.player.CountGames = confirm.player.CountGames;
+                Client.player.Points = confirm.player.Points;
                 Logger.Initialize(App.Session.Client.player.Name);
                 PlayerMenu lobby = new PlayerMenu();
                 lobby.Show();

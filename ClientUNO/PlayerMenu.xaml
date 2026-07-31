@@ -100,14 +100,14 @@
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Number of victories" FontSize="15"
 FontFamily="Comic Sans MS" Foreground="SaddleBrown" Margin="10"/>
-                    <TextBlock Width="80" Height="20"/>
+                    <TextBlock Width="80" Height="20" x:Name="wins" 
+FontSize="15"
+FontFamily="Comic Sans MS"
+TextWrapping="Wrap"
+MaxHeight="60"
+Foreground="Black"/>
                 </StackPanel>
 
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Number of points" FontSize="15"
-FontFamily="Comic Sans MS" Foreground="SaddleBrown" Margin="10"/>
-                    <TextBlock Width="80" Height="20" Margin="20,0,0,0"/>
-                </StackPanel>
             </StackPanel>
 
             <StackPanel Width="400">

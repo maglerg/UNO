@@ -31,6 +31,10 @@ namespace ClientUNO
                 sorted[i].IsWinner = (i == 0);
                 Players.Add(sorted[i]);
             }
+            foreach(var p in Players)
+            {
+                Logger.Log($"{p.Name} {p.Id} {p.Wins} {p.CountGames}");
+            }
         }
 
         private void BackToLobby_Click(object sender, RoutedEventArgs e)

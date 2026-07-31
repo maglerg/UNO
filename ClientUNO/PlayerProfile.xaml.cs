@@ -27,9 +27,8 @@ namespace ClientUNO
             status.Text = player.Status;
             avatar.Source = AvatarHelper.GetAvatar(player.AvatarId);
 
-            // wins.Text = 
-            // points.Text = 
-            // rating.Text = 
+            wins.Text = player.Wins.ToString();
+            // rating.Text 
         }
         private void Close_Click(object sender, RoutedEventArgs e)
         {

@@ -30,7 +30,7 @@ namespace Shared_Library
             this.roomManager = roomManager;
             Player = new Player();
             Room = new GameRoom();
-            userAcc = new UserAccount(Guid.NewGuid(), "", "", "", -1, "");
+            userAcc = new UserAccount(Guid.NewGuid(), "", "", "", -1, "", 0, 0, 0);
         }
         public async Task ReceiveLoop()
         {

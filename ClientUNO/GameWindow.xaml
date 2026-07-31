@@ -37,7 +37,18 @@
         <Grid HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="120" Visibility="{Binding TopPlayerVisibility}">
 
             <StackPanel HorizontalAlignment="Center" Orientation="Vertical">
-                <Border Width="106" Height="104" CornerRadius="6" BorderThickness="5" BorderBrush="{Binding TopPlayerBorderColor}"/>
+                <Border Width="106"
+                Height="104"
+                CornerRadius="6"
+                BorderThickness="5"
+                BorderBrush="{Binding TopPlayerBorderColor}"
+                ClipToBounds="True">
+
+                    <Image Source="{Binding TopPlayer.AvatarId,
+                    Converter={StaticResource AvatarConverter}}"
+                    Stretch="Uniform"/>
+
+                </Border>
                 <TextBlock Text="{Binding TopPlayer.Name}"
            HorizontalAlignment="Center"/>
 
@@ -56,7 +67,18 @@
         <!-- ================= LEFT PLAYER ================= -->
         <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20" Visibility="{Binding LeftPlayerVisibility}">
 
-            <Border Width="106" Height="104" CornerRadius="6" BorderThickness="5" BorderBrush="{Binding LeftPlayerBorderColor}"/>
+            <Border Width="106"
+        Height="104"
+        CornerRadius="6"
+        BorderThickness="5"
+        BorderBrush="{Binding LeftPlayerBorderColor}"
+        ClipToBounds="True">
+
+                <Image Source="{Binding LeftPlayer.AvatarId,
+                    Converter={StaticResource AvatarConverter}}"
+           Stretch="Uniform"/>
+
+            </Border>
             <TextBlock Text="{Binding LeftPlayer.Name}"/>
 
             <TextBlock Text="{Binding LeftPlayer.CardCount,
@@ -73,7 +95,18 @@
         <!-- ================= RIGHT PLAYER ================= -->
         <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center" Margin="20" Visibility="{Binding RightPlayerVisibility}">
 
-            <Border Width="106" Height="104" CornerRadius="6" BorderThickness="5" BorderBrush="{Binding RightPlayerBorderColor}"/>
+            <Border Width="106"
+        Height="104"
+        CornerRadius="6"
+        BorderThickness="5"
+        BorderBrush="{Binding RightPlayerBorderColor}"
+        ClipToBounds="True">
+
+                <Image Source="{Binding RightPlayer.AvatarId,
+                    Converter={StaticResource AvatarConverter}}"
+           Stretch="Uniform"/>
+
+            </Border>
             <TextBlock Text="{Binding RightPlayer.Name}"/>
 
             <TextBlock Text="{Binding RightPlayer.CardCount,
@@ -149,11 +182,22 @@
 
             <!-- player info -->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <Border Width="139" Height="139" CornerRadius="6" BorderThickness="5" BorderBrush="{Binding MePlayerBorderColor}"/>
-                <StackPanel Margin="10,0,0,0">
-                    <TextBlock Text="{Binding Me.Name}"/>
+                <Border Width="139"
+        Height="139"
+        CornerRadius="6"
+        BorderThickness="5"
+        BorderBrush="{Binding MePlayerBorderColor}"
+        ClipToBounds="True">
 
-                    <TextBlock Text="{Binding Me.CardCount,
+                    <Image Source="{Binding MePlayer.AvatarId,
+                    Converter={StaticResource AvatarConverter}}"
+           Stretch="Uniform"/>
+
+                </Border>
+                <StackPanel Margin="10,0,0,0">
+                    <TextBlock Text="{Binding MePlayer.Name}"/>
+
+                    <TextBlock Text="{Binding MePlayer.CardCount,
                           StringFormat=Cards: {0}}"/>
                 </StackPanel>
 

@@ -38,7 +38,7 @@ namespace ServerUNO
                     }
                     else
                     {
-                        var newAcc = new UserAccount(client.Player.Id, sMsg.name, sMsg.name, sMsg.password, sMsg.avatarId, "");
+                        var newAcc = new UserAccount(client.Player.Id, sMsg.name, sMsg.name, sMsg.password, sMsg.avatarId, "", 0, 0, 0);
                         accountManager.Add(newAcc);
                         accountManager.Save();
                         client.Player.Name = sMsg.name;
