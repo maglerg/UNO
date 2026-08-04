@@ -9,26 +9,56 @@ namespace ServerUNO
     public class UserAccount
     {
         public Guid Id { get; private set; }
+
         public string Username { get; set; }
-        public string Password { get; set; }
+        public string PasswordHash { get; set; }
+
         public string Name { get; set; }
-        public int Wins { get; set; }
-        public int CountGames { get; set; }
-        public int Points { get; set; }
-        public int AvatarId { get; set; }
         public string Status { get; set; }
-        public UserAccount(Guid id, string username, string password, string name, int avatarId, string status, int wins, int countGames, int points)
+
+        public int AvatarId { get; set; }
+
+        public int Wins { get; set; }
+
+        public int CountGames { get; set; }
+
+        public UserAccount(string username, string passwordHash, string name, int avatarId)
+        {
+            Id = Guid.NewGuid();
+
+            Username = username;
+            PasswordHash = passwordHash;
+
+            Name = name;
+            Status = "";
+            AvatarId = avatarId;
+
+            Wins = 0;
+            CountGames = 0;
+        }
+
+        public UserAccount(
+            Guid id,
+            string username,
+            string passwordHash,
+            string name,
+            string status,
+            int avatarId,
+            int wins,
+            int countGames)
         {
             Id = id;
+
             Username = username;
-            Password = password;
+            PasswordHash = passwordHash;
+
             Name = name;
-            Wins = wins;
-            Points = points;
-            CountGames = countGames;
-            AvatarId = avatarId;
             Status = status;
+
+            AvatarId = avatarId;
+
+            Wins = wins;
+            CountGames = countGames;
         }
-        
     }
 }

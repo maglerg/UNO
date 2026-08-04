@@ -14,9 +14,6 @@ using System.Windows.Shapes;
 
 namespace ClientUNO
 {
-    /// <summary>
-    /// Interaction logic for PlayerProfile.xaml
-    /// </summary>
     public partial class PlayerProfile : Window
     {
         public PlayerProfile(PlayerInfo player)

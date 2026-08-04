@@ -84,7 +84,6 @@ namespace ClientUNO
                 {
                     newAvatar = _newAvatarId.Value;
                 }
-                Logger.Log($"пееред отправкой в EditProfile{App.Session.Client.player.Id.ToString()}");
                 var confirm = await App.Session.Model.EditProfileAsync(newUsername, newStatus, newAvatar);
                 
                 Client.player.Name = newUsername;

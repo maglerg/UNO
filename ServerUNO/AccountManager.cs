@@ -1,90 +1,127 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
+﻿using Npgsql;
 
 namespace ServerUNO
 {
     public class AccountManager
     {
-        public List<UserAccount> _users = new();
-        private readonly string _filePath = "accounts.json";
+        private readonly string _connectionString =
+            "Host=localhost;Port=5432;Database=UnoDB;Username=postgres;Password=losh20ad";
 
-        public AccountManager()
-        {
-            if (!File.Exists(_filePath))
-                return;
+        public AccountManager() {}
 
-            var json = File.ReadAllText(_filePath);
-
-            if (string.IsNullOrWhiteSpace(json))
-            {
-                _users = new List<UserAccount>();
-                return;
-            }
-
-            _users = JsonSerializer.Deserialize<List<UserAccount>>(json)
-                     ?? new List<UserAccount>();
-
-        }
         public void Add(UserAccount user)
         {
-            _users.Add(user);
+            using var connection = new NpgsqlConnection(_connectionString);
+            connection.Open();
+
+            const string sql = @"
+    INSERT INTO Users
+    (Id, Username, PasswordHash, Name, Status, AvatarId, Wins, CountGames)
+    VALUES
+    (@Id, @Username, @PasswordHash, @Name, @Status, @AvatarId, @Wins, @CountGames);";
+
+            using var command = new NpgsqlCommand(sql, connection);
+
+            command.Parameters.AddWithValue("Id", user.Id);
+            command.Parameters.AddWithValue("Username", user.Username);
+            command.Parameters.AddWithValue("PasswordHash", user.PasswordHash);
+            command.Parameters.AddWithValue("Name", user.Name);
+            command.Parameters.AddWithValue("Status", user.Status);
+            command.Parameters.AddWithValue("AvatarId", user.AvatarId);
+            command.Parameters.AddWithValue("Wins", user.Wins);
+            command.Parameters.AddWithValue("CountGames", user.CountGames);
+
+            command.ExecuteNonQuery();
+
         }
-        public void Load()
+        public UserAccount? Find(string username, string passwordHash)
         {
-            if (!File.Exists(_filePath))
-            {
-                _users = new List<UserAccount>();
-                return;
-            }
+            using var connection = new NpgsqlConnection(_connectionString);
+            connection.Open();
 
-            string json = File.ReadAllText(_filePath);
+            const string sql = @"
+    SELECT Id, Username, PasswordHash, Name, Status,
+           AvatarId, Wins, CountGames
+    FROM Users
+    WHERE Username = @Username
+      AND PasswordHash = @PasswordHash;";
 
-            if (string.IsNullOrWhiteSpace(json))
-            {
-                _users = new List<UserAccount>();
-                return;
-            }
-            _users = JsonSerializer.Deserialize<List<UserAccount>>(json)
-                     ?? new List<UserAccount>();
+            using var command = new NpgsqlCommand(sql, connection);
+
+            command.Parameters.AddWithValue("Username", username);
+            command.Parameters.AddWithValue("PasswordHash", passwordHash);
+
+            using var reader = command.ExecuteReader();
+
+            if (!reader.Read())
+                return null;
+
+            return new UserAccount(
+                reader.GetGuid(0),
+                reader.GetString(1),
+                reader.GetString(2),
+                reader.GetString(3),
+                reader.GetString(4),
+                reader.GetInt32(5),
+                reader.GetInt32(6),
+                reader.GetInt32(7));
         }
 
-        public void Save()
+        public UserAccount? Get(UserAccount account)
         {
-            string json = JsonSerializer.Serialize(_users, new JsonSerializerOptions
-            {
-                WriteIndented = true 
-            });
+            using var connection = new NpgsqlConnection(_connectionString);
+            connection.Open();
 
-            File.WriteAllText(_filePath, json);
+            const string sql = @"
+    SELECT Id, Username, PasswordHash, Name, Status,
+           AvatarId, Wins, CountGames
+    FROM Users
+    WHERE Id = @Id;";
+
+            using var command = new NpgsqlCommand(sql, connection);
+            command.Parameters.AddWithValue("Id", account.Id);
+
+            using var reader = command.ExecuteReader();
+
+            if (!reader.Read())
+                return null;
+
+            return new UserAccount(
+                reader.GetGuid(0),
+                reader.GetString(1),
+                reader.GetString(2),
+                reader.GetString(3),
+                reader.GetString(4),
+                reader.GetInt32(5),
+                reader.GetInt32(6),
+                reader.GetInt32(7));
         }
 
-        public UserAccount? Find(string username, string password)
-        {
-            return _users.FirstOrDefault(u =>
-                u.Username == username &&
-                u.Password == password);
-        }
-        public UserAccount Get(UserAccount account)
-        {
-            return _users.FirstOrDefault(u => ReferenceEquals(u, account));
-        }
         public bool UsernameExists(string username, Guid exceptId)
         {
-            return _users.Any(u =>
-                u.Username == username &&
-                u.Id != exceptId);
+            using var connection = new NpgsqlConnection(_connectionString);
+            connection.Open();
+
+            const string sql = @"
+                SELECT COUNT(*)
+                FROM Users
+                WHERE Username = @Username
+                  AND Id <> @Id;";
+
+            using var command = new NpgsqlCommand(sql, connection);
+
+            command.Parameters.AddWithValue("Username", username);
+            command.Parameters.AddWithValue("Id", exceptId);
+
+            return (long)command.ExecuteScalar() > 0;
         }
+
         public bool Register(UserAccount user)
         {
-            if (_users.Any(u => u.Username == user.Username))
+            if (UsernameExists(user.Username, Guid.Empty))
                 return false;
 
-            _users.Add(user);
-            Save();
+            Add(user);
             return true;
         }
     }

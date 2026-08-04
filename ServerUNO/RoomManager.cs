@@ -38,9 +38,8 @@ namespace ServerUNO
                     }
                     else
                     {
-                        var newAcc = new UserAccount(client.Player.Id, sMsg.name, sMsg.name, sMsg.password, sMsg.avatarId, "", 0, 0, 0);
+                        var newAcc = new UserAccount(sMsg.name, sMsg.password, sMsg.name, sMsg.avatarId);
                         accountManager.Add(newAcc);
-                        accountManager.Save();
                         client.Player.Name = sMsg.name;
                         client.Player.AvatarId = sMsg.avatarId;
                         client.Player.Status = "";
@@ -73,9 +72,9 @@ namespace ServerUNO
                         client.Player.Status = user1.Status;
                         client.Player.Wins = user1.Wins;
                         client.Player.CountGames = user1.CountGames;
-                        client.Player.Points = user1.Points;
+                        client.Player.Points = 0;
                         client.userAcc = user1;
-                        var pl = new PlayerInfo(user1.Id, user1.Name, -1, false, user1.Status, user1.AvatarId, user1.Wins, user1.CountGames, user1.Points);
+                        var pl = new PlayerInfo(user1.Id, user1.Name, -1, false, user1.Status, user1.AvatarId, user1.Wins, user1.CountGames, 0);
                         
                         await client.SendAsync(new ConfirmMessage(
                             RequestType.Login,
@@ -118,7 +117,6 @@ namespace ServerUNO
                         userAccount.Name = eMsg.name;
                         userAccount.Status = eMsg.status;
                         userAccount.AvatarId = eMsg.avatarId;
-                        accountManager.Save();
 
                         client.Player.Name = eMsg.name;
                         client.Player.AvatarId = eMsg.avatarId;
