@@ -19,7 +19,7 @@ namespace Server
 
         public async Task Start()
         {
-            listener.Prefixes.Add("http://localhost:5000/ws/");
+            listener.Prefixes.Add("http://+:5000/ws/");
             listener.Start();
 
             Console.WriteLine("Server started...");
