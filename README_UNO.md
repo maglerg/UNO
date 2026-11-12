@@ -199,19 +199,19 @@ docker run --name uno-server -p 5000:5000 uno-server
 
 ### Меню игрока и профиль
 
-![Меню игрока](docs/screenshots/PlayerMenu.png)
-![Профиль игрока](docs/screenshots/Profile.png)
+![Меню игрока](screenshots/PlayerMenu.png)
+![Профиль игрока](screenshots/Profile.png)
 
 ### Лобби
 
-![Лобби первого игрока](docs/screenshots/Lobby1.png)
-![Лобби второго игрока](docs/screenshots/Lobby2.png)
+![Лобби первого игрока](screenshots/Lobby1.png)
+![Лобби второго игрока](screenshots/Lobby2.png)
 
 ### Игровой процесс
 
-![Игра первого игрока](docs/screenshots/Game2.png)
-![Игра второго игрок](docs/screenshots/Game1.png)
-![Победа](docs/screenshots/GameOver.png)
+![Игра первого игрока](screenshots/Game2.png)
+![Игра второго игрок](screenshots/Game1.png)
+![Победа](screenshots/GameOver.png)
 
 ---
 
