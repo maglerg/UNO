@@ -4,10 +4,13 @@ namespace ServerUNO
 {
     public class AccountManager
     {
-        private readonly string _connectionString =
-            "Host=localhost;Port=5432;Database=UnoDB;Username=postgres;Password=losh20ad";
+        private readonly string _connectionString;
 
-        public AccountManager() {}
+        public AccountManager(string connectionString)
+        {
+            _connectionString = connectionString
+                ?? throw new ArgumentNullException(nameof(connectionString));
+        }
 
         public void Add(UserAccount user)
         {

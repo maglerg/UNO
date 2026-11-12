@@ -20,7 +20,9 @@ namespace ServerUNO
         // если игрок нажимает уно самому себе то он берет 2 карты XD
         static async Task Main(string[] args)
         {
-            AccountManager accountManager = new AccountManager();
+            AppConfig.Load();                                                        // ← добавили
+
+            AccountManager accountManager = new AccountManager(AppConfig.ConnectionString);  // ← передаём строку
             RoomManager roomManager = new RoomManager(accountManager);
 
             ServerManager server = new ServerManager(roomManager);
