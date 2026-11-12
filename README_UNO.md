@@ -194,18 +194,24 @@ docker run --name uno-server -p 5000:5000 uno-server
 ### Авторизация и регистрация
 
 ![Главное меню](screenshots/MainMenu.png)
+![Авторизация](screenshots/LoginUp.png)
+![Регистрация](screenshots/SignUp.png)
 
-### Лобби и игровые комнаты
+### Меню игрока и профиль
 
-![Игровое лобби](docs/screenshots/lobby.png)
+![Меню игрока](docs/screenshots/PlayerMenu.png)
+![Профиль игрока](docs/screenshots/Profile.png)
+
+### Лобби
+
+![Лобби первого игрока](docs/screenshots/Lobby1.png)
+![Лобби второго игрока](docs/screenshots/Lobby2.png)
 
 ### Игровой процесс
 
-![Игровой экран](docs/screenshots/game.png)
-
-### Профиль игрока
-
-![Профиль игрока](docs/screenshots/profile.png)
+![Игра первого игрока](docs/screenshots/Game2.png)
+![Игра второго игрок](docs/screenshots/Game1.png)
+![Победа](docs/screenshots/GameOver.png)
 
 ---
 
